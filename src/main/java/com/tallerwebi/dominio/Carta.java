@@ -24,4 +24,11 @@ public class Carta {
     public void setPalo(Palo palo) {
         this.palo = palo;
     }
+
+    public Boolean tienePalo(){
+        if (palo == null){
+            return false;
+        }
+        return true;
+    }
 }
