@@ -131,7 +131,7 @@ public class ControladorLogin {
 
     private Boolean rolEstaVacio(String rol) {
         if (rol == null || rol.isEmpty()) {
-            modelo.put("errorRol", "El campo rol es obligatorio");
+            modelo.put("errorRol", "Debe ingresar un rol");
             return true;
         }
         return false;
