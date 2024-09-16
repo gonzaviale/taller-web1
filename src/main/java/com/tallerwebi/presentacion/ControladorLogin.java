@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.Banco;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ControladorLogin {
 
     private ServicioLogin servicioLogin;
+
 
     @Autowired
     public ControladorLogin(ServicioLogin servicioLogin){
@@ -34,12 +36,17 @@ public class ControladorLogin {
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
         ModelMap model = new ModelMap();
-
+        Banco bancoBuscado = servicioLogin.consultarBanco(datosLogin.getEmail(), datosLogin.getPassword());
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
             return new ModelAndView("redirect:/home");
-        } else {
+        }
+        if (bancoBuscado != null) {
+            request.getSession().setAttribute("ROL", "ROL_BANCO");
+            return new ModelAndView("redirect:/home");
+        }
+        else {
             model.put("error", "Usuario o clave incorrecta");
         }
         return new ModelAndView("login", model);
@@ -66,6 +73,28 @@ public class ControladorLogin {
         model.put("usuario", new Usuario());
         return new ModelAndView("nuevo-usuario", model);
     }
+
+    @RequestMapping("/registroBanco")
+    public ModelAndView RegistroBanco() {
+
+        ModelMap modelo = new ModelMap();
+        modelo.put("datosBanco", new Banco());
+        return new ModelAndView("registroBanco", modelo);
+    }
+    @RequestMapping(path = "/registrarBanco", method = RequestMethod.POST)
+    public ModelAndView registrarBanco(@ModelAttribute("banco") Banco banco) {
+        ModelMap model = new ModelMap();
+        try {
+            servicioLogin.registrarBanco(banco);  // Cambiar a servicio que maneje bancos
+
+        } catch (Exception e) {
+            model.put("error", "Error al registrar el banco");
+            return new ModelAndView("registroBanco", model);  // Volver a la vista de registro si hay error
+        }
+        return new ModelAndView("redirect:/login");  // Redirigir a la página de login u otra según necesidad
+    }
+
+
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
     public ModelAndView irAHome() {

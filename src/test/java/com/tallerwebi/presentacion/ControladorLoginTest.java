@@ -1,8 +1,9 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Banco;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.excepcion.UsuarioExistente;
+import com.tallerwebi.dominio.excepcion.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,12 +23,13 @@ public class ControladorLoginTest {
 	private HttpServletRequest requestMock;
 	private HttpSession sessionMock;
 	private ServicioLogin servicioLoginMock;
-
+	private Banco bancoMock;
 
 	@BeforeEach
 	public void init(){
 		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
 		usuarioMock = mock(Usuario.class);
+		 bancoMock = mock(Banco.class);
 		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
@@ -102,4 +104,30 @@ public class ControladorLoginTest {
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
 		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el nuevo usuario"));
 	}
+
+	@Test
+	public void testRegistrarBancoSiNoExisteDeberiaCrearBancoYVolverAlLogin() throws BancoExistente, UsuarioExistente {
+
+		// Ejecución
+
+		ModelAndView modelAndView = controladorLogin.registrarBanco(bancoMock);
+
+		// Validación
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
+		verify(servicioLoginMock, times(1)).registrarBanco(bancoMock);
+	}
+	@Test
+	public void testRegistrarBancoSiBancoExisteDeberiaVolverAFormularioYMostrarError() throws BancoExistente, UsuarioExistente {
+		// Preparación
+		doThrow(BancoExistente.class).when(servicioLoginMock).registrarBanco(bancoMock);
+
+		// Ejecución
+		ModelAndView modelAndView = controladorLogin.registrarBanco(bancoMock);
+
+		// Validación
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("registroBanco"));
+		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el banco"));
+	}
+
 }
+
