@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Taller Web I</title>
+
+    <!-- Boostrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+
+    <!-- custom style -->
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Sangre</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="mascota : ${listaMascotas}">
+        <td th:text="${mascota.nombre}"></td>
+        <td th:text="${mascota.tipo}"></td>
+        <td th:text="${mascota.sangre}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
