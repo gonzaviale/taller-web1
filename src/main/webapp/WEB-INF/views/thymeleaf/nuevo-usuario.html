@@ -24,33 +24,42 @@
 
     <div class="container">
         <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-            <form action="#" th:action="@{/registrarme}" method="POST" th:object="${usuario}">
+            <form th:action="@{/registrarme}" method="POST" th:object="${usuario}">
                 <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" th:field="*{nombre}" placeholder="Nombre" required><br><br>
+                <input type="text" id="nombre" th:field="*{nombre}" placeholder="Nombre" ><br><br>
 
                 <label for="apellido">Apellido:</label>
-                <input type="text" id="apellido" th:field="*{apellido}" placeholder="Apellido" required><br><br>
+                <input type="text" id="apellido" th:field="*{apellido}" placeholder="Apellido" ><br><br>
 
                 <label for="email">Email:</label>
-                <input type="email" id="email" th:field="*{email}" placeholder="Email" required><br><br>
+                <input type="email" id="email" th:field="*{email}" placeholder="Email" ><br><br>
 
                 <label for="password">Contraseña:</label>
-                <input type="password" id="password" th:field="*{password}" placeholder="Contraseña" required><br><br>
+                <input type="password" id="password" th:field="*{password}" placeholder="Contraseña"><br><br>
 
                 <label for="confirmPassword">Repetir Contraseña:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repetir Contraseña"
-                       required><br><br>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repetir Contraseña"><br><br>
+                <label>¿Cómo te querés registrar?:</label>
+                <p>Luego de que inicies sesión deberás llenar el formulario correspondiente</p>
+                <input type="radio" name="rol" id="dueno" th:field="*{rol}" value="dueño mascota">
+                <label for="dueno">Dueño de mascota</label>
+
+                <input type="radio" name="rol" id="veterinario" th:field="*{rol}" value="veterinario">
+                <label for="veterinario">Veterinario</label>
 
                 <button type="submit">Registrar</button>
             </form>
-
+            <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
+            <p th:if="${errorEmail != null}" class="alert alert-danger" th:text="'Error: ' + ${errorEmail}">
+            <p th:if="${errorApellido != null}" class="alert alert-danger" th:text="'Error: ' + ${errorApellido}">
+            <p th:if="${errorNombre != null}" class="alert alert-danger" th:text="'Error: ' + ${errorNombre}">
+            <p th:if="${errorPassword != null}" class="alert alert-danger" th:text="'Error: ' + ${errorPassword}">
+            <p th:if="${errorPasswordsDistintas != null}" class="alert alert-danger" th:text="'Error: ' + ${errorPasswordsDistintas}">
+            <p th:if="${errorRol != null}" class="alert alert-danger" th:text="'Error ' + ${errorRol}">
         </div>
     </div>
 
 </main>
-<!-- /.container -->
-
-<!-- Boostrap core js -->
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>
