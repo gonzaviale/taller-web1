@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Buscar Mascotas</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">UNLAM</a>
+</nav>
+
+<!-- Contenedor principal con márgenes para el formulario -->
+<div class="container mt-5 pt-5">
+    <!-- Título del buscador -->
+    <h2 class="text-center mb-4">Buscar Mascotas</h2>
+
+    <!-- Formulario con método GET para buscar mascotas -->
+    <form class="row g-3" action="/spring/filtro" method="get">
+        <!-- Campo de búsqueda por nombre -->
+        <div class="col-md-4">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre de la mascota">
+        </div>
+
+        <!-- Campo de búsqueda por tipo -->
+        <div class="col-md-4">
+            <label for="tipo" class="form-label">Tipo</label>
+            <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Tipo de mascota">
+        </div>
+
+        <!-- Campo de búsqueda por tipo de sangre -->
+        <div class="col-md-4">
+            <label for="sangre" class="form-label">Sangre</label>
+            <input type="text" class="form-control" id="sangre" name="sangre" placeholder="Tipo de sangre">
+        </div>
+
+        <!-- Botón para buscar -->
+        <div class="col-12 text-center mt-4">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
