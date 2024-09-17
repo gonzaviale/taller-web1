@@ -1,9 +1,15 @@
 package com.tallerwebi.dominio;
 
-public class RepositorioBanco {
-    public Object buscarPorId(int l) {
+public interface RepositorioBanco {
+
+
+    public default Object buscarPorId(int l) {
 
 
         return null;
     }
+
+
+
+    void guardar(Banco banco);
 }

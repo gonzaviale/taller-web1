@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class Banco {
@@ -33,6 +35,12 @@ public class Banco {
     @Column(name = "horario", nullable = false, length = 255)
     private String horario;
 
+    @ElementCollection
+    @CollectionTable(name = "stock_sangre", joinColumns = @JoinColumn(name = "banco_id"))
+    @MapKeyColumn(name = "tipo_sangre")
+    @Column(name = "cantidad_stock")
+    private Map<String, Integer> stockSangre = new HashMap<>();
+
 
     // Constructor vacío
     public Banco() {
@@ -51,7 +59,15 @@ public class Banco {
 
     }
 
-    // Getters y Setters
+    public void agregarPaqueteDeSangre(String tipoSangre, int cantidad) {
+        stockSangre.merge(tipoSangre, cantidad, Integer::sum);
+    }
+
+    public Map<String, Integer> getStockSangre() {
+        return stockSangre;
+    }
+
+
     public Long getId() {
         return id;
     }
@@ -140,5 +156,9 @@ public class Banco {
                 ", password='" + password + '\'' +  // Incluye la contraseña en toString si es necesario
                 ", horario='" + horario + '\'' +
                 '}';
+    }
+
+
+    public void agregarPaqueteDeSangre(PaqueteDeSangre paquete) {
     }
 }

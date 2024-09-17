@@ -1,10 +1,9 @@
 package com.tallerwebi.dominio;
 
-public class ServicioBanco {
-    public ServicioBanco(RepositorioBanco repositorioBancoMock) {
-    }
+import com.tallerwebi.dominio.excepcion.BancoNoEncontrado;
 
-    public PaqueteDeSangre agregarPaqueteDeSangre(int id, PaqueteDeSangre paquete) {
-        return null;
-    }
+public interface ServicioBanco {
+
+
+    PaqueteDeSangre agregarPaqueteDeSangre(int idBanco, PaqueteDeSangre paquete) throws BancoNoEncontrado;
 }
