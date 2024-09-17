@@ -5,5 +5,5 @@ import com.tallerwebi.dominio.excepcion.BancoNoEncontrado;
 public interface ServicioBanco {
 
 
-    PaqueteDeSangre agregarPaqueteDeSangre(int idBanco, PaqueteDeSangre paquete) throws BancoNoEncontrado;
+    void agregarPaqueteDeSangre(Long idBanco, PaqueteDeSangre paquete) throws BancoNoEncontrado;
 }

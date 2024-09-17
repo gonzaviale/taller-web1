@@ -16,7 +16,7 @@ public class ServicioBancoImp implements ServicioBanco {
     }
 
     @Override
-    public PaqueteDeSangre agregarPaqueteDeSangre(int idBanco, PaqueteDeSangre paquete) throws BancoNoEncontrado {
+    public void agregarPaqueteDeSangre(Long idBanco, PaqueteDeSangre paquete) throws BancoNoEncontrado {
         Banco banco = (Banco) repositorio.buscarPorId(idBanco);
 
         if (banco == null) {
@@ -28,9 +28,8 @@ public class ServicioBancoImp implements ServicioBanco {
 
         banco.agregarPaqueteDeSangre(tipoSangre, cantidad);
 
-        banco.agregarPaqueteDeSangre(paquete);
+
         repositorio.guardar(banco);
 
-        return paquete;
     }
 }

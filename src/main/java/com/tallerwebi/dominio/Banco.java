@@ -1,11 +1,16 @@
 package com.tallerwebi.dominio;
 
+import org.springframework.beans.MutablePropertyValues;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
 public class Banco {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,18 +40,11 @@ public class Banco {
     @Column(name = "horario", nullable = false, length = 255)
     private String horario;
 
-    @ElementCollection
-    @CollectionTable(name = "stock_sangre", joinColumns = @JoinColumn(name = "banco_id"))
-    @MapKeyColumn(name = "tipo_sangre")
-    @Column(name = "cantidad_stock")
-    private Map<String, Integer> stockSangre = new HashMap<>();
+    @OneToMany(mappedBy = "banco", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaqueteDeSangre> stockSangre;
 
 
-    // Constructor vacío
-    public Banco() {
-    }
 
-    // Constructor con parámetros
     public Banco(String nombreBanco, String direccion, String ciudad, String pais, String telefono, String email, String password, String horario) {
         this.nombreBanco = nombreBanco;
         this.direccion = direccion;
@@ -56,16 +54,45 @@ public class Banco {
         this.email = email;
         this.password = password;
         this.horario = horario;
+        this.stockSangre  = new ArrayList<>();
 
     }
 
-    public void agregarPaqueteDeSangre(String tipoSangre, int cantidad) {
-        stockSangre.merge(tipoSangre, cantidad, Integer::sum);
+    public Banco() {
+        this.stockSangre  = new ArrayList<>();
     }
 
-    public Map<String, Integer> getStockSangre() {
+
+
+
+    public List<PaqueteDeSangre> getStockSangre() {
         return stockSangre;
     }
+
+    public List<PaqueteDeSangre> getPaquetesDeSangre() {
+        return stockSangre;
+    }
+
+
+
+    public void agregarPaqueteDeSangre(String tipoSangre, int cantidad) {
+
+        PaqueteDeSangre paquete = stockSangre.stream()
+                .filter(p -> p.getTipoSangre().equals(tipoSangre))
+                .findFirst()
+                .orElse(null);
+
+
+        if (paquete == null) {
+            paquete = new PaqueteDeSangre(tipoSangre, cantidad,this);
+            this.stockSangre.add(paquete);
+        } else {
+
+            paquete.setCantidad(paquete.getCantidad() + cantidad);
+        }
+    }
+
+
 
 
     public Long getId() {
@@ -159,6 +186,5 @@ public class Banco {
     }
 
 
-    public void agregarPaqueteDeSangre(PaqueteDeSangre paquete) {
-    }
+
 }

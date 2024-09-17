@@ -3,13 +3,11 @@ package com.tallerwebi.dominio;
 public interface RepositorioBanco {
 
 
-    public default Object buscarPorId(int l) {
 
 
-        return null;
-    }
+    Banco guardar(Banco banco);
 
+    Banco buscarBanco(String email, String password);
 
-
-    void guardar(Banco banco);
+    Banco buscarPorId(Long idBanco);
 }

@@ -45,11 +45,6 @@ public class ServicioLoginImpl implements ServicioLogin {
         repositorioUsuario.guardarBanco(banco);
     }
 
-    @Override
-    public Banco consultarBanco(String email, String password) {
-        return repositorioUsuario.buscarBanco(email, password);
-    }
-
 }
 
 

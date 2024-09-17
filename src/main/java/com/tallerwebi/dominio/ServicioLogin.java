@@ -10,5 +10,5 @@ public interface ServicioLogin {
 
     void registrarBanco(Banco banco) throws BancoExistente;
 
-    Banco consultarBanco(String email, String password);
+
 }

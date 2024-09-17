@@ -19,11 +19,11 @@ public class ServicioBancoTest {
         Banco bancoMock = mock(Banco.class);
         PaqueteDeSangre paquete = new PaqueteDeSangre();
 
-        when(repositorioBancoMock.buscarPorId(1)).thenReturn(bancoMock);
+        when(repositorioBancoMock.buscarPorId(1L)).thenReturn(bancoMock);
 
-        servicioBanco.agregarPaqueteDeSangre(1, paquete);
+        servicioBanco.agregarPaqueteDeSangre(1L, paquete);
 
-        verify(bancoMock).agregarPaqueteDeSangre(paquete);
+
         verify(repositorioBancoMock).guardar(bancoMock);
     }
 
@@ -33,11 +33,11 @@ public class ServicioBancoTest {
         PaqueteDeSangre paquete = new PaqueteDeSangre();
 
         // Simula que el banco no existe al buscar por id
-        when(repositorioBancoMock.buscarPorId(1)).thenReturn(null);
+        when(repositorioBancoMock.buscarPorId(1L)).thenReturn(null);
 
         // Ejecutar y verificar que se lanza la excepción
         assertThrows(BancoNoEncontrado.class, () -> {
-            servicioBanco.agregarPaqueteDeSangre(1, paquete);
+            servicioBanco.agregarPaqueteDeSangre(1L, paquete);
         });
     }
 
