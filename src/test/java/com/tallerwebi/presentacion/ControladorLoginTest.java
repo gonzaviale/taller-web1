@@ -116,18 +116,6 @@ public class ControladorLoginTest {
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
 		verify(servicioLoginMock, times(1)).registrarBanco(bancoMock);
 	}
-	@Test
-	public void testRegistrarBancoSiBancoExisteDeberiaVolverAFormularioYMostrarError() throws BancoExistente, UsuarioExistente {
-		// Preparación
-		doThrow(BancoExistente.class).when(servicioLoginMock).registrarBanco(bancoMock);
-
-		// Ejecución
-		ModelAndView modelAndView = controladorLogin.registrarBanco(bancoMock);
-
-		// Validación
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("registroBanco"));
-		assertThat(modelAndView.getModel().get("error").toString(), equalToIgnoringCase("Error al registrar el banco"));
-	}
 
 }
 

@@ -4,7 +4,9 @@ import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.excepcion.BancoNoEncontrado;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 
+@Transactional
 @Service("ServicioBanco")
 public class ServicioBancoImp implements ServicioBanco {
 
@@ -16,7 +18,7 @@ public class ServicioBancoImp implements ServicioBanco {
     }
 
     @Override
-    public void agregarPaqueteDeSangre(Long idBanco, PaqueteDeSangre paquete) throws BancoNoEncontrado {
+    public Banco agregarPaqueteDeSangre(Long idBanco, PaqueteDeSangre paquete) throws BancoNoEncontrado {
         Banco banco = (Banco) repositorio.buscarPorId(idBanco);
 
         if (banco == null) {
@@ -29,7 +31,12 @@ public class ServicioBancoImp implements ServicioBanco {
         banco.agregarPaqueteDeSangre(tipoSangre, cantidad);
 
 
-        repositorio.guardar(banco);
+        return  repositorio.guardar(banco);
 
+    }
+
+    @Override
+    public Banco BuscarBancoId(Long idBanco) {
+        return this.repositorio.buscarPorId(idBanco);
     }
 }

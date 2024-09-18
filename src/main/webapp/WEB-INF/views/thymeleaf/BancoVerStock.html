@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Ver Stock</title>
+
+    <!-- Bootstrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+
+    <!-- Custom style -->
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">UNLAM</a>
+</nav>
+
+<main role="main" class="container mt-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="BancoHome">
+                            Agregar Sangre
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="VerStock">
+                            Ver Stock
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="VerPeticiones">
+                            Ver Peticiones
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <!-- Main content -->
+        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <h1>Ver Stock de Sangre</h1>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Tipo de Sangre</th>
+                    <th scope="col">Cantidad</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>A+</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>O-</td>
+                    <td>5</td>
+                </tr>
+                <!-- Aquí puedes agregar más filas dinámicamente desde el backend -->
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</main>
+
+<!-- Bootstrap core js -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

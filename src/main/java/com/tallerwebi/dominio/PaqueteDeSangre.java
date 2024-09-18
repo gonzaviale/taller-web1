@@ -25,6 +25,7 @@ import javax.persistence.*;
             this.banco = banco;
         }
 
+
         // Getters y setters
         public Long getId() {
             return id;
