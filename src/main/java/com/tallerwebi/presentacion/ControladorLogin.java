@@ -50,10 +50,34 @@ public class ControladorLogin {
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
     public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario,
                                     @RequestParam("confirmPassword") String confirmPassword) {
+        modelo.clear();
 
-        if (emailEstaVacio(usuario.getEmail()) || passwordEstaVacia(usuario.getPassword(), confirmPassword) ||
-                passwordsDiferentes(usuario.getPassword(), confirmPassword) || apellidoEstaVacio(usuario.getApellido()) ||
-                nombreEstaVacio(usuario.getNombre()) || rolEstaVacio(usuario.getRol())) {
+        if (nombreEstaVacio(usuario.getNombre())) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        if (apellidoEstaVacio(usuario.getApellido())) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        if (emailEstaVacio(usuario.getEmail())) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        if (rolEstaVacio(usuario.getRol())) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        if (passwordEstaVacia(usuario.getPassword(), confirmPassword)) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        if (passwordsDiferentes(usuario.getPassword(), confirmPassword)) {
             modelo.put("usuario", usuario);
             return new ModelAndView("nuevo-usuario", modelo);
         }
@@ -70,7 +94,6 @@ public class ControladorLogin {
 
         return new ModelAndView("redirect:/login");
     }
-
 
     @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
     public ModelAndView nuevoUsuario() {
