@@ -24,7 +24,7 @@
 
     <div class="container">
         <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-            <form th:action="@{/registrarme}" method="POST" th:object="${usuario}">
+            <form th:action="@{/registrarme}" method="POST" th:object="${usuario}" accept-charset="UTF-8">
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" th:field="*{nombre}" placeholder="Nombre" ><br><br>
 
@@ -45,7 +45,7 @@
                 <label for="dueno">Dueño de mascota</label>
 
                 <input type="radio" name="rol" id="veterinario" th:field="*{rol}" value="veterinario">
-                <label for="veterinario">Veterinario</label>
+                <label for="veterinario">Veterinario</label><br><br>
 
                 <button type="submit">Registrar</button>
             </form>
