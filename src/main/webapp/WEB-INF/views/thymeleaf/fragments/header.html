@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="chrome-extension://bojobppfploabceghnmlahpoonbcbacn/app/content-style.css">
+    <title>header</title>
+    <link rel="stylesheet" href="../../../../resources/core/css/header.css">
+</head>
+<body>
+<header>
+    <a th:href="@{home.html/}" ><img th:src="@{/images/logo.PNG}" alt="HEROES" id="logo"></a>
+    <!--<i class="fa fa-user-circle white"></i>-->
+    <a th:href="@{/perfil.html}">Perfil</a>
+    <form action="#" th:action="@{/busqueda}" method="get">
+        <label>
+            <input type="text" placeholder="Buscar..." name="search">
+        </label>
+        <button type="submit">Buscar</button>
+    </form>
+</header>
+
+</body>
+</html>
