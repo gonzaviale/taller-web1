@@ -15,31 +15,18 @@ public class ServicioBancoTest {
 
     @Test
     public void agregarPaqueteDeSangreSiBancoExisteDeberiaAgregarPaquete() throws BancoNoEncontrado {
-
+        // Preparar datos de prueba
         Banco bancoMock = mock(Banco.class);
-        PaqueteDeSangre paquete = new PaqueteDeSangre();
+        PaqueteDeSangre paquete = new PaqueteDeSangre("Tipo A", 10, bancoMock);
 
+        // Simula que el banco existe al buscar por id
         when(repositorioBancoMock.buscarPorId(1L)).thenReturn(bancoMock);
 
-        servicioBanco.agregarPaqueteDeSangre(1L, paquete);
+        // Ejecutar el método
+        servicioBanco.agregarPaqueteDeSangre(paquete, bancoMock);
 
-
-        verify(repositorioBancoMock).guardar(bancoMock);
+        // Verificar que el repositorio guarda el paquete de sangre
+        verify(repositorioBancoMock).guardarSangre(paquete, bancoMock);
     }
-
-    @Test
-    public void agregarPaqueteDeSangreSiBancoNoExisteDeberiaLanzarExcepcion() {
-        // Preparar datos de prueba
-        PaqueteDeSangre paquete = new PaqueteDeSangre();
-
-        // Simula que el banco no existe al buscar por id
-        when(repositorioBancoMock.buscarPorId(1L)).thenReturn(null);
-
-        // Ejecutar y verificar que se lanza la excepción
-        assertThrows(BancoNoEncontrado.class, () -> {
-            servicioBanco.agregarPaqueteDeSangre(1L, paquete);
-        });
-    }
-
 
     }

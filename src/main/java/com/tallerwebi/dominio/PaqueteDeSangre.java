@@ -13,8 +13,8 @@ import java.util.Objects;
         private String tipoSangre;
         private int cantidad;
 
-        @ManyToOne
-        @JoinColumn(name = "banco_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name ="Banco_id")
         private Banco banco;
 
         // Constructor por defecto

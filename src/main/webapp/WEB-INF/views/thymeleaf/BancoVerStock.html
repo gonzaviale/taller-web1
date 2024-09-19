@@ -56,16 +56,15 @@
                     <th scope="col">Cantidad</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>A+</td>
-                    <td>10</td>
+
+                <tr th:if="${#lists.isEmpty(paquetes)}">
+                    <td colspan="2">No hay paquetes de sangre disponibles.</td>
                 </tr>
-                <tr>
-                    <td>O-</td>
-                    <td>5</td>
+                <tr th:each="paquete : ${paquetes}">
+                    <td th:text="${paquete.tipoSangre}">Tipo de Sangre</td>
+                    <td th:text="${paquete.cantidad}">Cantidad</td>
                 </tr>
-                <!-- Aquí puedes agregar más filas dinámicamente desde el backend -->
+                </tbody>
                 </tbody>
             </table>
 

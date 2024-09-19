@@ -21,13 +21,17 @@
 
 <main role="main" class="container mt-4">
 
-    <!-- Mostrar el mensaje (error o éxito) si existe -->
-    <div th:if="${error != null or success != null}"
-         class="alert"
-         th:classappend="${error != null ? 'alert-danger' : 'alert-success'}"
-         role="alert">
-        <p th:text="${error != null ? error : success}"></p>
+
+    <!-- Mensaje de éxito -->
+    <div th:if="${param.success}" class="alert alert-success" role="alert">
+        <span th:text="${param.success}">Mensaje de éxito</span>
     </div>
+
+    <!-- Mensaje de error -->
+    <div th:if="${param.error}" class="alert alert-danger" role="alert">
+        <span th:text="${param.error}">Mensaje de error</span>
+    </div>
+
 
 
     <div class="row">
@@ -36,7 +40,7 @@
             <div class="position-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{'/BancoHome?idBanco=' + ${idBanco}}">
+                        <a class="nav-link" th:href="@{'/BancoHome'}">
                             Agregar Sangre
                         </a>
                     </li>

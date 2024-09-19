@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Controller
 public class ControladorBanco {
@@ -32,13 +33,29 @@ public class ControladorBanco {
 
 
     @RequestMapping("/BancoHome")
-    public ModelAndView BancoHome(@RequestParam(value = "idBanco") Integer idBanco,
+    public ModelAndView BancoHome(HttpSession session,
                                   @RequestParam(value = "error", required = false) String error) {
         ModelMap modelo = new ModelMap();
-        Banco banco = servicioBanco.BuscarBancoId(1L);
 
-        modelo.addAttribute("nombreBanco", banco.getNombreBanco());
-        modelo.addAttribute("idBanco", idBanco );
+
+        Long idBanco = (Long) session.getAttribute("idBanco");
+
+        if (idBanco != null) {
+
+            Banco banco = servicioBanco.BuscarBancoId(idBanco);
+
+            if (banco != null) {
+
+                modelo.addAttribute("nombreBanco", banco.getNombreBanco());
+                modelo.addAttribute("idBanco", idBanco);
+            } else {
+
+                modelo.addAttribute("error", "Banco no encontrado.");
+            }
+        } else {
+
+            modelo.addAttribute("error", "ID de banco no encontrado en la sesión.");
+        }
 
 
         if (error != null && !error.isEmpty()) {
@@ -50,12 +67,20 @@ public class ControladorBanco {
 
 
     @RequestMapping("/VerStock")
-    public ModelAndView VerStock() {
+    public ModelAndView VerStock(HttpSession session) {
+
+        Long idBanco = (Long) session.getAttribute("idBanco");
+        Banco banco = servicioBanco.BuscarBancoId(idBanco);
 
         ModelMap modelo = new ModelMap();
         modelo.put("datosBanco", new Banco());
+        List<PaqueteDeSangre> paquetes = servicioBanco.obtenerPaquetesDeSangrePorBanco(idBanco);
+        modelo.addAttribute("paquetes", paquetes);
         return new ModelAndView("BancoVerStock", modelo);
     }
+
+
+
 
     @RequestMapping("/VerPeticiones")
     public ModelAndView BancoVerPeticiones() {
@@ -67,39 +92,34 @@ public class ControladorBanco {
 
 
     @RequestMapping("/agregarPaquete")
-    public String agregarPaqueteDeSangre(@RequestParam("idBanco") Long idBanco,
+    public String agregarPaqueteDeSangre(HttpSession session,
                                          @RequestParam("tipoSangre") String tipoSangre,
-                                         @RequestParam("cantidad") int cantidad
-                                         )  {
+                                         @RequestParam("cantidad") int cantidad) {
         try {
+            Long idBanco = (Long) session.getAttribute("idBanco");
+
             Banco banco = servicioBanco.BuscarBancoId(idBanco);
             PaqueteDeSangre paquete = new PaqueteDeSangre(tipoSangre, cantidad, banco);
-            servicioBanco.agregarPaqueteDeSangre(idBanco, paquete);
-            return "redirect:/BancoHome?idBanco=" + idBanco + "&success=" +
-                    URLEncoder.encode("Paquete de sangre agregado con éxito", StandardCharsets.UTF_8);
-        }
-
-        catch (BancoNoEncontrado e) {
-            String errorMessage = e.getMessage() != null ? e.getMessage() : "Banco no Registrado inicia session";
-            return "redirect:/BancoHome?idBanco=" + idBanco + "&error=" +
+            servicioBanco.agregarPaqueteDeSangre(paquete,banco);
+            String errorMessage = "Paquete de sangre agregado con éxito";
+            return "redirect:/BancoHome?success=" +
+                    URLEncoder.encode(errorMessage, StandardCharsets.UTF_8);
+        } catch (BancoNoEncontrado e) {
+            String errorMessage = e.getMessage() != null ? e.getMessage() : "Banco no Registrado inicia sesión";
+            return "redirect:/BancoHome?error=" +
                     URLEncoder.encode(errorMessage, StandardCharsets.UTF_8);
         }
-
-
     }
 
-    @RequestMapping("/buscarBancoConIdCero")
-    public String buscarBancoConIdCero() {
 
-        Banco banco = servicioBanco.BuscarBancoId(1L);
+    @RequestMapping("/loginsimulado")
+    public String buscarBancoConIdCero(HttpSession session) {
+        Banco banco = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+        servicioBanco.agregarBanco(banco);
 
-        if (banco != null) {
+        session.setAttribute("idBanco", banco.getId());
 
-            return "redirect:/BancoHome?idBanco=0";
-
-
-        }
-        return "";
+        return "redirect:/BancoHome";
     }
 }
 

@@ -13,9 +13,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 
-@Repository
+@Repository("RepositorioBanco")
 public class RepositorioBancoImpl implements RepositorioBanco {
 
     private SessionFactory sessionFactory;
@@ -32,8 +33,11 @@ public class RepositorioBancoImpl implements RepositorioBanco {
     }
 
     @Override
-    public PaqueteDeSangre guardarSangre(PaqueteDeSangre paquete) {
+    public PaqueteDeSangre guardarSangre(PaqueteDeSangre paquete, Banco banco) {
+        banco.agregarPaqueteDeSangre(paquete);
+
         sessionFactory.getCurrentSession().save(paquete);
+        sessionFactory.getCurrentSession().saveOrUpdate(banco);
         return paquete;
     }
 
@@ -56,12 +60,33 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         return session.createQuery(cq).uniqueResult();
     }
 
+
+
     @Override
-    public Banco actualizar(Banco banco, PaqueteDeSangre paquete) {
-        this.guardar(banco);
-        this.guardarSangre(paquete);
-        return null;
+    public PaqueteDeSangre buscarSangre(String tipoSangre) {
+
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<PaqueteDeSangre> cq = cb.createQuery(PaqueteDeSangre.class);
+        Root<PaqueteDeSangre> root = cq.from(PaqueteDeSangre.class);
+        cq.select(root).where(cb.equal(root.get("tipoSangre"), tipoSangre));
+        return session.createQuery(cq).uniqueResult();
     }
 
+
+
+
+    public List<PaqueteDeSangre> obtenerPaquetesDeSangrePorBanco(Long idBanco) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<PaqueteDeSangre> cq = cb.createQuery(PaqueteDeSangre.class);
+        Root<PaqueteDeSangre> root = cq.from(PaqueteDeSangre.class);
+
+
+        cq.select(root);
+        cq.where(cb.equal(root.get("banco").get("id"), idBanco));
+
+        return session.createQuery(cq).getResultList();
+    }
 
 }

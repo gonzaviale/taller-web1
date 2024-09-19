@@ -3,10 +3,8 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.Banco;
 import com.tallerwebi.dominio.PaqueteDeSangre;
 import com.tallerwebi.dominio.RepositorioBanco;
-import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
@@ -28,8 +28,6 @@ import static org.hamcrest.Matchers.*;
 
 public class RepositorioBancoTest {
 
-    @Autowired
-    SessionFactory sessionFactory;
 
     @Autowired
     private RepositorioBanco bancoRepository;
@@ -72,18 +70,18 @@ public class RepositorioBancoTest {
     @Transactional
     @Rollback
     void testBuscarBancoPorId() {
-        // Crear y guardar un banco de prueba
+
         Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
                 "123456789", "test@example.com", "testpassword", "Horario Test");
         Banco savedBanco = bancoRepository.guardar(banco);
 
-        // Buscar el banco por ID
+
         Banco bancoEncontrado = bancoRepository.buscarPorId(savedBanco.getId());
 
-        // Verificar que el banco encontrado no sea nulo
+
         assertThat(bancoEncontrado, is(notNullValue()));
 
-        // Verificar que el banco encontrado tenga los mismos detalles que el banco guardado
+
         assertThat(bancoEncontrado.getId(), is(equalTo(savedBanco.getId())));
         assertThat(bancoEncontrado.getNombreBanco(), is(equalTo("Banco Test")));
     }
@@ -148,4 +146,22 @@ public class RepositorioBancoTest {
         ));
 
     }
+    @Transactional
+    @Rollback
+    @Test
+    public void testGuardarSangre() {
+        Banco banco = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+        bancoRepository.guardar(banco);
+        PaqueteDeSangre paquete = new PaqueteDeSangre("O-", 5,banco );
+
+         bancoRepository.guardarSangre(paquete, banco);
+
+        PaqueteDeSangre  paqueteGuardado=bancoRepository.buscarSangre("O-");
+        // Verificamos que se haya guardado correctamente
+        assertNotNull(paqueteGuardado.getId()); // Se verifica que el ID se generó
+        assertEquals("O-", paqueteGuardado.getTipoSangre());
+        assertEquals(5, paqueteGuardado.getCantidad());
+    }
+
+
 }

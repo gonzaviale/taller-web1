@@ -37,7 +37,7 @@ public class Banco {
     @Column(name = "horario", nullable = false, length = 255)
     private String horario;
 
-    @OneToMany(mappedBy = "banco")
+    @OneToMany(mappedBy = "banco", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PaqueteDeSangre> stockSangre;
 
 
@@ -61,34 +61,15 @@ public class Banco {
 
 
 
-
-    public List<PaqueteDeSangre> getStockSangre() {
-        return stockSangre;
-    }
-
     public List<PaqueteDeSangre> getPaquetesDeSangre() {
         return stockSangre;
     }
 
 
-
     public void agregarPaqueteDeSangre(PaqueteDeSangre nuevoPaquete) {
 
-        PaqueteDeSangre paqueteExistente = stockSangre.stream()
-                .filter(p -> p.getTipoSangre().equals(nuevoPaquete.getTipoSangre()))
-                .findFirst()
-                .orElse(null);
-
-        if (paqueteExistente == null) {
-            this.stockSangre.add(nuevoPaquete);
-        } else {
-            paqueteExistente.setCantidad(paqueteExistente.getCantidad() + nuevoPaquete.getCantidad());
-
-        }
+        this.stockSangre.add(nuevoPaquete);
     }
-
-
-
 
     public Long getId() {
         return id;
