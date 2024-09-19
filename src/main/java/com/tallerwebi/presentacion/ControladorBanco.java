@@ -22,33 +22,31 @@ import java.nio.charset.StandardCharsets;
 @Controller
 public class ControladorBanco {
 
-    private ServicioBanco servicioBanco;
+    private final ServicioBanco servicioBanco;
 
 
     @Autowired
-    public ControladorBanco( ServicioBanco servicioBanco) {
+    public ControladorBanco(ServicioBanco servicioBanco) {
         this.servicioBanco = servicioBanco;
     }
 
 
-
-
     @RequestMapping("/BancoHome")
-    public ModelAndView BancoHome(@RequestParam(value = "error", required = false) String error) {
+    public ModelAndView BancoHome(@RequestParam(value = "idBanco") Integer idBanco,
+                                  @RequestParam(value = "error", required = false) String error) {
         ModelMap modelo = new ModelMap();
-        modelo.put("datosBanco", new Banco());
-        modelo.addAttribute("idBanco", 0);
+        Banco banco = servicioBanco.BuscarBancoId(1L);
 
-        // Añadir el mensaje de error al modelo si está presente
+        modelo.addAttribute("nombreBanco", banco.getNombreBanco());
+        modelo.addAttribute("idBanco", idBanco );
+
+
         if (error != null && !error.isEmpty()) {
             modelo.addAttribute("error", error);
         }
 
         return new ModelAndView("BancoHome", modelo);
     }
-
-
-
 
 
     @RequestMapping("/VerStock")
@@ -58,6 +56,7 @@ public class ControladorBanco {
         modelo.put("datosBanco", new Banco());
         return new ModelAndView("BancoVerStock", modelo);
     }
+
     @RequestMapping("/VerPeticiones")
     public ModelAndView BancoVerPeticiones() {
 
@@ -70,31 +69,45 @@ public class ControladorBanco {
     @RequestMapping("/agregarPaquete")
     public String agregarPaqueteDeSangre(@RequestParam("idBanco") Long idBanco,
                                          @RequestParam("tipoSangre") String tipoSangre,
-                                         @RequestParam("cantidad") int cantidad,
-                                         RedirectAttributes redirectAttributes) {
+                                         @RequestParam("cantidad") int cantidad
+                                         ) {
         try {
-            Banco banco = new Banco();
+            Banco banco = servicioBanco.BuscarBancoId(idBanco);
             PaqueteDeSangre paquete = new PaqueteDeSangre(tipoSangre, cantidad, banco);
             servicioBanco.agregarPaqueteDeSangre(idBanco, paquete);
-            return "redirect:/BancoHome?success=" + URLEncoder.encode("Paquete de sangre agregado con éxito", StandardCharsets.UTF_8);
+            return "redirect:/BancoHome?idBanco=" + idBanco + "&success=" +
+                    URLEncoder.encode("Paquete de sangre agregado con éxito", StandardCharsets.UTF_8);
+        }
 
-        } catch (BancoNoEncontrado e) {
+        catch (BancoNoEncontrado e) {
             String errorMessage = e.getMessage() != null ? e.getMessage() : "Banco no Registrado inicia session";
-            // Redirige a BancoHome con un parámetro de error
-            return "redirect:/BancoHome?error=" + URLEncoder.encode(errorMessage, StandardCharsets.UTF_8);
+            return "redirect:/BancoHome?idBanco=" + idBanco + "&error=" +
+                    URLEncoder.encode(errorMessage, StandardCharsets.UTF_8);
         }
     }
 
+    @RequestMapping("/buscarBancoConIdCero")
+    public String buscarBancoConIdCero() {
+        // Lógica para buscar el banco con id = 0 (o alguna validación)
+        Banco banco = servicioBanco.BuscarBancoId(1L);
+
+        if (banco != null) {
+            // Redirige a la página BancoHome con el idBanco = 0
+            return "redirect:/BancoHome?idBanco=0";
 
 
-
-
-
-
-
-
-
+        }
+        return "";
     }
+}
+
+
+
+
+
+
+
+
 
 
 

@@ -8,12 +8,12 @@ import javax.transaction.Transactional;
 
 @Transactional
 @Service("ServicioBanco")
-public class ServicioBancoImp implements ServicioBanco {
+public class ServicioBancoImpl implements ServicioBanco {
 
     private final RepositorioBanco repositorio;
 
     // Inyección de dependencias a través del constructor
-    public ServicioBancoImp(RepositorioBanco repositorio) {
+    public ServicioBancoImpl(RepositorioBanco repositorio) {
         this.repositorio = repositorio;
     }
 
@@ -25,11 +25,7 @@ public class ServicioBancoImp implements ServicioBanco {
             throw new BancoNoEncontrado("El banco con ID " + idBanco + " no fue encontrado.");
         }
 
-        String tipoSangre = paquete.getTipoSangre();
-        int cantidad = paquete.getCantidad();
-
-        banco.agregarPaqueteDeSangre(tipoSangre, cantidad);
-
+        banco.agregarPaqueteDeSangre( paquete);
 
         return  repositorio.guardar(banco);
 
@@ -37,6 +33,9 @@ public class ServicioBancoImp implements ServicioBanco {
 
     @Override
     public Banco BuscarBancoId(Long idBanco) {
+
         return this.repositorio.buscarPorId(idBanco);
     }
+
+
 }

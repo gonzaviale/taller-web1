@@ -3,10 +3,7 @@ package com.tallerwebi.dominio;
 import org.springframework.beans.MutablePropertyValues;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 public class Banco {
@@ -75,20 +72,18 @@ public class Banco {
 
 
 
-    public void agregarPaqueteDeSangre(String tipoSangre, int cantidad) {
+    public void agregarPaqueteDeSangre(PaqueteDeSangre nuevoPaquete) {
 
-        PaqueteDeSangre paquete = stockSangre.stream()
-                .filter(p -> p.getTipoSangre().equals(tipoSangre))
+        PaqueteDeSangre paqueteExistente = stockSangre.stream()
+                .filter(p -> p.getTipoSangre().equals(nuevoPaquete.getTipoSangre()))
                 .findFirst()
                 .orElse(null);
 
-
-        if (paquete == null) {
-            paquete = new PaqueteDeSangre(tipoSangre, cantidad,this);
-            this.stockSangre.add(paquete);
+        if (paqueteExistente == null) {
+            this.stockSangre.add(nuevoPaquete);
         } else {
+            paqueteExistente.setCantidad(paqueteExistente.getCantidad() + nuevoPaquete.getCantidad());
 
-            paquete.setCantidad(paquete.getCantidad() + cantidad);
         }
     }
 
@@ -186,5 +181,16 @@ public class Banco {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Banco banco = (Banco) o;
+        return Objects.equals(id, banco.id) && Objects.equals(nombreBanco, banco.nombreBanco) && Objects.equals(direccion, banco.direccion) && Objects.equals(ciudad, banco.ciudad) && Objects.equals(pais, banco.pais) && Objects.equals(telefono, banco.telefono) && Objects.equals(email, banco.email) && Objects.equals(password, banco.password) && Objects.equals(horario, banco.horario) && Objects.equals(stockSangre, banco.stockSangre);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nombreBanco, direccion, ciudad, pais, telefono, email, password, horario, stockSangre);
+    }
 }

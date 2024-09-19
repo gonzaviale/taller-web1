@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.excepcion.BancoNoEncontrado;
-import com.tallerwebi.infraestructura.ServicioBancoImp;
+import com.tallerwebi.infraestructura.ServicioBancoImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 public class ServicioBancoTest {
 
     private final RepositorioBanco repositorioBancoMock = mock(RepositorioBanco.class);
-    private final ServicioBancoImp servicioBanco = new ServicioBancoImp(repositorioBancoMock);
+    private final ServicioBancoImpl servicioBanco = new ServicioBancoImpl(repositorioBancoMock);
 
 
 

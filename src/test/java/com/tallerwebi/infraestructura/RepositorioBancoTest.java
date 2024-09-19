@@ -67,6 +67,7 @@ public class RepositorioBancoTest {
         assertThat(savedBanco.getDireccion(), is(equalTo("Dirección Test")));
 
     }
+
     @Test
     @Transactional
     @Rollback
@@ -91,11 +92,15 @@ public class RepositorioBancoTest {
     @Transactional
     @Rollback
     void testAgregarPaqueteDeSangreSiBancoExiste() {
+        // Crear un banco de prueba
         Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
                 "123456789", "test@example.com", "testpassword", "Horario Test");
 
 
-        banco.agregarPaqueteDeSangre("A+", 5);
+        PaqueteDeSangre paquete = new PaqueteDeSangre("A+", 5, banco);
+        banco.agregarPaqueteDeSangre(paquete);
+
+
         Banco bancoConPaquetes = bancoRepository.guardar(banco);
 
 
@@ -103,9 +108,11 @@ public class RepositorioBancoTest {
         assertThat(bancoConPaquetes.getPaquetesDeSangre().size(), is(1));
 
 
-
-
+        PaqueteDeSangre paqueteGuardado = bancoConPaquetes.getPaquetesDeSangre().get(0);
+        assertThat(paqueteGuardado.getTipoSangre(), is("A+"));
+        assertThat(paqueteGuardado.getCantidad(), is(5));
     }
+
     @Test
     @Transactional
     @Rollback
@@ -114,30 +121,31 @@ public class RepositorioBancoTest {
         Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
                 "123456789", "test@example.com", "testpassword", "Horario Test");
 
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, banco);
 
-        banco.agregarPaqueteDeSangre("A+", 5);
-        banco.agregarPaqueteDeSangre("B-", 3);
-        banco.agregarPaqueteDeSangre("O+", 7);
+        banco.agregarPaqueteDeSangre(paqueteA);
+        banco.agregarPaqueteDeSangre(paqueteB);
+        banco.agregarPaqueteDeSangre(paqueteO);
 
-
+        // Guardar el banco en la base de datos
         Banco bancoConPaquetes = bancoRepository.guardar(banco);
 
-
+        // Verificar que el banco no es nulo
         assertThat(bancoConPaquetes, is(notNullValue()));
 
-
-        assertThat(bancoConPaquetes.getPaquetesDeSangre().size(), is(3));
-
-
+        // Verificar que se guardaron los tres paquetes
         List<PaqueteDeSangre> paquetes = bancoConPaquetes.getPaquetesDeSangre();
         assertThat(paquetes, hasSize(3));
+
+        // Verificar las propiedades de los paquetes
         assertThat(paquetes, hasItems(
                 allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
                 allOf(hasProperty("tipoSangre", is("B-")), hasProperty("cantidad", is(3))),
                 allOf(hasProperty("tipoSangre", is("O+")), hasProperty("cantidad", is(7)))
         ));
+
     }
-
-
-
 }

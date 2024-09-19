@@ -36,7 +36,7 @@
             <div class="position-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="BancoHome">
+                        <a class="nav-link" th:href="@{'/BancoHome?idBanco=' + ${idBanco}}">
                             Agregar Sangre
                         </a>
                     </li>
@@ -60,26 +60,24 @@
 
         <!-- Main content -->
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <h1>Banco Home</h1>
+            <h1>Banco Home: <span th:text="${nombreBanco}"></span></h1>
 
 
             <form action="#" th:action="@{/agregarPaquete}" method="post">
                 <div class="mb-3">
 
-                 <!--   <input type="hidden" name="idBanco" th:value="${idBanco}"/> -->
-                    <input type="hidden" name="idBanco" th:value="0"/>
-
+                    <input type="hidden" th:value="${idBanco}" name="idBanco" />
                     <label for="tipoSangre" class="form-label">Tipo de Sangre</label>
                     <select id="tipoSangre" name="tipoSangre" class="form-select" required>
                         <option value="" disabled selected>Seleccione el tipo de sangre</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
+                        <option value="DEA 1.1+">DEA 1.1+</option>
+                        <option value="DEA 1.1-">DEA 1.1-</option>
+                        <option value="DEA 1.2+">DEA 1.2+</option>
+                        <option value="DEA 1.2-">DEA 1.2-</option>
+                        <option value="DEA 3+">DEA 3+</option>
+                        <option value="DEA 3-">DEA 3-</option>
+                        <option value="DEA 4+">DEA 4+</option>
+                        <option value="DEA 4-">DEA 4-</option>
                     </select>
                 </div>
 
