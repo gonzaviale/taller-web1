@@ -22,12 +22,11 @@ public class ServicioBancoImpl implements ServicioBanco {
         Banco banco = (Banco) repositorio.buscarPorId(idBanco);
 
         if (banco == null) {
-            throw new BancoNoEncontrado("El banco con ID " + idBanco + " no fue encontrado.");
+            throw new BancoNoEncontrado("gfdg");
         }
 
         banco.agregarPaqueteDeSangre( paquete);
-
-        return  repositorio.guardar(banco);
+        return  repositorio.actualizar(banco,paquete);
 
     }
 
@@ -36,6 +35,8 @@ public class ServicioBancoImpl implements ServicioBanco {
 
         return this.repositorio.buscarPorId(idBanco);
     }
+
+
 
 
 }

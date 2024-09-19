@@ -37,7 +37,7 @@ public class Banco {
     @Column(name = "horario", nullable = false, length = 255)
     private String horario;
 
-    @OneToMany(mappedBy = "banco", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "banco")
     private List<PaqueteDeSangre> stockSangre;
 
 

@@ -1,8 +1,9 @@
 package com.tallerwebi.dominio;
 import javax.persistence.*;
+import java.util.Objects;
 
 
-    @Entity
+@Entity
     public class PaqueteDeSangre {
 
         @Id
@@ -25,8 +26,20 @@ import javax.persistence.*;
             this.banco = banco;
         }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PaqueteDeSangre that = (PaqueteDeSangre) o;
+        return cantidad == that.cantidad && Objects.equals(id, that.id) && Objects.equals(tipoSangre, that.tipoSangre) && Objects.equals(banco, that.banco);
+    }
 
-        // Getters y setters
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, tipoSangre, cantidad, banco);
+    }
+
+    // Getters y setters
         public Long getId() {
             return id;
         }

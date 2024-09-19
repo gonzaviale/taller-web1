@@ -70,7 +70,7 @@ public class ControladorBanco {
     public String agregarPaqueteDeSangre(@RequestParam("idBanco") Long idBanco,
                                          @RequestParam("tipoSangre") String tipoSangre,
                                          @RequestParam("cantidad") int cantidad
-                                         ) {
+                                         )  {
         try {
             Banco banco = servicioBanco.BuscarBancoId(idBanco);
             PaqueteDeSangre paquete = new PaqueteDeSangre(tipoSangre, cantidad, banco);
@@ -84,15 +84,17 @@ public class ControladorBanco {
             return "redirect:/BancoHome?idBanco=" + idBanco + "&error=" +
                     URLEncoder.encode(errorMessage, StandardCharsets.UTF_8);
         }
+
+
     }
 
     @RequestMapping("/buscarBancoConIdCero")
     public String buscarBancoConIdCero() {
-        // Lógica para buscar el banco con id = 0 (o alguna validación)
+
         Banco banco = servicioBanco.BuscarBancoId(1L);
 
         if (banco != null) {
-            // Redirige a la página BancoHome con el idBanco = 0
+
             return "redirect:/BancoHome?idBanco=0";
 
 

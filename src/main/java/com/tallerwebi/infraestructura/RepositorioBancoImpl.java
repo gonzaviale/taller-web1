@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Banco;
+import com.tallerwebi.dominio.PaqueteDeSangre;
 import com.tallerwebi.dominio.RepositorioBanco;
 import com.tallerwebi.dominio.Usuario;
 import org.hibernate.Session;
@@ -31,6 +32,12 @@ public class RepositorioBancoImpl implements RepositorioBanco {
     }
 
     @Override
+    public PaqueteDeSangre guardarSangre(PaqueteDeSangre paquete) {
+        sessionFactory.getCurrentSession().save(paquete);
+        return paquete;
+    }
+
+    @Override
     public Banco buscarBanco(String email, String password) {
         final Session session = sessionFactory.getCurrentSession();
         return (Banco) session.createCriteria(Usuario.class)
@@ -47,6 +54,13 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         Root<Banco> root = cq.from(Banco.class);
         cq.select(root).where(cb.equal(root.get("id"), idBanco));
         return session.createQuery(cq).uniqueResult();
+    }
+
+    @Override
+    public Banco actualizar(Banco banco, PaqueteDeSangre paquete) {
+        this.guardar(banco);
+        this.guardarSangre(paquete);
+        return null;
     }
 
 
