@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ControladorLogin {
 
     private ServicioLogin servicioLogin;
+    private ModelMap modelo = new ModelMap();
 
     @Autowired
     public ControladorLogin(ServicioLogin servicioLogin) {
@@ -34,30 +36,64 @@ public class ControladorLogin {
 
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
-        ModelMap model = new ModelMap();
+
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
             return new ModelAndView("redirect:/home");
         } else {
-            model.put("error", "Usuario o clave incorrecta");
+            modelo.put("error", "Usuario o clave incorrecta");
         }
-        return new ModelAndView("login", model);
+        return new ModelAndView("login", modelo);
     }
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
-        ModelMap model = new ModelMap();
+    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario,
+                                    @RequestParam("confirmPassword") String confirmPassword) {
+        modelo.clear();
+
+        if (nombreEstaVacio(usuario.getNombre())) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+
+        }
+
+        if (apellidoEstaVacio(usuario.getApellido())) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        if (emailEstaVacio(usuario.getEmail())) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        if (rolEstaVacio(usuario.getRol())) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        if (passwordEstaVacia(usuario.getPassword(), confirmPassword)) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        if (passwordsDiferentes(usuario.getPassword(), confirmPassword)) {
+            modelo.put("usuario", usuario);
+            return new ModelAndView("nuevo-usuario", modelo);
+        }
+
         try {
             servicioLogin.registrar(usuario);
         } catch (UsuarioExistente e) {
-            model.put("error", "El usuario ya existe");
-            return new ModelAndView("nuevo-usuario", model);
+            modelo.put("error", "El usuario ya existe");
+            return new ModelAndView("nuevo-usuario", modelo);
         } catch (Exception e) {
-            model.put("error", "Error al registrar el nuevo usuario");
-            return new ModelAndView("nuevo-usuario", model);
+            modelo.put("error", "Error al registrar el nuevo usuario");
+            return new ModelAndView("nuevo-usuario", modelo);
         }
+
         return new ModelAndView("redirect:/login");
     }
 
@@ -99,5 +135,52 @@ public class ControladorLogin {
     public ModelAndView inicio() {
         return new ModelAndView("redirect:/login");
     }
-}
 
+    private Boolean apellidoEstaVacio(String apellido) {
+        if (apellido.isEmpty()) {
+            modelo.put("errorApellido", "El campo apellido es obligatorio");
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean nombreEstaVacio(String nombre) {
+        if (nombre.isEmpty()) {
+            modelo.put("errorNombre", "El campo nombre es obligatorio");
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean emailEstaVacio(String email) {
+        if (email == null || email.isEmpty()) {
+            modelo.put("errorEmail", "El campo email es obligatorio");
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean passwordEstaVacia(String contrasena1, String contrasena2) {
+        if (contrasena1.isEmpty() || contrasena2.isEmpty()) {
+            modelo.put("errorPassword", "El campo contraseña es obligatorio");
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean passwordsDiferentes(String password1, String password2) {
+        if (!password1.equals(password2)) {
+            modelo.put("errorPasswordsDistintas", "Las contraseñas deben ser iguales");
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean rolEstaVacio(String rol) {
+        if (rol == null || rol.isEmpty()) {
+            modelo.put("errorRol", "Debe ingresar un rol");
+            return true;
+        }
+        return false;
+    }
+}

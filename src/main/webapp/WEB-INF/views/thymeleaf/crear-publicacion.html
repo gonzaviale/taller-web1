@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>crear-publicacion</title>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main>
+    <h1>Registrar Publicación</h1>
+
+    <!-- El formulario envía una solicitud POST a /registrarPublicacion -->
+    <form th:action="@{/publicarPublicacion}" method="post" th:object="${publicacion}">
+        <!-- Campo Título -->
+        <label for="titulo">Título:</label><br>
+        <input th:field="*{titulo}" type="text" id="titulo"><br><br>
+
+        <!-- Campo Descripción -->
+        <label for="descripcion">Descripción:</label><br>
+        <textarea id="descripcion" th:field="*{descripcion}"></textarea><br><br>
+
+        <!-- Campo Puede Movilizarse -->
+        <label>¿Puede movilizarse?</label><br>
+        <input type="radio" id="movilizarseSi" th:field="*{puedeMovilizarse}" value="true" >
+        <label for="movilizarseSi">Sí</label>
+        <input type="radio" id="movilizarseNo" th:field="*{puedeMovilizarse}" value="false">
+        <label for="movilizarseNo">No</label><br><br>
+
+        <!-- Campo Tipo de Sangre -->
+        <label for="tipoDeSangre">Tipo de Sangre:</label><br>
+        <select id="tipoDeSangre" th:field="*{tipoDeSangre}" required>
+            <option value="">Seleccione el tipo de sangre</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+        </select><br><br>
+
+        <!-- Campo Zona de Residencia -->
+        <label for="zonaDeResidencia">Zona de Residencia:</label><br>
+        <input type="text" id="zonaDeResidencia" th:field="*{zonaDeResidencia}" ><br><br>
+
+        <!-- Campo Tipo de Publicación -->
+        <label for="tipoDePublicacion">Tipo de Publicación:</label><br>
+        <select id="tipoDePublicacion" th:field="*{tipoDePublicacion}" required>
+            <option value="">Seleccione el tipo de publicación</option>
+            <option value="venta">Venta</option>
+            <option value="donación">Donación</option>
+            <option value="busqueda">buscaqueda</option>
+        </select><br><br>
+
+        <!-- Botón Registrar -->
+        <button type="submit">Registrar Publicación</button>
+
+    </form>
+</main>
+
+</body>
+</html>

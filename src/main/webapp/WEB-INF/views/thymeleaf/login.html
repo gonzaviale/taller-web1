@@ -17,7 +17,7 @@
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">UNLAM</a>
+    <a class="navbar-brand" th:href="@{/login.html}">UNLAM</a>
 </nav>
 
 <main role="main" class="container">
@@ -28,7 +28,10 @@
                 <h3 class="form-signin-heading">Taller Web I</h3>
                 <hr class="colorgraph"><br>
 
+                <label for = "email">Introduzca su email</label>
                 <input th:field="*{email}" id="email" type="email" class="form-control" required/>
+
+                <label for="password">Introduzca su contraseñia</label>
                 <input th:field="*{password}" type="password" id="password" class="form-control" required/>
 
                 <button id="btn-login" class="btn btn-lg btn-primary btn-block" Type="Submit">Login</button>

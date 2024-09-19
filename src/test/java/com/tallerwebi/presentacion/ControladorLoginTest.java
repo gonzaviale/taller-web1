@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class ControladorLoginTest {
@@ -31,6 +32,10 @@ public class ControladorLoginTest {
 		usuarioMock = mock(Usuario.class);
 		 bancoMock = mock(Banco.class);
 		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
+		when(usuarioMock.getPassword()).thenReturn("123");
+		when(usuarioMock.getApellido()).thenReturn("Alarcón");
+		when(usuarioMock.getNombre()).thenReturn("Lucía");
+		when(usuarioMock.getRol()).thenReturn("a");
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
 		servicioLoginMock = mock(ServicioLogin.class);
@@ -72,7 +77,7 @@ public class ControladorLoginTest {
 	public void registrameSiUsuarioNoExisteDeberiaCrearUsuarioYVolverAlLogin() throws UsuarioExistente {
 
 		// ejecucion
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
@@ -85,7 +90,7 @@ public class ControladorLoginTest {
 		doThrow(UsuarioExistente.class).when(servicioLoginMock).registrar(usuarioMock);
 
 		// ejecucion
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
@@ -97,8 +102,9 @@ public class ControladorLoginTest {
 		// preparacion
 		doThrow(RuntimeException.class).when(servicioLoginMock).registrar(usuarioMock);
 
+
 		// ejecucion
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock);
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
@@ -106,15 +112,62 @@ public class ControladorLoginTest {
 	}
 
 	@Test
-	public void testRegistrarBancoSiNoExisteDeberiaCrearBancoYVolverAlLogin() throws BancoExistente, UsuarioExistente {
+	public void siNoSeIngresaMailElRegistroFalla(){
+		when(usuarioMock.getEmail()).thenReturn("");
 
-		// Ejecución
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
 
-		ModelAndView modelAndView = controladorLogin.registrarBanco(bancoMock);
+		thenRegistroFalla(modelAndView, "errorEmail", "El campo email es obligatorio");
+	}
 
-		// Validación
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
-		verify(servicioLoginMock, times(1)).registrarBanco(bancoMock);
+	@Test
+	public void siNoSeIngresaApellidoElRegistroFalla(){
+		when(usuarioMock.getApellido()).thenReturn("");
+
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
+
+		thenRegistroFalla(modelAndView, "errorApellido", "El campo apellido es obligatorio");
+	}
+
+	@Test
+	public void siNoSeIngresaNombreElRegistroFalla(){
+		when(usuarioMock.getNombre()).thenReturn("");
+
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
+
+		thenRegistroFalla(modelAndView, "errorNombre", "El campo nombre es obligatorio");
+	}
+
+	@Test
+	public void siNoSeIngresaUnaDeLasPasswordElRegistroFalla(){
+
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "");
+
+		thenRegistroFalla(modelAndView, "errorPassword", "El campo contraseña es obligatorio");
+	}
+
+	@Test
+	public void siLasPasswordsSonDistintasElRegistroFalla(){
+		when(usuarioMock.getPassword()).thenReturn("123");
+
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "abc");
+
+		thenRegistroFalla(modelAndView, "errorPasswordsDistintas", "Las contraseñas deben ser iguales");
+	}
+
+	@Test
+	public void siNoSeIngresaUnRolElRegistroFalla(){
+		when(usuarioMock.getRol()).thenReturn("");
+
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
+
+		thenRegistroFalla(modelAndView, "errorRol", "Debe ingresar un rol");
+	}
+
+	private void thenRegistroFalla(ModelAndView mav, String errorKey, String mensajeError) {
+		assertThat(mav.getViewName(), equalToIgnoringCase("nuevo-usuario"));
+
+		assertThat(mav.getModel().get(errorKey).toString(), equalToIgnoringCase(mensajeError));
 	}
 
 }
