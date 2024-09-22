@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.ServicioPublicacion;
 import com.tallerwebi.dominio.excepcion.PublicacionNoValida;
 import com.tallerwebi.dominio.excepcion.PublicacionSinTipoDePublicacion;
 import com.tallerwebi.dominio.excepcion.PublicacionSinTipoDeSangre;
+import com.tallerwebi.dominio.excepcion.PublicacionSinTitulo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,17 +29,20 @@ public class ControladorPublicacion {
         try {
             servicioPublicacion.guardarPublicacion(nuevaPublicacion);
         }catch (PublicacionSinTipoDeSangre ex){
-            model = new ModelMap("error", "el campo sangre no puede estar vacio");
-            return new ModelAndView("error", model);
+            model = new ModelMap("mensaje", "Publicacion no registrada: el campo sangre no puede estar vacio");
+            return new ModelAndView("redirect:/home", model);
         } catch (PublicacionSinTipoDePublicacion e) {
-            model = new ModelMap("error", "el campo tipo de publicacion no puede estar vacio");
-            return new ModelAndView("error", model);
+            model = new ModelMap("mensaje", "Publicacion no registrada: el campo tipo de publicacion no puede estar vacio");
+            return new ModelAndView("redirect:/home", model);
         }catch (PublicacionNoValida e) {
-            model = new ModelMap("error", "el campo tipo de publicacion y el campo de sangre no puede estar vacio");
-            return new ModelAndView("error", model);
+            model = new ModelMap("mensaje", "Publicacion no registrada: el campo tipo de publicacion y el campo de sangre no puede estar vacio");
+            return new ModelAndView("redirect:/home", model);
+        } catch (PublicacionSinTitulo e) {
+            model = new ModelMap("mensaje", "Publicacion no registrada: el campo titulo de la publicacion no puede estar vacio");
+            return new ModelAndView("redirect:/home", model);
         }
-        model = new ModelMap("registroExitoso", "la publicacion fue registrada correctamente");
-        return new ModelAndView("redirect:/registro-exitoso", model);
+        model = new ModelMap("mensaje", "la publicacion fue registrada correctamente");
+        return new ModelAndView("redirect:/home", model);
     }
 
     @RequestMapping(path ="/crear-publicacion")
@@ -46,11 +50,6 @@ public class ControladorPublicacion {
         ModelMap model= new ModelMap();
         model.put("publicacion", new Publicacion());
         return new ModelAndView("crear-publicacion",model);
-    }
-
-    @RequestMapping("/registro-exitoso")
-    public ModelAndView registroExitoso() {
-        return new ModelAndView("registro-exitoso");
     }
 
 }
