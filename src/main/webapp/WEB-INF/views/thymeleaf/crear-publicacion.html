@@ -3,63 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>crear-publicacion</title>
 </head>
 <body>
 <header th:replace="fragments/header :: header"></header>
 
-<main>
-    <h1>Registrar Publicación</h1>
+<main class="container mt-5">
+    <h1 class="text-center mb-4">Registrar Publicación</h1>
 
     <!-- El formulario envía una solicitud POST a /registrarPublicacion -->
-    <form th:action="@{/publicarPublicacion}" method="post" th:object="${publicacion}">
+    <form id="formPublicacion" th:action="@{/publicarPublicacion}" method="post" th:object="${publicacion}" class="needs-validation" novalidate>
+
         <!-- Campo Título -->
-        <label for="titulo">Título:</label><br>
-        <input th:field="*{titulo}" type="text" id="titulo"><br><br>
+        <div class="mb-3">
+            <label for="titulo" class="form-label">Título:</label>
+            <input th:field="*{titulo}" type="text" id="titulo" class="form-control" required>
+            <div class="invalid-feedback">Por favor, ingrese un título.</div>
+        </div>
 
         <!-- Campo Descripción -->
-        <label for="descripcion">Descripción:</label><br>
-        <textarea id="descripcion" th:field="*{descripcion}"></textarea><br><br>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción:</label>
+            <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="4"></textarea>
+        </div>
 
         <!-- Campo Puede Movilizarse -->
-        <label>¿Puede movilizarse?</label><br>
-        <input type="radio" id="movilizarseSi" th:field="*{puedeMovilizarse}" value="true" >
-        <label for="movilizarseSi">Sí</label>
-        <input type="radio" id="movilizarseNo" th:field="*{puedeMovilizarse}" value="false">
-        <label for="movilizarseNo">No</label><br><br>
+        <div class="mb-3">
+            <label class="form-label">¿Puede movilizarse?</label><br>
+            <div class="form-check form-check-inline">
+                <input type="radio" id="movilizarseSi" th:field="*{puedeMovilizarse}" value="true" class="form-check-input">
+                <label for="movilizarseSi" class="form-check-label">Sí</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" id="movilizarseNo" th:field="*{puedeMovilizarse}" value="false" class="form-check-input">
+                <label for="movilizarseNo" class="form-check-label">No</label>
+            </div>
+        </div>
 
         <!-- Campo Tipo de Sangre -->
-        <label for="tipoDeSangre">Tipo de Sangre:</label><br>
-        <select id="tipoDeSangre" th:field="*{tipoDeSangre}" required>
-            <option value="">Seleccione el tipo de sangre</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-        </select><br><br>
+        <div class="mb-3">
+            <label for="tipoDeSangre" class="form-label">Tipo de Sangre:</label>
+            <select id="tipoDeSangre" th:field="*{tipoDeSangre}" class="form-select" required>
+                <option value="">Seleccione el tipo de sangre</option>
+                <option value="DEA-1.1.">DEA-1.1.</option>
+                <option value="DEA-1.2.">DEA-1.2.-</option>
+                <option value="DEA-3">DEA-3</option>
+                <option value="DEA-4">DEA-4-</option>
+                <option value="DEA-5">DEA-5</option>
+                <option value="DEA-6">DEA-6-</option>
+                <option value="DEA-7">DEA-7</option>
+                <option value="DEA-8 ">DEA-8-</option>
+            </select>
+            <div class="invalid-feedback">Por favor, seleccione un tipo de sangre.</div>
+        </div>
 
         <!-- Campo Zona de Residencia -->
-        <label for="zonaDeResidencia">Zona de Residencia:</label><br>
-        <input type="text" id="zonaDeResidencia" th:field="*{zonaDeResidencia}" ><br><br>
+        <div class="mb-3">
+            <label for="zonaDeResidencia" class="form-label">Zona de Residencia:</label>
+            <input type="text" id="zonaDeResidencia" th:field="*{zonaDeResidencia}" class="form-control">
+        </div>
 
         <!-- Campo Tipo de Publicación -->
-        <label for="tipoDePublicacion">Tipo de Publicación:</label><br>
-        <select id="tipoDePublicacion" th:field="*{tipoDePublicacion}" required>
-            <option value="">Seleccione el tipo de publicación</option>
-            <option value="venta">Venta</option>
-            <option value="donación">Donación</option>
-            <option value="busqueda">buscaqueda</option>
-        </select><br><br>
+        <div class="mb-3">
+            <label for="tipoDePublicacion" class="form-label">Tipo de Publicación:</label>
+            <select id="tipoDePublicacion" th:field="*{tipoDePublicacion}" class="form-select" required>
+                <option value="">Seleccione el tipo de publicación</option>
+                <option value="venta">Venta</option>
+                <option value="donación">Donación</option>
+                <option value="busqueda">Búsqueda</option>
+            </select>
+            <div class="invalid-feedback">Por favor, seleccione un tipo de publicación.</div>
+        </div>
 
         <!-- Botón Registrar -->
-        <button type="submit">Registrar Publicación</button>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Publicar</button>
+        </div>
 
     </form>
+
 </main>
+
+<!-- Incluimos Bootstrap JS y Popper.js para la funcionalidad de validación -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+
+<!-- Script para la validación de formulario -->
+<script>
+    (function () {
+        'use strict'
+
+        let firstAttempt = true;
+
+        // Seleccionamos el formulario
+        const form = document.getElementById('formPublicacion');
+
+        form.addEventListener('submit', function (event) {
+            // Prevenimos el envío del formulario si no es válido
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                // Si es el primer intento, mostramos una alerta
+                if (firstAttempt) {
+                    alert("Por favor, complete los campos obligatorios: Título, Tipo de Sangre, y Tipo de Publicación.");
+                    firstAttempt = false;  // Cambiamos el estado para permitir el segundo intento
+                } else {
+                    form.classList.add('was-validated');  // Aplicamos la validación visual de Bootstrap
+                }
+            } else {
+                form.classList.add('was-validated');  // Si el formulario es válido, lo dejamos enviar
+            }
+        }, false);
+    })();
+</script>
+
 
 </body>
 </html>

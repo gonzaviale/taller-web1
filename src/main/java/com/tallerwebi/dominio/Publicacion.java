@@ -5,7 +5,6 @@ import javax.persistence.*;
 @Entity
 public class Publicacion {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,7 +15,6 @@ public class Publicacion {
     private String zonaDeResidencia;
     private Boolean estaActiva;
     private String tipoDePublicacion;
-    //private Mascota mascota;
 
     public void setId(Long id) {
         this.id = id;
