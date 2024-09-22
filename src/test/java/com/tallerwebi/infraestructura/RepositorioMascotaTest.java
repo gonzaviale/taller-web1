@@ -61,7 +61,7 @@ public class RepositorioMascotaTest {
         mascota.setNombre("tobi");
 
         repositorioMascota.agregarMascota(mascota);
-        ArrayList<Mascota> mascotasPorNombre = repositorioMascota.buscarMascota("tobi");
+        ArrayList<Mascota> mascotasPorNombre = repositorioMascota.buscarMascota("tobi", "", "");
         String nombreRecibido = mascotasPorNombre.get(0).getNombre();
         String nombreEsperado = "tobi";
 
@@ -76,7 +76,7 @@ public class RepositorioMascotaTest {
         mascota.setSangre("0+");
 
         repositorioMascota.agregarMascota(mascota);
-        ArrayList<Mascota> mascotasPorSangre = repositorioMascota.buscarPorSangre("0+");
+        ArrayList<Mascota> mascotasPorSangre = repositorioMascota.buscarMascota("", "0+", "");
         String sangreRecibida = mascotasPorSangre.get(0).getSangre();
 
         assertEquals(sangreRecibida, "0+");
@@ -90,7 +90,7 @@ public class RepositorioMascotaTest {
         mascota.setTipo("Donante");
 
         repositorioMascota.agregarMascota(mascota);
-        ArrayList<Mascota> mascotasPorTipo = repositorioMascota.buscarPorTipo("Donante");
+        ArrayList<Mascota> mascotasPorTipo = repositorioMascota.buscarMascota("","","Donante");
         String tipoRecibida = mascotasPorTipo.get(0).getTipo();
 
         assertEquals(tipoRecibida, "Donante");

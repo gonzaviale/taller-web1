@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Mascota;
 import com.tallerwebi.dominio.RepositorioMascota;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -20,31 +21,27 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
     }
 
     @Override
-    public ArrayList<Mascota> buscarMascota(String nombre) {
+    public ArrayList<Mascota> buscarMascota(String nombre, String sangre, String tipo) {
         final Session session = sessionFactory.getCurrentSession();
-        List<Mascota> mascotas = session.createCriteria(Mascota.class)
-                .add(Restrictions.eq("nombre", nombre))
-                .list();
+
+        Criteria criteria = session.createCriteria(Mascota.class);
+
+        if (nombre != null && !nombre.isEmpty()) {
+            criteria.add(Restrictions.eq("nombre", nombre));
+        }
+
+        if (sangre != null && !sangre.isEmpty()) {
+            criteria.add(Restrictions.eq("sangre", sangre));
+        }
+
+        if (tipo != null && !tipo.isEmpty()) {
+            criteria.add(Restrictions.eq("tipo", tipo));
+        }
+
+        List<Mascota> mascotas = criteria.list();
         return new ArrayList<>(mascotas);
     }
 
-    @Override
-    public ArrayList<Mascota> buscarPorTipo(String tipo) {
-        final Session session = sessionFactory.getCurrentSession();
-        List<Mascota> mascotas = session.createCriteria(Mascota.class)
-                .add(Restrictions.eq("tipo", tipo))
-                .list();
-        return new ArrayList<>(mascotas);
-    }
-
-    @Override
-    public ArrayList<Mascota> buscarPorSangre(String sangre) {
-        final Session session = sessionFactory.getCurrentSession();
-        List<Mascota> mascotas = session.createCriteria(Mascota.class)
-                .add(Restrictions.eq("sangre", sangre))
-                .list();
-        return new ArrayList<>(mascotas);
-    }
 
     @Override
     public void agregarMascota(Mascota mascota) {
