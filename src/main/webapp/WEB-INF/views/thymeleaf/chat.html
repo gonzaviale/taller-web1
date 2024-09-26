@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script type="importmap">
+        {
+            "imports": {
+                "@stomp/stompjs": "https://ga.jspm.io/npm:@stomp/stompjs@7.0.0/esm6/index.js",
+                "sockjs-client": "https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"
+            }
+        }
+    </script>
+    <script
+            async
+            src="https://ga.jspm.io/npm:es-module-shims@1.5.1/dist/es-module-shims.js"
+            crossorigin="anonymous"
+    ></script>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Chat</h2>
+    <div id="messages" class="border p-3 mb-3" style="height: 300px; overflow-y: auto;"></div>
+    <input type="text" id="messageInput" class="form-control mb-2" placeholder="Escribe un mensaje..."/>
+    <button id="sendButton" class="btn btn-primary" disabled>Enviar</button>
+</div>
+
+<script type="module" th:src="@{js/chat.js}"></script>
+</body>
+</html>
