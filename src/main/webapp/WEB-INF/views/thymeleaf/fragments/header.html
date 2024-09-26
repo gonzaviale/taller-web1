@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="chrome-extension://bojobppfploabceghnmlahpoonbcbacn/app/content-style.css">
+    <title>header</title>
+    <link rel="stylesheet" href="../../../../resources/core/css/header.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<header class="d-flex justify-content-between align-items-center py-3 border-bottom">
+    <!-- Logo -->
+    <a th:href="@{home.html}" class="d-flex align-items-center">
+        <img th:src="@{/images/logo.PNG}" alt="HEROES" id="logo" class="me-3" style="height: 50px;">
+    </a>
+
+    <!-- Barra de búsqueda -->
+    <form action="#" th:action="@{/busqueda}" method="get" class="d-flex">
+        <label>
+            <input type="text" placeholder="Buscar..." name="search" class="form-control me-2" style="max-width: 300px;">
+        </label>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+    <!-- Enlace al perfil -->
+    <a th:href="@{/perfil.html}" class="text-decoration-none me-4">Perfil</a>
+
+</header>
+
+</body>
+</html>

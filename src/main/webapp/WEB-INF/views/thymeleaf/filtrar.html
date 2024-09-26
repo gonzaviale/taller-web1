@@ -6,7 +6,7 @@
 
     <title>Taller Web I</title>
 
-    <!-- Boostrap core css -->
+    <!-- Bootstrap core css -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
 
     <!-- custom style -->
@@ -14,22 +14,33 @@
 
 </head>
 <body>
-<table>
-    <thead>
-    <tr>
-        <th>Nombre</th>
-        <th>Tipo</th>
-        <th>Sangre</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="mascota : ${listaMascotas}">
-        <td th:text="${mascota.nombre}"></td>
-        <td th:text="${mascota.tipo}"></td>
-        <td th:text="${mascota.sangre}"></td>
-    </tr>
-    </tbody>
-</table>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">UNLAM</a>
+</nav>
+
+<!-- Contenedor principal con márgenes y centrado -->
+<div class="container mt-5 pt-5">
+    <!-- Título opcional -->
+    <h2 class="text-center mb-4">Lista de Mascotas</h2>
+
+    <!-- Tabla estilizada con Bootstrap -->
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Sangre</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mascota : ${listaMascotas}">
+            <td th:text="${mascota.nombre}"></td>
+            <td th:text="${mascota.tipo}"></td>
+            <td th:text="${mascota.sangre}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

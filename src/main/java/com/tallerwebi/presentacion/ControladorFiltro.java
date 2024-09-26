@@ -39,4 +39,9 @@ public class ControladorFiltro {
         return new ModelAndView("filtrar", model);
     }
 
+    @RequestMapping(path = "/buscar")
+    public ModelAndView buscarMascotas(){
+        return new ModelAndView("buscar");
+    }
+
 }
