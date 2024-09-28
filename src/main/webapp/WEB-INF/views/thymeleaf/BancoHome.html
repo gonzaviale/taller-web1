@@ -64,8 +64,11 @@
 
         <!-- Main content -->
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <form action="#" th:action="@{/logout}" method="get">
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
             <h1>Banco Home: <span th:text="${nombreBanco}"></span></h1>
-
+            <h1><span th:text="${idBanco}"></span></h1>
 
             <form action="#" th:action="@{/agregarPaquete}" method="post">
                 <div class="mb-3">
@@ -84,7 +87,16 @@
                         <option value="DEA 4-">DEA 4-</option>
                     </select>
                 </div>
-
+                <div class="mb-3">
+                    <label for="tipoProducto" class="form-label">Selección del Producto Sanguíneo</label>
+                    <select id="tipoProducto" name="tipoProducto" class="form-select" required>
+                        <option value="" disabled selected>Seleccione el producto sanguíneo</option>
+                        <option value="Sangre total">Sangre total</option>
+                        <option value="Glóbulos rojos empaquetados">Glóbulos rojos empaquetados</option>
+                        <option value="Plasma fresco congelado">Plasma fresco congelado</option>
+                        <option value="Plaquetas">Plaquetas</option>
+                    </select>
+                </div>
                 <div class="mb-3">
                     <label for="cantidad" class="form-label">Cantidad (en paquetes)</label>
                     <input type="number" id="cantidad" name="cantidad" class="form-control" min="1" required/>

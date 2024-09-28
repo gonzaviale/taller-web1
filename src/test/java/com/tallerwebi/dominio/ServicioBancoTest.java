@@ -17,7 +17,7 @@ public class ServicioBancoTest {
     public void agregarPaqueteDeSangreSiBancoExisteDeberiaAgregarPaquete() throws BancoNoEncontrado {
         // Preparar datos de prueba
         Banco bancoMock = mock(Banco.class);
-        PaqueteDeSangre paquete = new PaqueteDeSangre("Tipo A", 10, bancoMock);
+        PaqueteDeSangre paquete = new PaqueteDeSangre("Tipo A", 10,"plaquetas" ,bancoMock);
 
         // Simula que el banco existe al buscar por id
         when(repositorioBancoMock.buscarPorId(1L)).thenReturn(bancoMock);

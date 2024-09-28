@@ -36,7 +36,7 @@ class ControladorBancoTest {
     void agregarPaqueteDeSangre_Success() throws Exception {
         // Arrange
         Banco banco = new Banco(); // Suponiendo que este banco tiene el ID correcto.
-        PaqueteDeSangre paquete = new PaqueteDeSangre("A+", 1, banco);
+        PaqueteDeSangre paquete = new PaqueteDeSangre("A+", 1,"", banco);
 
         // Act & Assert
         mockMvc.perform(post("/agregarPaquete")

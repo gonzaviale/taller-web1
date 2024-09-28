@@ -35,9 +35,12 @@ public class ControladorBanco {
     @RequestMapping("/BancoHome")
     public ModelAndView BancoHome(HttpSession session,
                                   @RequestParam(value = "error", required = false) String error) {
+
+        if (!verificarSesion(session)) {
+            return new ModelAndView("redirect:/login");  // Redirigir a la página de login si no hay sesión
+        }
+
         ModelMap modelo = new ModelMap();
-
-
         Long idBanco = (Long) session.getAttribute("idBanco");
 
         if (idBanco != null) {
@@ -68,6 +71,9 @@ public class ControladorBanco {
 
     @RequestMapping("/VerStock")
     public ModelAndView VerStock(HttpSession session) {
+        if (!verificarSesion(session)) {
+            return new ModelAndView("redirect:/login");  // Redirigir a la página de login si no hay sesión
+        }
 
         Long idBanco = (Long) session.getAttribute("idBanco");
         Banco banco = servicioBanco.BuscarBancoId(idBanco);
@@ -81,9 +87,13 @@ public class ControladorBanco {
 
 
 
-
+//TODO
     @RequestMapping("/VerPeticiones")
-    public ModelAndView BancoVerPeticiones() {
+    public ModelAndView BancoVerPeticiones(HttpSession session) {
+        if (!verificarSesion(session)) {
+            return new ModelAndView("redirect:/login");  // Redirigir a la página de login si no hay sesión
+        }
+
 
         ModelMap modelo = new ModelMap();
         modelo.put("datosBanco", new Banco());
@@ -94,12 +104,15 @@ public class ControladorBanco {
     @RequestMapping("/agregarPaquete")
     public String agregarPaqueteDeSangre(HttpSession session,
                                          @RequestParam("tipoSangre") String tipoSangre,
-                                         @RequestParam("cantidad") int cantidad) {
+                                         @RequestParam("cantidad") int cantidad,
+                                         @RequestParam("tipoProducto") String tipoProducto
+
+                                         ) {
         try {
             Long idBanco = (Long) session.getAttribute("idBanco");
 
             Banco banco = servicioBanco.BuscarBancoId(idBanco);
-            PaqueteDeSangre paquete = new PaqueteDeSangre(tipoSangre, cantidad, banco);
+            PaqueteDeSangre paquete = new PaqueteDeSangre(tipoSangre, cantidad,tipoProducto, banco);
             servicioBanco.agregarPaqueteDeSangre(paquete,banco);
             String errorMessage = "Paquete de sangre agregado con éxito";
             return "redirect:/BancoHome?success=" +
@@ -111,6 +124,13 @@ public class ControladorBanco {
         }
     }
 
+    private boolean verificarSesion(HttpSession session) {
+        Long idBanco = (Long) session.getAttribute("idBanco");
+        return idBanco != null;
+    }
+
+
+
 
     @RequestMapping("/loginsimulado")
     public String buscarBancoConIdCero(HttpSession session) {
@@ -121,6 +141,14 @@ public class ControladorBanco {
 
         return "redirect:/BancoHome";
     }
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();  // Invalida toda la sesión, eliminando todos los atributos
+        return "redirect:/login";  // Redirige al login con un mensaje de logout exitoso
+    }
+
+
+
 }
 
 

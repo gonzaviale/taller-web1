@@ -95,7 +95,7 @@ public class RepositorioBancoTest {
                 "123456789", "test@example.com", "testpassword", "Horario Test");
 
 
-        PaqueteDeSangre paquete = new PaqueteDeSangre("A+", 5, banco);
+        PaqueteDeSangre paquete = new PaqueteDeSangre("A+", 5,"", banco);
         banco.agregarPaqueteDeSangre(paquete);
 
 
@@ -120,9 +120,9 @@ public class RepositorioBancoTest {
                 "123456789", "test@example.com", "testpassword", "Horario Test");
 
         // Agregar varios paquetes de sangre
-        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, banco);
-        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, banco);
-        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, banco);
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5,"", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3,"", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7,"", banco);
 
         banco.agregarPaqueteDeSangre(paqueteA);
         banco.agregarPaqueteDeSangre(paqueteB);
@@ -152,7 +152,7 @@ public class RepositorioBancoTest {
     public void testGuardarSangre() {
         Banco banco = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
         bancoRepository.guardar(banco);
-        PaqueteDeSangre paquete = new PaqueteDeSangre("O-", 5,banco );
+        PaqueteDeSangre paquete = new PaqueteDeSangre("O-", 5,"",banco );
 
          bancoRepository.guardarSangre(paquete, banco);
 
