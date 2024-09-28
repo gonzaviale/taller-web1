@@ -1,59 +1,32 @@
 package com.tallerwebi.dominio;
 
-import org.hibernate.annotations.Columns;
+public interface Mascota {
 
-import javax.persistence.*;
+    Long getId();
 
-@Entity
-public class Mascota {
+    void setId(Long id);
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    String getNombre();
 
-    private String nombre;
-    private String tipo;
-    private String sangre;
-    @ManyToOne
-    private Usuario dueño;
+    void setNombre(String nombre);
 
-    // Getters y setters
-    public Long getId() {
-        return id;
-    }
+    String getTipo();
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    void setTipo(String tipo);
 
-    public String getNombre() {
-        return nombre;
-    }
+    String getSangre();
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    void setSangre(String sangre);
 
-    public String getTipo() {
-        return tipo;
-    }
+    Usuario getDuenio();
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+    void setDuenio(Usuario duenio);
 
-    public String getSangre() {
-        return sangre;
-    }
+    boolean isDonante();
 
-    public void setSangre(String sangre) {
-        this.sangre = sangre;
-    }
-    public Usuario getDueño() {
-        return dueño;
-    }
+    void setDonante(boolean donante);
 
-    public void setDueño(Usuario dueño) {
-        this.dueño = dueño;
-    }
+    boolean isReceptor();
+
+    void setReceptor(boolean receptor);
 }
