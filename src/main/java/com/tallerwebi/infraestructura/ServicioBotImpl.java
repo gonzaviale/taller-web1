@@ -18,8 +18,10 @@ public class ServicioBotImpl implements ServicioBot {
 
     @Override
     public Bot solicitarRespuesta(String respuesta) {
-        return this.repositorioBot.obtenerRespuesta(respuesta);
+        String respuestaSinEspacios = respuesta.replaceAll("\\s+", "");
+        return this.repositorioBot.obtenerRespuesta(respuestaSinEspacios);
     }
+
 
     @Override
     public void guardarBot(Bot bot) {
