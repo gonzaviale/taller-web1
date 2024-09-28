@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Agregar Paquete de Sangre</title>
+
+  <!-- Boostrap core css -->
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+
+  <!-- Custom style -->
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+<header th:replace="fragments/header :: header"></header>
+
+<main role="main" class="container mt-4">
+
+
+  <div th:if="${param.success}" class="alert alert-success" role="alert">
+    <span th:text="${param.success}">Mensaje de éxito</span>
+  </div>
+
+  <div th:if="${param.error}" class="alert alert-danger" role="alert">
+    <span th:text="${param.error}">Mensaje de error</span>
+  </div>
+
+
+  <div class="row">
+    <!-- Sidebar -->
+    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+      <div class="position-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{'/BancoHome'}">
+              Agregar Sangre
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="VerStock">
+              Ver Stock
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="VerPeticiones">
+              Ver Peticiones
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Error Message -->
+
+
+
+    <!-- Main content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <form action="#" th:action="@{/logout}" method="get">
+        <button type="submit" class="btn btn-danger">Logout</button>
+      </form>
+      <h1>Banco Home: <span th:text="${nombreBanco}"></span></h1>
+      <h1><span th:text="${idBanco}"></span></h1>
+
+      <form action="#" th:action="@{/agregarPaquete}" method="post">
+        <div class="mb-3">
+
+          <input type="hidden" th:value="${idBanco}" name="idBanco" />
+          <label for="tipoSangre" class="form-label">Tipo de Sangre</label>
+          <select id="tipoSangre" name="tipoSangre" class="form-select" required>
+            <option value="" disabled selected>Seleccione el tipo de sangre</option>
+            <option value="DEA 1.1+">DEA 1.1+</option>
+            <option value="DEA 1.1-">DEA 1.1-</option>
+            <option value="DEA 1.2+">DEA 1.2+</option>
+            <option value="DEA 1.2-">DEA 1.2-</option>
+            <option value="DEA 3+">DEA 3+</option>
+            <option value="DEA 3-">DEA 3-</option>
+            <option value="DEA 4+">DEA 4+</option>
+            <option value="DEA 4-">DEA 4-</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="tipoProducto" class="form-label">Selección del Producto Sanguíneo</label>
+          <select id="tipoProducto" name="tipoProducto" class="form-select" required>
+            <option value="" disabled selected>Seleccione el producto sanguíneo</option>
+            <option value="Sangre total">Sangre total</option>
+            <option value="Glóbulos rojos empaquetados">Glóbulos rojos empaquetados</option>
+            <option value="Plasma fresco congelado">Plasma fresco congelado</option>
+            <option value="Plaquetas">Plaquetas</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="cantidad" class="form-label">Cantidad (en paquetes)</label>
+          <input type="number" id="cantidad" name="cantidad" class="form-control" min="1" required/>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Agregar</button>
+      </form>
+
+
+    </div>
+  </div>
+
+
+
+</main>
+
+<!-- Boostrap core js -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>
