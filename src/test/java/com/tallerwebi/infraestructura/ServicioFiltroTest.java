@@ -40,7 +40,7 @@ public class ServicioFiltroTest {
         mascota.setTipo("Donante");
 
         repositorioMascota.agregarMascota(mascota);
-        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("Mascota", "", "");
+        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("Mascota", "0+", "Donante");
         Mascota recibida = mascotas.get(0);
 
         assertEquals(recibida, mascota);
@@ -69,10 +69,10 @@ public class ServicioFiltroTest {
         repositorioMascota.agregarMascota(mascota1);
         repositorioMascota.agregarMascota(mascota2);
 
-        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("Mascota", "", "Recibe");
+        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("", "", "Donante");
         ArrayList<Mascota> esperadas = new ArrayList<>();
         esperadas.add(mascota);
-        esperadas.add(mascota2);
+        esperadas.add(mascota1);
 
         assertEquals(mascotas, esperadas);
     }

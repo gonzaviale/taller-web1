@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class ControladorLogin {
 
-    private ServicioLogin servicioLogin;
-    private ModelMap modelo = new ModelMap();
+    private final ServicioLogin servicioLogin;
+    final private ModelMap modelo = new ModelMap();
 
     @Autowired
     public ControladorLogin(ServicioLogin servicioLogin) {
@@ -36,7 +36,6 @@ public class ControladorLogin {
 
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
-
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
@@ -104,6 +103,7 @@ public class ControladorLogin {
         return new ModelAndView("nuevo-usuario", model);
     }
 
+
     @RequestMapping("/registroBanco")
     public ModelAndView RegistroBanco() {
 
@@ -130,6 +130,7 @@ public class ControladorLogin {
     public ModelAndView irAHome() {
         return new ModelAndView("home");
     }
+
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {

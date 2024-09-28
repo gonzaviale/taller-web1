@@ -20,30 +20,23 @@ public class ServicioFiltroImpl implements ServicioFiltro {
 
     @Override
     public ArrayList<Mascota> consultarMascota(String nombre, String sangre, String tipo) {
-        ArrayList<Mascota> mascotas = new ArrayList<>();
 
-        if(!nombre.isEmpty()) {
-            ArrayList<Mascota> mascotasPorNombre = repositorioMascota.buscarMascota(nombre);
-            if(mascotasPorNombre != null) {
-                mascotas.addAll(mascotasPorNombre);
-            }
+        if(nombre!=null && !nombre.isEmpty()){
+            nombre = nombre;
+        } else {
+            nombre = "";
         }
-
-        if(!sangre.isEmpty()) {
-            ArrayList<Mascota> mascotasPorSangre = repositorioMascota.buscarPorSangre(sangre);
-            if(mascotasPorSangre != null) {
-                mascotas.addAll(mascotasPorSangre);
-            }
+        if(sangre!=null && !sangre.isEmpty()){
+            sangre = sangre;
+        } else {
+            sangre = "";
         }
-
-        if(!tipo.isEmpty()) {
-            ArrayList<Mascota> mascotasPorTipo = repositorioMascota.buscarPorTipo(tipo);
-            if(mascotasPorTipo != null) {
-                mascotas.addAll(mascotasPorTipo);
-            }
+        if(tipo!=null && !tipo.isEmpty()){
+            tipo = tipo;
+        } else {
+            tipo = "";
         }
-
-        return mascotas;
+        return new ArrayList<>(repositorioMascota.buscarMascota(nombre, sangre, tipo));
     }
 
 }
