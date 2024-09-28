@@ -16,11 +16,9 @@ public class ControladorWebSocket {
     @Autowired
     public ControladorWebSocket(ServicioBot servicioBot) { this.servicioBot = servicioBot; }
 
-    // Método que maneja los mensajes entrantes y los envía a todos los suscriptores
     @MessageMapping("/sendMessage")
     @SendTo("/topic/messages")
     public String sendMessage(String message) {
-        // Devuelve el mensaje enviado al topic para que todos los clientes lo reciban
         Bot respuestaBot = servicioBot.solicitarRespuesta(message);
         if(respuestaBot==null){
             return "<p style='color:red'>Bot: Ops, no entiendo tu mensaje, intentelo de nuevo</p>";
