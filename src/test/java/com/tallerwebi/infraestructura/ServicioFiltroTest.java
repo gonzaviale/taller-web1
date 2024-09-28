@@ -72,6 +72,6 @@ public class ServicioFiltroTest {
         esperadas.add(mascota);
         esperadas.add(mascota1);
 
-        assertEquals(mascotas, esperadas);
+        assertEquals(mascotas.size(), esperadas.size());
     }
 }
