@@ -28,6 +28,7 @@ public class PaqueteDeSangre {
         this.tipoSangre = tipoSangre;
         this.cantidad = cantidad;
         this.banco = banco;
+        this.tipoProducto = tipoProducto;
     }
 
     @Override

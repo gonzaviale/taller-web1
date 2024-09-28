@@ -122,7 +122,7 @@ public class ControladorBanco {
 
     @RequestMapping("/loginsimulado")
     public String buscarBancoConIdCero(HttpSession session) {
-        Banco banco = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+        Banco banco = new Banco("Banco Test",  "Dirección","Ciudad","País",  "123456789","email@test.com", "9-18",  "12345");
         servicioBanco.agregarBanco(banco);
 
         session.setAttribute("idBanco", banco.getId());
@@ -135,5 +135,5 @@ public class ControladorBanco {
         Long idBanco = (Long) session.getAttribute("idBanco");
         return idBanco != null;
     }
-    
+
 }
