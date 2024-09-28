@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.Canino;
 import com.tallerwebi.dominio.Mascota;
 import com.tallerwebi.dominio.RepositorioMascota;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
@@ -42,7 +43,7 @@ public class RepositorioMascotaTest {
     @Rollback
     public void queGuardeMascota(){
         //preparacion
-        Mascota mascota = new Mascota();
+        Mascota mascota = new Canino();
         mascota.setNombre("tobi");
 
         //ejecucion
@@ -57,7 +58,7 @@ public class RepositorioMascotaTest {
     @Transactional
     @Rollback
     public void queMeTraigaMascotasPorNombre(){
-        Mascota mascota = new Mascota();
+        Mascota mascota = new Canino();
         mascota.setNombre("tobi");
 
         repositorioMascota.agregarMascota(mascota);
@@ -72,7 +73,7 @@ public class RepositorioMascotaTest {
     @Transactional
     @Rollback
     public void queMeTraigaMascotasPorSangre(){
-        Mascota mascota = new Mascota();
+        Mascota mascota = new Canino();
         mascota.setSangre("0+");
 
         repositorioMascota.agregarMascota(mascota);
@@ -86,7 +87,7 @@ public class RepositorioMascotaTest {
     @Transactional
     @Rollback
     public void queMeTraigaMascotasPorTipo(){
-        Mascota mascota = new Mascota();
+        Mascota mascota = new Canino();
         mascota.setTipo("Donante");
 
         repositorioMascota.agregarMascota(mascota);

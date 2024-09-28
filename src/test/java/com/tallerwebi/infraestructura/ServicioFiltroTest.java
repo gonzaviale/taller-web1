@@ -1,9 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 
-import com.tallerwebi.dominio.Mascota;
-import com.tallerwebi.dominio.RepositorioMascota;
-import com.tallerwebi.dominio.ServicioFiltro;
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.junit.jupiter.api.Test;
@@ -34,7 +32,7 @@ public class ServicioFiltroTest {
     @Transactional
     @Rollback
     public void filtrarMascota() {
-        Mascota mascota = new Mascota();
+        Mascota mascota = new Canino();
         mascota.setNombre("Mascota");
         mascota.setSangre("0+");
         mascota.setTipo("Donante");
@@ -50,17 +48,17 @@ public class ServicioFiltroTest {
     @Transactional
     @Rollback
     public void filtrarVariasMascotas() {
-        Mascota mascota = new Mascota();
+        Mascota mascota = new Felino();
         mascota.setNombre("Mascota");
         mascota.setSangre("0+");
         mascota.setTipo("Donante");
 
-        Mascota mascota1 = new Mascota();
+        Mascota mascota1 = new Canino();
         mascota1.setNombre("Mascota1");
         mascota1.setSangre("0+");
         mascota1.setTipo("Donante");
 
-        Mascota mascota2 = new Mascota();
+        Mascota mascota2 = new Felino();
         mascota2.setNombre("Mascota2");
         mascota2.setSangre("0+");
         mascota2.setTipo("Recibe");
