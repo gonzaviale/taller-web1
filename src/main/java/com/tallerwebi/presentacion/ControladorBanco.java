@@ -107,9 +107,8 @@ public class ControladorBanco {
         Banco banco = servicioBanco.BuscarBancoId(idBanco);
         PaqueteDeSangre paquete = new PaqueteDeSangre(tipoSangre, cantidad, tipoProducto, banco);
         servicioBanco.agregarPaqueteDeSangre(paquete, banco);
-        String errorMessage = "Paquete de sangre agregado con éxito";
-        return "redirect:/bancoHome?success=" +
-                URLEncoder.encode(errorMessage, StandardCharsets.UTF_8);
+        String errorMessage = "Paquete de sangre agregado con exito";
+        return "redirect:/bancoHome?success=" + errorMessage;
 
     }
 
