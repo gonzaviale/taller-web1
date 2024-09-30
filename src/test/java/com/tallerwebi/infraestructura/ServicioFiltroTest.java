@@ -3,6 +3,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Mascota;
 import com.tallerwebi.dominio.RepositorioMascota;
+import com.tallerwebi.dominio.RepositorioPublicacion;
 import com.tallerwebi.dominio.ServicioFiltro;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
@@ -18,7 +19,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
@@ -28,7 +28,9 @@ public class ServicioFiltroTest {
     @Autowired
     RepositorioMascota repositorioMascota;
     @Autowired
-    ServicioFiltro servicioFiltro = new ServicioFiltroImpl(repositorioMascota);
+    RepositorioPublicacion repositorioPublicacion;
+    @Autowired
+    ServicioFiltro servicioFiltro = new ServicioFiltroImpl(repositorioMascota,repositorioPublicacion);
 
     @Test
     @Transactional
