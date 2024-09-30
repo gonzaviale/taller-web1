@@ -10,9 +10,9 @@ public interface Mascota {
 
     void setNombre(String nombre);
 
-    String getTipo();
+    String getRaza();
 
-    void setTipo(String tipo);
+    void setRaza(String raza);
 
     String getSangre();
 
@@ -29,4 +29,12 @@ public interface Mascota {
     boolean isReceptor();
 
     void setReceptor(boolean receptor);
+
+    void setAnios(Integer anios);
+
+    Integer getAnios();
+
+    void setPeso(Float peso);
+
+    Float getPeso();
 }

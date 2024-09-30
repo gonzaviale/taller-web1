@@ -35,7 +35,7 @@ public class ServicioFiltroTest {
         Mascota mascota = new Canino();
         mascota.setNombre("Mascota");
         mascota.setSangre("0+");
-        mascota.setTipo("Donante");
+        mascota.setRaza("Donante");
 
         repositorioMascota.agregarMascota(mascota);
         ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("Mascota", "0+", "Donante");
@@ -51,17 +51,17 @@ public class ServicioFiltroTest {
         Mascota mascota = new Felino();
         mascota.setNombre("Mascota");
         mascota.setSangre("0+");
-        mascota.setTipo("Donante");
+        mascota.setRaza("Donante");
 
         Mascota mascota1 = new Canino();
         mascota1.setNombre("Mascota1");
         mascota1.setSangre("0+");
-        mascota1.setTipo("Donante");
+        mascota1.setRaza("Donante");
 
         Mascota mascota2 = new Felino();
         mascota2.setNombre("Mascota2");
         mascota2.setSangre("0+");
-        mascota2.setTipo("Recibe");
+        mascota2.setRaza("Recibe");
 
         repositorioMascota.agregarMascota(mascota);
         repositorioMascota.agregarMascota(mascota1);

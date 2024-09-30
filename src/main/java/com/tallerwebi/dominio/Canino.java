@@ -9,13 +9,16 @@ public class Canino implements Mascota {
     private Long id;
 
     private String nombre;
-    private String tipo;
+    private String raza;
     private String sangre;
     private boolean donante;
     private boolean receptor;
+    private Integer anios;
+    private Float peso;
 
     @ManyToOne
     private Usuario duenio;
+
 
     @Override
     public Long getId() {
@@ -38,13 +41,13 @@ public class Canino implements Mascota {
     }
 
     @Override
-    public String getTipo() {
-        return tipo;
+    public String getRaza() {
+        return raza;
     }
 
     @Override
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setRaza(String raza) {
+        this.raza = raza;
     }
 
     @Override
@@ -86,4 +89,16 @@ public class Canino implements Mascota {
     public void setReceptor(boolean receptor) {
         this.receptor = receptor;
     }
+
+    @Override
+    public void setAnios(Integer anios) {this.anios = anios;}
+
+    @Override
+    public Integer getAnios() {return this.anios;}
+
+    @Override
+    public void setPeso(Float peso) {this.peso = peso;}
+
+    @Override
+    public Float getPeso() {return this.peso;}
 }
