@@ -9,4 +9,6 @@ public interface RepositorioBanco {
     Banco buscarPorId(Long idBanco);
     PaqueteDeSangre buscarSangre(String s);
     List<PaqueteDeSangre> obtenerPaquetesDeSangrePorBanco(Long idBanco);
+    List<Solicitud> solicitudesPorBanco(Long idBanco);
+    Solicitud guardarSolicitud(Solicitud solicitud1);
 }

@@ -4,6 +4,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.Banco;
 import com.tallerwebi.dominio.PaqueteDeSangre;
 import com.tallerwebi.dominio.ServicioBanco;
+import com.tallerwebi.dominio.Solicitud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,7 +64,7 @@ public class ControladorBanco {
     }
 
 
-    @RequestMapping("/VerStock")
+    @RequestMapping("/verStock")
     public ModelAndView VerStock(HttpSession session) {
         if (!verificarSesion(session)) {
             return new ModelAndView("redirect:/login");  // Redirigir a la página de login si no hay sesión
@@ -81,14 +82,17 @@ public class ControladorBanco {
 
 
     //TODO
-    @RequestMapping("/VerPeticiones")
+    @RequestMapping("/verPeticiones")
     public ModelAndView BancoVerPeticiones(HttpSession session) {
         if (!verificarSesion(session)) {
             return new ModelAndView("redirect:/login");  // Redirigir a la página de login si no hay sesión
         }
-
+        Long idBanco = (Long) session.getAttribute("idBanco");
 
         ModelMap modelo = new ModelMap();
+
+       List<Solicitud>solicitudes = servicioBanco.obtenerSolicitudesXBanco(idBanco);
+        modelo.addAttribute("solicitudes", solicitudes);
         modelo.put("datosBanco", new Banco());
         return new ModelAndView("bancoVerPeticiones", modelo);
     }
@@ -123,8 +127,18 @@ public class ControladorBanco {
     public String buscarBancoConIdCero(HttpSession session) {
         Banco banco = new Banco("Banco Test",  "Dirección","Ciudad","País",  "123456789","email@test.com", "9-18",  "12345");
         servicioBanco.agregarBanco(banco);
-
         session.setAttribute("idBanco", banco.getId());
+        Solicitud solicitud1 = new Solicitud(banco.getId(), 1L, "Plasma fresco congelado", "DEA 1.1+", 3);
+        Solicitud solicitud2 = new Solicitud(banco.getId(), 2L, "Glóbulos rojos empaquetados", "DEA 1.1-", 2);
+        Solicitud solicitud3 = new Solicitud(banco.getId(), 3L, "Sangre total", "DEA 1.2+", 5);
+        Solicitud solicitud4 = new Solicitud(banco.getId(), 4L, "Plaquetas", "DEA 4-", 4);
+
+        // Agregar las solicitudes al servicio de solicitudes
+        servicioBanco.agregarSolicitud(solicitud1);
+        servicioBanco.agregarSolicitud(solicitud2);
+        servicioBanco.agregarSolicitud(solicitud3);
+        servicioBanco.agregarSolicitud(solicitud4);
+
 
         return "redirect:/bancoHome";
     }

@@ -7,5 +7,6 @@ public interface ServicioBanco {
     void agregarBanco(Banco banco);
     Banco BuscarBancoId(Long idBanco);
     List<PaqueteDeSangre> obtenerPaquetesDeSangrePorBanco(Long idBanco);
-
+    List<Solicitud> obtenerSolicitudesXBanco(Long idBanco);
+    Solicitud agregarSolicitud(Solicitud solicitud1);
 }

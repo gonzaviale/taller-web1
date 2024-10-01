@@ -1,10 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 
-import com.tallerwebi.dominio.Banco;
-import com.tallerwebi.dominio.PaqueteDeSangre;
-import com.tallerwebi.dominio.RepositorioBanco;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -86,5 +83,19 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         cq.where(cb.equal(root.get("banco").get("id"), idBanco));
 
         return session.createQuery(cq).getResultList();
+    }
+
+    @Override
+    public List<Solicitud> solicitudesPorBanco(Long idBanco) {
+        final Session session = sessionFactory.getCurrentSession();
+        return session.createCriteria(Solicitud.class)
+                .add(Restrictions.eq("bancoId", idBanco))
+                .list();
+    }
+
+    @Override
+    public Solicitud guardarSolicitud(Solicitud solicitud1) {
+        sessionFactory.getCurrentSession().save(solicitud1);
+        return solicitud1;
     }
 }

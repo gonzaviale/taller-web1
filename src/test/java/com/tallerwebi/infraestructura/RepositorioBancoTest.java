@@ -3,6 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.Banco;
 import com.tallerwebi.dominio.PaqueteDeSangre;
 import com.tallerwebi.dominio.RepositorioBanco;
+import com.tallerwebi.dominio.Solicitud;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.hibernate.SessionFactory;
@@ -136,7 +137,53 @@ public class RepositorioBancoTest {
 
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    void testGuardarSolicitud() {
+        // Crear banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        repositorioBanco.guardar(banco);
 
+
+        Solicitud solicitud = new Solicitud(banco.getId(), 1L, "Sangre total", "DEA 1.2+", 4);
+
+
+        Solicitud solicitudGuardada = repositorioBanco.guardarSolicitud(solicitud);
+
+
+        assertThat(solicitudGuardada.getId(), notNullValue());
+        assertThat(solicitudGuardada.getTipoSangre(), is("DEA 1.2+"));
+        assertThat(solicitudGuardada.getCantidad(), is(4));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testSolicitudesPorBanco() {
+        // Crear banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        repositorioBanco.guardar(banco);
+
+        // Crear solicitudes
+        Solicitud solicitud1 = new Solicitud(banco.getId(), 1L, "Plasma fresco congelado", "DEA 1.1+", 3);
+        Solicitud solicitud2 = new Solicitud(banco.getId(), 2L, "Glóbulos rojos empaquetados", "DEA 1.1-", 2);
+
+        repositorioBanco.guardarSolicitud(solicitud1);
+        repositorioBanco.guardarSolicitud(solicitud2);
+
+        // Llamada al método
+        List<Solicitud> solicitudes = repositorioBanco.solicitudesPorBanco(banco.getId());
+
+        // Verificaciones
+        assertThat(solicitudes, hasSize(2));
+        assertThat(solicitudes, hasItems(
+                allOf(hasProperty("tipoSangre", is("DEA 1.1+")), hasProperty("cantidad", is(3))),
+                allOf(hasProperty("tipoSangre", is("DEA 1.1-")), hasProperty("cantidad", is(2)))
+        ));
+    }
 
 
 

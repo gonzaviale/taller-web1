@@ -26,17 +26,17 @@
             <div class="position-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="BancoHome">
+                        <a class="nav-link" th:href="@{'/bancoHome'}">
                             Agregar Sangre
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="VerStock">
+                        <a class="nav-link" th:href="@{'/verStock'}">
                             Ver Stock
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="VerPeticiones">
+                        <a class="nav-link" th:href="@{'/verPeticiones'}">
                             Ver Peticiones
                         </a>
                     </li>
@@ -54,21 +54,22 @@
                 <tr>
                     <th scope="col">Nombre del Solicitante</th>
                     <th scope="col">Tipo de Sangre Solicitada</th>
+                    <th scope="col">Tipo de Producto</th>
                     <th scope="col">Cantidad Solicitada</th>
+                    <th scope="col">Estado</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>John Doe</td>
-                    <td>A+</td>
-                    <td>3</td>
+                <tr th:if="${#lists.isEmpty(solicitudes)}">
+                    <td colspan="5">No hay solicitudes .</td>
                 </tr>
-                <tr>
-                    <td>Jane Smith</td>
-                    <td>O-</td>
-                    <td>2</td>
+                <tr th:each="solicitud : ${solicitudes}">
+                    <td th:text="${solicitud.usuarioId}">Nombre del Solicitante</td>
+                    <td th:text="${solicitud.tipoSangre}">Tipo de Sangre</td>
+                    <td th:text="${solicitud.tipoProducto}">Tipo de Producto</td>
+                    <td th:text="${solicitud.cantidad}">Cantidad</td>
+                    <td th:text="${solicitud.estado}">Estado</td>
                 </tr>
-                <!-- Aquí puedes agregar más filas dinámicamente desde el backend -->
                 </tbody>
             </table>
 

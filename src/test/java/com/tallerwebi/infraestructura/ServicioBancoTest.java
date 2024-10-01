@@ -69,7 +69,31 @@ public class ServicioBancoTest {
         verify(repositorioBancoMock).obtenerPaquetesDeSangrePorBanco(1L);
         assertEquals(paquetesMock, paquetes);
     }
+    @Rollback
+    @Transactional
+    @Test
+    public void agregarSolicitudDeberiaGuardarSolicitud() {
+        Solicitud solicitud = new Solicitud(1L, 1L, "Sangre total", "DEA 1.1+", 5);
+        when(repositorioBancoMock.guardarSolicitud(solicitud)).thenReturn(solicitud);
 
+        Solicitud solicitudGuardada = servicioBanco.agregarSolicitud(solicitud);
 
+        verify(repositorioBancoMock).guardarSolicitud(solicitud);
+        assertEquals(solicitud, solicitudGuardada);
+    }
+    @Rollback
+    @Transactional
+    @Test
+    public void obtenerSolicitudesPorBancoDeberiaRetornarListaDeSolicitudes() {
+        List<Solicitud> solicitudesMock = mock(List.class);
 
+        when(repositorioBancoMock.solicitudesPorBanco(1L)).thenReturn(solicitudesMock);
+        List<Solicitud> solicitudes = servicioBanco.obtenerSolicitudesXBanco(1L);
+
+        verify(repositorioBancoMock).solicitudesPorBanco(1L);
+        assertEquals(solicitudesMock, solicitudes);
+    }
 }
+
+
+

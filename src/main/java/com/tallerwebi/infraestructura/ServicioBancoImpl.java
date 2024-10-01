@@ -1,8 +1,5 @@
 package com.tallerwebi.infraestructura;
-import com.tallerwebi.dominio.Banco;
-import com.tallerwebi.dominio.PaqueteDeSangre;
-import com.tallerwebi.dominio.RepositorioBanco;
-import com.tallerwebi.dominio.ServicioBanco;
+import com.tallerwebi.dominio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -32,6 +29,17 @@ public class ServicioBancoImpl implements ServicioBanco {
     public List<PaqueteDeSangre>  obtenerPaquetesDeSangrePorBanco(Long idBanco) {
         return repositorio.obtenerPaquetesDeSangrePorBanco(idBanco);
     }
+
+    @Override
+    public List<Solicitud> obtenerSolicitudesXBanco(Long idBanco) {
+        return repositorio.solicitudesPorBanco(idBanco);
+    }
+
+    @Override
+    public Solicitud agregarSolicitud(Solicitud solicitud1) {
+        return repositorio.guardarSolicitud(solicitud1);
+    }
+
     @Override
     public void agregarBanco(Banco banco) {
         this.repositorio.guardar(banco);
