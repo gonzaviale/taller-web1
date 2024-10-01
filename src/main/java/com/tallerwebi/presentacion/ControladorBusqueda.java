@@ -25,7 +25,6 @@ public class ControladorBusqueda {
     public ModelAndView buscar (@RequestParam("tipoDeBusqueda") String tipoDeBusqueda,
                                 @RequestParam ("search") String search)
     {
-
         ModelMap model= new ModelMap();
 
         if(tipoDeBusqueda.equals("mascotas")){
