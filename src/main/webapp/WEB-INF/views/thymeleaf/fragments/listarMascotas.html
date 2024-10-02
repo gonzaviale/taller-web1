@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<body>
+<article class="container mt-2 pt-2">
+    <h2 class="text-center ">Lista de Mascotas</h2>
+    <table class="table table-striped table-hover table-bordered" >
+        <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Sangre</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mascota : ${listaMascotas}">
+            <td th:text="${mascota.nombre}"></td>
+            <td th:text="${mascota.tipo}"></td>
+            <td th:text="${mascota.sangre}"></td>
+        </tr>
+        </tbody>
+    </table>
+</article>
+</body>
+</html>

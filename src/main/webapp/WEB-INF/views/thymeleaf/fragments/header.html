@@ -10,20 +10,36 @@
 </head>
 <body>
 <header class="d-flex justify-content-between align-items-center py-3 border-bottom">
-    <!-- Logo -->
     <a th:href="@{home.html}" class="d-flex align-items-center">
-        <img th:src="@{/images/logo.PNG}" alt="HEROES" id="logo" class="me-3" style="height: 50px;">
+        <picture>
+            <source media="(max-width: 768px)" th:srcset="@{/images/LogoMobile.PNG}">
+            <img th:src="@{/images/logo.PNG}" alt="HEROES" id="logo" class="me-3" style="height: 50px;">
+        </picture>
     </a>
 
-    <!-- Barra de búsqueda -->
-    <form action="#" th:action="@{/busqueda}" method="get" class="d-flex">
-        <label>
-            <input type="text" placeholder="Buscar..." name="search" class="form-control me-2" style="max-width: 300px;">
-        </label>
-        <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
-    <!-- Enlace al perfil -->
-    <a th:href="@{/perfil.html}" class="text-decoration-none me-4">Perfil</a>
+    <section>
+
+        <form action="#" th:action="@{/busquedaFiltrada}" method="post" class="d-flex">
+
+            <label for="tipoDeBusqueda">
+                <select id="tipoDeBusqueda" name="tipoDeBusqueda" class="form-select" required >
+                    <option value="">selecciona el tipo de busqueda</option>
+                    <option value="publicacion">Publicacion</option>
+                    <option value="mascotas">Mascotas</option>
+                    <option value="usuarios">Usuarios</option>
+                    <option value="veterinarios">Veterinarios</option>
+                    <option value="banco de sangre">Banco de sangre</option>
+                </select>
+            </label>
+
+            <label>
+                <input type="text" placeholder="Buscar..." name="search" class="form-control me-2" style="max-width: 300px;">
+            </label>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+
+    </section>
+    <a th:href="@{/perfil.html}" class="text-decoration-none me-4">Mi perfil</a>
 
 </header>
 

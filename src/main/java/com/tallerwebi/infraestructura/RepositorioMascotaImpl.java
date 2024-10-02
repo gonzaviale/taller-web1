@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.RepositorioMascota;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Repository("repositorioMascota")
 public class RepositorioMascotaImpl implements RepositorioMascota {
 
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     public RepositorioMascotaImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -27,15 +28,15 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
         Criteria criteria = session.createCriteria(Mascota.class);
 
         if (nombre != null && !nombre.isEmpty()) {
-            criteria.add(Restrictions.eq("nombre", nombre));
+            criteria.add(Restrictions.like("nombre","%" +nombre + "%",MatchMode.ANYWHERE));
         }
 
         if (sangre != null && !sangre.isEmpty()) {
-            criteria.add(Restrictions.eq("sangre", sangre));
+            criteria.add(Restrictions.like("sangre", "%" +sangre + "%", MatchMode.ANYWHERE));
         }
 
         if (tipo != null && !tipo.isEmpty()) {
-            criteria.add(Restrictions.eq("tipo", tipo));
+            criteria.add(Restrictions.like("tipo", "%" +tipo + "%",MatchMode.ANYWHERE));
         }
 
         List<Mascota> mascotas = criteria.list();

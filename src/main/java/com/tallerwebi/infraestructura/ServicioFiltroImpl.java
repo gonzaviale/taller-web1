@@ -11,32 +11,38 @@ import java.util.ArrayList;
 @Transactional
 public class ServicioFiltroImpl implements ServicioFiltro {
 
-    private RepositorioMascota repositorioMascota;
+    private final RepositorioMascota repositorioMascota;
+    private final RepositorioPublicacion repositorioPublicacion;
 
     @Autowired
-    public ServicioFiltroImpl(RepositorioMascota repositorioMascota){
+    public ServicioFiltroImpl(RepositorioMascota repositorioMascota,RepositorioPublicacion repositorioPublicacion){
         this.repositorioMascota = repositorioMascota;
+        this.repositorioPublicacion= repositorioPublicacion;
     }
 
     @Override
     public ArrayList<Mascota> consultarMascota(String nombre, String sangre, String tipo) {
 
-        if(nombre!=null && !nombre.isEmpty()){
-            nombre = nombre;
-        } else {
-            nombre = "";
-        }
-        if(sangre!=null && !sangre.isEmpty()){
-            sangre = sangre;
-        } else {
-            sangre = "";
-        }
-        if(tipo!=null && !tipo.isEmpty()){
-            tipo = tipo;
-        } else {
-            tipo = "";
-        }
+        nombre=validadorCampo(nombre);
+        sangre=validadorCampo(sangre);
+        tipo=validadorCampo(tipo);
+
         return new ArrayList<>(repositorioMascota.buscarMascota(nombre, sangre, tipo));
+    }
+
+    @Override
+    public ArrayList<Publicacion> consultarPublicaciones(String titulo, String tipoDeSangre, String zonaDeResidencia, String tipoDePublicacion){
+
+        titulo = validadorCampo(titulo);
+        tipoDeSangre = validadorCampo(tipoDeSangre);
+        zonaDeResidencia = validadorCampo(zonaDeResidencia);
+        tipoDePublicacion = validadorCampo(tipoDePublicacion);
+
+        return new ArrayList<>(repositorioPublicacion.buscarPublicaciones(titulo, tipoDeSangre, zonaDeResidencia,tipoDePublicacion));
+    }
+
+    private String validadorCampo(String campo) {
+        return (campo == null || campo.isEmpty()) ? "" : campo;
     }
 
 }
