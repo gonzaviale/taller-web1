@@ -42,7 +42,7 @@ public class ControladorBusqueda {
     @RequestMapping(path = "/busqueda")
     public ModelAndView busqueda(){
         ModelMap model= new ModelMap();
-        model.put("datos",new datosBusqueda());
+        model.put("datos",new BancoConTiposDeSangre());
         return new ModelAndView("busqueda",model);
     }
 

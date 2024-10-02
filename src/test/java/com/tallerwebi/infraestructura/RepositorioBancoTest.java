@@ -136,7 +136,43 @@ public class RepositorioBancoTest {
 
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    void siNoIngresoUnaSangreValidaParaBuscarNoEncuentroResultados() {
+        // Crear un banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
 
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5,"", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3,"", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7,"", banco);
+
+        banco.agregarPaqueteDeSangre(paqueteA);
+        banco.agregarPaqueteDeSangre(paqueteB);
+        banco.agregarPaqueteDeSangre(paqueteO);
+
+        // Guardar el banco en la base de datos
+        Banco bancoConPaquetes = repositorioBanco.guardar(banco);
+        repositorioBanco.guardar(banco1);
+
+        // Verificar que el banco no es nulo
+        assertThat(bancoConPaquetes, is(notNullValue()));
+
+        // Verificar que se guardaron los tres paquetes
+        List<PaqueteDeSangre> paquetes = bancoConPaquetes.getPaquetesDeSangre();
+        assertThat(paquetes, hasSize(3));
+
+        // Verificar las propiedades de los paquetes
+        assertThat(paquetes, hasItems(
+                allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
+                allOf(hasProperty("tipoSangre", is("B-")), hasProperty("cantidad", is(3))),
+                allOf(hasProperty("tipoSangre", is("O+")), hasProperty("cantidad", is(7)))
+        ));
+
+    }
 
 
 

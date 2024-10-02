@@ -5,15 +5,17 @@ import com.tallerwebi.dominio.Banco;
 import com.tallerwebi.dominio.PaqueteDeSangre;
 import com.tallerwebi.dominio.RepositorioBanco;
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.presentacion.BancoConTiposDeSangre;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository("RepositorioBanco")
@@ -86,5 +88,42 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         cq.where(cb.equal(root.get("banco").get("id"), idBanco));
 
         return session.createQuery(cq).getResultList();
+    }
+
+    public List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnSangreDeTodosLosBancos(String sangreBuscada){
+
+        //necesito un lugar donde almacenar los resultados
+        List<BancoConTiposDeSangre> resultados = new ArrayList<>();
+
+        //obtengo todos los bancos
+        Criteria bancoCriteria = this.sessionFactory.getCurrentSession().createCriteria(Banco.class);
+        List<Banco> bancos = bancoCriteria.list();
+
+        //recorro todos los bancos
+        for (Banco banco : bancos) {
+            //recorro los paquetes de los bancos
+            for (PaqueteDeSangre paquete : banco.getPaquetesDeSangre()) {
+                if (paquete.getTipoSangre()!=null && paquete.getTipoSangre().contains(sangreBuscada)) {
+                    BancoConTiposDeSangre bancoConTipos = new BancoConTiposDeSangre();
+                    //datos banco a guardar en el objeto
+                    bancoConTipos.setBancoId(banco.getId());
+                    bancoConTipos.setNombreBanco(banco.getNombreBanco());
+                    bancoConTipos.setDireccion(banco.getDireccion());
+                    bancoConTipos.setTelefono(banco.getTelefono());
+                    bancoConTipos.setCiudad(banco.getCiudad());
+                    bancoConTipos.setEmail(banco.getEmail());
+                    //datos de sangre a guardar en el objeto
+                    bancoConTipos.setTipoSangre(paquete.getTipoSangre());
+                    bancoConTipos.setSangreId(paquete.getId());
+                    bancoConTipos.setTipoProducto(paquete.getTipoProducto());
+                    bancoConTipos.setCantidad(paquete.getCantidad());
+                    //guardo el objeto
+                    resultados.add(bancoConTipos);
+                }
+            }
+
+        }
+
+        return resultados;
     }
 }
