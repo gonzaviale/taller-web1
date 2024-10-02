@@ -15,11 +15,9 @@
 
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">UNLAM</a>
-</nav>
-
 <main role="main" class="container mt-4">
+
+
     <div class="row">
 
         <div class="row">
@@ -48,6 +46,9 @@
 
         <!-- Main content -->
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <form action="#" th:action="@{/logout}" method="get">
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
             <h1>Ver Stock de Sangre</h1>
 
             <table class="table table-striped">
@@ -67,13 +68,13 @@
                     <td th:text="${paquete.tipoProducto}">Tipo de Sangre</td>
                     <td th:text="${paquete.cantidad}">Cantidad</td>
                 </tr>
-                </tbody>
-                </tbody>
+
             </table>
 
 
         </div>
     </div>
+
 </main>
 
 <!-- Bootstrap core js -->

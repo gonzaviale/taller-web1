@@ -20,8 +20,6 @@ public class Solicitud {
     private String tipoSangre;
     @Column
     private int cantidad;
-
-
     @Column
     private String estado;
 

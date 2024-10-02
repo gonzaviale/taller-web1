@@ -11,4 +11,7 @@ public interface RepositorioBanco {
     List<PaqueteDeSangre> obtenerPaquetesDeSangrePorBanco(Long idBanco);
     List<Solicitud> solicitudesPorBanco(Long idBanco);
     Solicitud guardarSolicitud(Solicitud solicitud1);
+    Solicitud buscarSolicitudPorId(int id);
+    List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatible(Solicitud solicitud);
+    void rechazarSolicitud(int solicitudId);
 }

@@ -41,7 +41,28 @@ public class ServicioBancoImpl implements ServicioBanco {
     }
 
     @Override
+    public Solicitud buscarSolicitud(int id) {
+        return this.repositorio.buscarSolicitudPorId(id);
+    }
+
+    @Override
+    public List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatibles(Solicitud solicitud) {
+        return repositorio.obtenerPaquetesDeSangreCompatible(solicitud);
+    }
+
+    @Override
+    public void rechazarSolicitud(int solicitudId) {
+       this.repositorio.rechazarSolicitud( solicitudId);
+    }
+
+    @Override
+    public void asignarPaqueteASolicitud(int solicitudId, int paqueteId) {
+
+    }
+
+    @Override
     public void agregarBanco(Banco banco) {
+
         this.repositorio.guardar(banco);
     }
 }

@@ -8,6 +8,7 @@ import com.tallerwebi.dominio.Solicitud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.ModelMap;
@@ -63,11 +64,10 @@ public class ControladorBanco {
         return new ModelAndView("bancoHome", modelo);
     }
 
-
     @RequestMapping("/verStock")
     public ModelAndView VerStock(HttpSession session) {
         if (!verificarSesion(session)) {
-            return new ModelAndView("redirect:/login");  // Redirigir a la página de login si no hay sesión
+            return new ModelAndView("redirect:/login");  
         }
 
         Long idBanco = (Long) session.getAttribute("idBanco");
@@ -80,12 +80,10 @@ public class ControladorBanco {
         return new ModelAndView("bancoVerStock", modelo);
     }
 
-
-    //TODO
     @RequestMapping("/verPeticiones")
     public ModelAndView BancoVerPeticiones(HttpSession session) {
         if (!verificarSesion(session)) {
-            return new ModelAndView("redirect:/login");  // Redirigir a la página de login si no hay sesión
+            return new ModelAndView("redirect:/login");  
         }
         Long idBanco = (Long) session.getAttribute("idBanco");
 
@@ -96,6 +94,51 @@ public class ControladorBanco {
         modelo.put("datosBanco", new Banco());
         return new ModelAndView("bancoVerPeticiones", modelo);
     }
+
+    @RequestMapping("/revisarSolicitud")
+    public ModelAndView BancoVerPeticion(@RequestParam("solicitudId") int solicitudId, HttpSession session) {
+        if (!verificarSesion(session)) {
+            return new ModelAndView("redirect:/login");  
+        }
+        Long idBanco = (Long) session.getAttribute("idBanco");
+        ModelMap modelo = new ModelMap();
+
+        Solicitud solicitud = servicioBanco.buscarSolicitud(solicitudId);
+        List<PaqueteDeSangre> paquetes = servicioBanco.obtenerPaquetesDeSangreCompatibles(solicitud);
+
+        modelo.addAttribute("solicitud", solicitud);
+        modelo.addAttribute("paquetes", paquetes);
+        modelo.put("datosBanco", new Banco());
+        return new ModelAndView("bancoVerSolicitud", modelo);
+    }
+
+
+    @RequestMapping(value = "/rechazarSolicitud", method = RequestMethod.POST)
+    public String rechazarSolicitud(@RequestParam("solicitudId") int solicitudId, HttpSession session) {
+        if (!verificarSesion(session)) {
+            return "redirect:/login";
+        }
+
+         servicioBanco.rechazarSolicitud(solicitudId);
+
+            return "redirect:/verPeticiones";
+
+    }
+
+    @RequestMapping(value = "/asignarPaquete", method = RequestMethod.POST)
+    public String asignarPaquete(@RequestParam("solicitudId") int solicitudId,
+                                 @RequestParam("paqueteId") int paqueteId,
+                                 HttpSession session) {
+        if (!verificarSesion(session)) {
+            return "redirect:/login";
+        }
+        servicioBanco.asignarPaqueteASolicitud(solicitudId, paqueteId);
+
+        return "redirect:/verPeticiones";
+    }
+
+
+
 
 
     @RequestMapping("/agregarPaquete")
@@ -118,8 +161,8 @@ public class ControladorBanco {
 
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
-        session.invalidate();  // Invalida toda la sesión, eliminando todos los atributos
-        return "redirect:/login";  // Redirige al login con un mensaje de logout exitoso
+        session.invalidate();
+        return "redirect:/login";
     }
 
 
@@ -128,10 +171,10 @@ public class ControladorBanco {
         Banco banco = new Banco("Banco Test",  "Dirección","Ciudad","País",  "123456789","email@test.com", "9-18",  "12345");
         servicioBanco.agregarBanco(banco);
         session.setAttribute("idBanco", banco.getId());
-        Solicitud solicitud1 = new Solicitud(banco.getId(), 1L, "Plasma fresco congelado", "DEA 1.1+", 3);
-        Solicitud solicitud2 = new Solicitud(banco.getId(), 2L, "Glóbulos rojos empaquetados", "DEA 1.1-", 2);
-        Solicitud solicitud3 = new Solicitud(banco.getId(), 3L, "Sangre total", "DEA 1.2+", 5);
-        Solicitud solicitud4 = new Solicitud(banco.getId(), 4L, "Plaquetas", "DEA 4-", 4);
+        Solicitud solicitud1 = new Solicitud(banco.getId(), 1L, "Plasma fresco congelado", "DEA 1.1+", 300);
+        Solicitud solicitud2 = new Solicitud(banco.getId(), 2L, "Globulos rojos empaquetados", "DEA 1.1-", 200);
+        Solicitud solicitud3 = new Solicitud(banco.getId(), 3L, "Sangre total", "DEA 1.2+", 500);
+        Solicitud solicitud4 = new Solicitud(banco.getId(), 4L, "Plaquetas", "DEA 4-", 400);
 
         // Agregar las solicitudes al servicio de solicitudes
         servicioBanco.agregarSolicitud(solicitud1);

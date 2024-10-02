@@ -93,6 +93,54 @@ public class ServicioBancoTest {
         verify(repositorioBancoMock).solicitudesPorBanco(1L);
         assertEquals(solicitudesMock, solicitudes);
     }
+
+
+
+    @Rollback
+    @Transactional
+    @Test
+    public void buscarSolicitudSiSolicitudExisteDeberiaRetornarSolicitud() {
+        Solicitud solicitudMock = mock(Solicitud.class);
+        when(solicitudMock.getId()).thenReturn(1);
+
+        when(repositorioBancoMock.buscarSolicitudPorId(1)).thenReturn(solicitudMock);
+
+        Solicitud solicitudEncontrada = servicioBanco.buscarSolicitud(1);
+
+        verify(repositorioBancoMock).buscarSolicitudPorId(1);
+        assertEquals(solicitudMock, solicitudEncontrada);
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    public void obtenerPaquetesDeSangreCompatiblesDeberiaRetornarListaDePaquetesCompatibles() {
+        Solicitud solicitudMock = new Solicitud(1L, 1L, "Sangre total", "DEA 1.1+", 5);
+        List<PaqueteDeSangre> paquetesMock = new ArrayList<>();
+        paquetesMock.add(new PaqueteDeSangre("DEA 1.1+", 10, "Sangre total", null));
+        paquetesMock.add(new PaqueteDeSangre("DEA 1.1+", 7, "Sangre total", null));
+
+        when(repositorioBancoMock.obtenerPaquetesDeSangreCompatible(solicitudMock)).thenReturn(paquetesMock);
+
+        List<PaqueteDeSangre> paquetesCompatibles = servicioBanco.obtenerPaquetesDeSangreCompatibles(solicitudMock);
+
+        verify(repositorioBancoMock).obtenerPaquetesDeSangreCompatible(solicitudMock);
+        assertEquals(paquetesMock, paquetesCompatibles);
+    }
+
+
+    @Rollback
+    @Transactional
+    @Test
+    public void rechazarSolicitudSiSolicitudExisteDeberiaActualizarEstado() {
+
+        Solicitud solicitudMock = new Solicitud(1L, 1L, "Sangre total", "DEA 1.1+", 1);
+        when(repositorioBancoMock.buscarSolicitudPorId(1)).thenReturn(solicitudMock);
+
+        servicioBanco.rechazarSolicitud(1);
+
+        verify(repositorioBancoMock).rechazarSolicitud(1);
+    }
 }
 
 

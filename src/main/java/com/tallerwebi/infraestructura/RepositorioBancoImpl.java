@@ -4,12 +4,13 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class RepositorioBancoImpl implements RepositorioBanco {
 
     private SessionFactory sessionFactory;
+
     public RepositorioBancoImpl(org.hibernate.SessionFactory sessionFactory) {
 
         this.sessionFactory = sessionFactory;
@@ -57,7 +59,6 @@ public class RepositorioBancoImpl implements RepositorioBanco {
     }
 
 
-
     @Override
     public PaqueteDeSangre buscarSangre(String tipoSangre) {
 
@@ -68,8 +69,6 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         cq.select(root).where(cb.equal(root.get("tipoSangre"), tipoSangre));
         return session.createQuery(cq).uniqueResult();
     }
-
-
 
 
     public List<PaqueteDeSangre> obtenerPaquetesDeSangrePorBanco(Long idBanco) {
@@ -97,5 +96,46 @@ public class RepositorioBancoImpl implements RepositorioBanco {
     public Solicitud guardarSolicitud(Solicitud solicitud1) {
         sessionFactory.getCurrentSession().save(solicitud1);
         return solicitud1;
+    }
+
+    @Override
+    public Solicitud buscarSolicitudPorId(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Solicitud> cq = cb.createQuery(Solicitud.class);
+        Root<Solicitud> root = cq.from(Solicitud.class);
+        cq.select(root).where(cb.equal(root.get("id"), id));
+        return session.createQuery(cq).uniqueResult();
+    }
+
+    @Override
+    public List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatible(Solicitud solicitud) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<PaqueteDeSangre> cq = cb.createQuery(PaqueteDeSangre.class);
+        Root<PaqueteDeSangre> root = cq.from(PaqueteDeSangre.class);
+
+        Predicate tipoProductoPredicate = cb.equal(root.get("tipoProducto"), solicitud.getTipoProducto());
+        Predicate tipoSangrePredicate = cb.equal(root.get("tipoSangre"), solicitud.getTipoSangre());
+        Predicate cantidadPredicate = cb.greaterThanOrEqualTo(root.get("cantidad"), solicitud.getCantidad());
+        Predicate bancoIdPredicate = cb.equal(root.get("banco").get("id"), solicitud.getBancoId()); // Modificado aquí
+
+        cq.select(root).where(cb.and(tipoProductoPredicate, tipoSangrePredicate, cantidadPredicate, bancoIdPredicate));
+
+        return session.createQuery(cq).getResultList();
+    }
+
+    @Override
+    public void rechazarSolicitud(int solicitudId) {
+        Session session = sessionFactory.getCurrentSession();
+
+
+        Solicitud solicitud = this.buscarSolicitudPorId(solicitudId);
+        if (solicitud != null) {
+
+            solicitud.setEstado("Rechazada");
+
+            session.update(solicitud);
+        }
     }
 }
