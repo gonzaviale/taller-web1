@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <title>Busqueda</title>
+</head>
+<body>
+
+<header th:replace="fragments/header :: header"></header>
+
+<section th:if="${listaMascotas}">
+
+    <article th:replace="fragments/listarMascotas"></article>
+
+</section>
+
+<section th:if="${publicaciones}">
+
+    <article th:replace="fragments/listarPublicaciones"></article>
+
+</section>
+
+
+</body>
+</html>

@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.PublicacionNoExistente;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface RepositorioPublicacion {
@@ -9,4 +10,6 @@ public interface RepositorioPublicacion {
     Publicacion obtenerPorId(Long id) throws PublicacionNoExistente;
 
     List<Publicacion> obtenerTodasLasPublicaciones();
+
+    ArrayList<Publicacion> buscarPublicaciones(String titulo, String tipoDeSangre, String zonaDeResidencia, String tipoDePublicacion);
 }

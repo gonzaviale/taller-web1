@@ -1,11 +1,22 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Publicacion;
 import com.tallerwebi.dominio.ServicioPublicacion;
 import com.tallerwebi.infraestructura.ServicioPublicacionImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ControladorHomeTest {
 
@@ -23,19 +34,87 @@ public class ControladorHomeTest {
         //given
         givenElServicioMeEntregaUnaPublicacion();
         //when
-        whenIngresoYObtengoUnaPublicacion();
-        //obtengo todas las publicaciones y las imprimo por pantalla dependiendo de sus parametros
-        //el controlador solo se encarga de pasar los datos a la vista entonces debo simular que el servicio
-        //deberia mockear el servicio de publicacion para que me entregue una lista falsa de cosas y
-        //validar que se impriman bien
+        List<Publicacion> publicaciones= whenIngresoYObtengoTodasLasPublicaciones();
+        //then
+        thenObtengoUnaPublicacionParaListar(publicaciones);
+    }
+
+    @Test
+    public void queMePermitaListarVariasPublicaciones(){
+        //given
+        givenElServicioMeEntregaTresPublicaciones();
+        //when
+        List<Publicacion> publicaciones= whenIngresoYObtengoTodasLasPublicaciones();
+        //then
+        thenObtengoTresPublicacionesParaListar(publicaciones);
+    }
+
+    @Test
+    public void siNoHayPublicacionesGuardadasNoListaPublicaciones(){
+        //given
+        givenElServicioMeEntregaUnaListaVacia();
+        //when
+        List<Publicacion> publicaciones= whenIngresoYObtengoTodasLasPublicaciones();
+        //then
+        thenNoObtengoPublicaciones(publicaciones);
+    }
+
+    private void thenNoObtengoPublicaciones(List<Publicacion> publicaciones) {
+        assertThat(publicaciones, is(Collections.emptyList()));
+        assertThat(publicaciones.size(),is(0));
+    }
+
+    private void givenElServicioMeEntregaUnaListaVacia() {
+        when(servicioPublicacion.obtenerTodasLasPublicaciones()).thenReturn(new ArrayList<>());
+    }
+
+
+    private void thenObtengoTresPublicacionesParaListar(List<Publicacion> publicaciones) {
+        assertThat(publicaciones.size(), is(3));
+        assertThat(publicaciones, hasItem(hasProperty("titulo",is("dono sangre"))));
+        assertThat(publicaciones, hasItem(hasProperty("titulo",is("vendo sangre"))));
+        assertThat(publicaciones, hasItem(hasProperty("titulo",is("busco sangre"))));
 
     }
 
-    private void whenIngresoYObtengoUnaPublicacion() {
+    private void givenElServicioMeEntregaTresPublicaciones() {
+
+        List<Publicacion> publicaciones= new ArrayList<>();
+        Publicacion nuevaPublicacion = getPublicacionConTipoDePublicacionYTitulo("donacion", "dono sangre");
+
+        Publicacion nuevaPublicacion1= getPublicacionConTipoDePublicacionYTitulo("venta", "vendo sangre");
+
+        Publicacion nuevaPublicacion2= getPublicacionConTipoDePublicacionYTitulo("busqueda","busco sangre");
+
+        publicaciones.add(nuevaPublicacion);
+        publicaciones.add(nuevaPublicacion1);
+        publicaciones.add(nuevaPublicacion2);
+
+        when(servicioPublicacion.obtenerTodasLasPublicaciones()).thenReturn(publicaciones);
+    }
+
+    private static Publicacion getPublicacionConTipoDePublicacionYTitulo(String tipoDePublicacion,String titulo) {
+        Publicacion nuevaPublicacion= new Publicacion();
+        nuevaPublicacion.setTipoDePublicacion(tipoDePublicacion);
+        nuevaPublicacion.setTitulo(titulo);
+        return nuevaPublicacion;
+    }
+
+
+    private void thenObtengoUnaPublicacionParaListar(List<Publicacion> publicaciones) {
+        ModelAndView modelAndView=controladorHome.irAHome("",new ModelMap());
+        assertThat(modelAndView.getModel().get("publicaciones"), is(equalTo(publicaciones)));
+        assertThat(servicioPublicacion.obtenerTodasLasPublicaciones().size(), is(1));
+    }
+
+    private List <Publicacion> whenIngresoYObtengoTodasLasPublicaciones() {
+        return servicioPublicacion.obtenerTodasLasPublicaciones();
 
     }
 
     private void givenElServicioMeEntregaUnaPublicacion() {
-        //mock(servicioPublicacion.obtenerPublicaciones());
+        List<Publicacion> publicaciones= new ArrayList<>();
+        publicaciones.add(new Publicacion());
+        when(servicioPublicacion.obtenerTodasLasPublicaciones()).thenReturn(publicaciones);
     }
 }
