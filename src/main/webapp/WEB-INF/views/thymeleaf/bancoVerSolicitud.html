@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Ver Solicitudes Compatibles</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+
+<main role="main" class="container mt-4">
+
+    <div class="row">
+
+        <div class="row">
+
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/bancoHome'}">Agregar Sangre</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/verStock'}">Ver Stock</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/verPeticiones'}">Ver Peticiones</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <form action="#" th:action="@{/logout}" method="get">
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
+
+
+
+                <div th:if="${solicitud}">
+                    <h5>Detalles de la Solicitud</h5>
+                    <p><strong>ID Solicitud:</strong> <span th:text="${solicitud.id}"></span></p>
+                    <p><strong>Usuario ID:</strong> <span th:text="${solicitud.usuarioId}"></span></p>
+                    <p><strong>Tipo de Producto:</strong> <span th:text="${solicitud.tipoProducto}"></span></p>
+                    <p><strong>Tipo de Sangre:</strong> <span th:text="${solicitud.tipoSangre}"></span></p>
+                    <p><strong>Cantidad:</strong> <span th:text="${solicitud.cantidad}"></span></p>
+
+                    <!-- Botón de Rechazar -->
+                    <form action="#" th:action="@{/rechazarSolicitud}" method="post">
+                        <input type="hidden" th:name="solicitudId" th:value="${solicitud.id}"/>
+                        <button type="submit" class="btn btn-danger">Rechazar</button>
+                    </form>
+                </div>
+                <h3>Compatibles</h3>
+                <table class="table table-striped mt-4">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID Solicitud</th>
+                        <th scope="col">Tipo de Sangre</th>
+                        <th scope="col">Tipo Producto</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(paquetes)}">
+                        <td colspan="5" class="text-center">No hay stock compatible.</td>
+                    </tr>
+                    <tr th:each="paquete : ${paquetes}">
+                        <td th:text="${paquete.id}">ID Solicitud</td>
+                        <td th:text="${paquete.tipoSangre}">Tipo de Sangre</td>
+                        <td th:text="${paquete.tipoProducto}">Tipo Producto</td>
+                        <td th:text="${paquete.cantidad}">Cantidad</td>
+                        <td>
+                            <form action="#" th:action="@{/asignarPaquete}" method="post">
+                                <input type="hidden" th:name="paqueteId" th:value="${paquete.id}"/>
+                                <input type="hidden" th:name="solicitudId" th:value="${solicitud.id}"/>
+                                <button type="submit" class="btn btn-success">Asignar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

@@ -15,28 +15,25 @@
 
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">UNLAM</a>
-</nav>
-
 <main role="main" class="container mt-4">
+
     <div class="row">
         <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
             <div class="position-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="BancoHome">
+                        <a class="nav-link" th:href="@{'/bancoHome'}">
                             Agregar Sangre
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="VerStock">
+                        <a class="nav-link" th:href="@{'/verStock'}">
                             Ver Stock
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="VerPeticiones">
+                        <a class="nav-link" th:href="@{'/verPeticiones'}">
                             Ver Peticiones
                         </a>
                     </li>
@@ -45,30 +42,40 @@
         </nav>
 
 
-        <!-- Main content -->
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <form action="#" th:action="@{/logout}" method="get">
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
             <h1>Ver Peticiones de Sangre</h1>
 
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">Nombre del Solicitante</th>
+                    <th scope="col">Id del Solicitante</th>
                     <th scope="col">Tipo de Sangre Solicitada</th>
+                    <th scope="col">Tipo de Producto</th>
                     <th scope="col">Cantidad Solicitada</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th> <!-- Nueva columna para el botón -->
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>John Doe</td>
-                    <td>A+</td>
-                    <td>3</td>
+                <tr th:if="${#lists.isEmpty(solicitudes)}">
+                    <td colspan="6">No hay solicitudes.</td>
                 </tr>
-                <tr>
-                    <td>Jane Smith</td>
-                    <td>O-</td>
-                    <td>2</td>
+                <tr th:each="solicitud : ${solicitudes}">
+                    <td th:text="${solicitud.usuarioId}">Nombre del Solicitante</td>
+                    <td th:text="${solicitud.tipoSangre}">Tipo de Sangre</td>
+                    <td th:text="${solicitud.tipoProducto}">Tipo de Producto</td>
+                    <td th:text="${solicitud.cantidad}">Cantidad</td>
+                    <td th:text="${solicitud.estado}">Estado</td>
+                    <td>
+                        <a class="btn btn-primary"
+                           th:href="@{/revisarSolicitud(solicitudId=${solicitud.id})}">
+                            Revisar
+                        </a>
+                    </td>
                 </tr>
-                <!-- Aquí puedes agregar más filas dinámicamente desde el backend -->
                 </tbody>
             </table>
 
@@ -77,7 +84,6 @@
     </div>
 </main>
 
-<!-- Bootstrap core js -->
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>
