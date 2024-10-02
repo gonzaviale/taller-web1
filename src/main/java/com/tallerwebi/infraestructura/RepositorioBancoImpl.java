@@ -138,4 +138,31 @@ public class RepositorioBancoImpl implements RepositorioBanco {
             session.update(solicitud);
         }
     }
+
+    @Override
+    public PaqueteDeSangre buscarSangreXId(int paqueteId) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<PaqueteDeSangre> cq = cb.createQuery(PaqueteDeSangre.class);
+        Root<PaqueteDeSangre> root = cq.from(PaqueteDeSangre.class);
+
+        Predicate paqueteIdPredicate = cb.equal(root.get("id"), paqueteId);
+
+        cq.select(root).where(paqueteIdPredicate);
+
+        return session.createQuery(cq).getSingleResult();
+    }
+
+    @Override
+    public void solicitudAprobar(int solicitudId) {
+
+        Session session = sessionFactory.getCurrentSession();
+        Solicitud solicitud = this.buscarSolicitudPorId(solicitudId);
+        if (solicitud != null) {
+            solicitud.setEstado("aprobada");
+            session.update(solicitud);
+        }
+
+    }
 }
+

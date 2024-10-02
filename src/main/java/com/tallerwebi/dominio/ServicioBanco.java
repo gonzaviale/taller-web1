@@ -13,6 +13,5 @@ public interface ServicioBanco {
     List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatibles(Solicitud solicitud);
     void rechazarSolicitud(int solicitudId);
     void asignarPaqueteASolicitud(int solicitudId, int paqueteId);
-
-
+    PaqueteDeSangre BuscarPaqueteSangreXId(int paqueteId);
 }

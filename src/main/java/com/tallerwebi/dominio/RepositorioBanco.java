@@ -14,4 +14,6 @@ public interface RepositorioBanco {
     Solicitud buscarSolicitudPorId(int id);
     List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatible(Solicitud solicitud);
     void rechazarSolicitud(int solicitudId);
+    PaqueteDeSangre buscarSangreXId(int paqueteId);
+    void solicitudAprobar(int solicitudId);
 }

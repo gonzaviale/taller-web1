@@ -58,6 +58,14 @@ public class ServicioBancoImpl implements ServicioBanco {
     @Override
     public void asignarPaqueteASolicitud(int solicitudId, int paqueteId) {
 
+       // Entrega entrega = new Entrega(solicitudId,paqueteId);
+       // this.guardarEntrega(entrega) ;
+        this.repositorio.solicitudAprobar(solicitudId);
+    }
+
+    @Override
+    public PaqueteDeSangre BuscarPaqueteSangreXId(int paqueteId) {
+        return this.repositorio.buscarSangreXId(paqueteId);
     }
 
     @Override
