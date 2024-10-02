@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<body>
+<article th:if="${publicaciones}" class="container mt-4">
+    <h1 class="mb-4">Lista de Publicaciones</h1>
+    <article th:each="publicacion : ${publicaciones}" class="card mb-3">
+        <section class="card-body">
+            <h5 class="card-title" th:text="${publicacion.getTitulo()}"></h5>
+            <p class="card-text" th:text="${publicacion.getDescripcion()}"></p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>Tipo de Publicación: </strong><span th:text="${publicacion.getTipoDePublicacion()}"></span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Tipo de Sangre: </strong><span th:text="${publicacion.getTipoDeSangre()}"></span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Estado: </strong><span th:text="${publicacion.getEstaActiva()} ? 'Activa' : 'Inactiva'"></span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Movilidad: </strong><span th:text="${publicacion.getPuedeMovilizarse()} ? 'Puede movilizarse' : 'No puede movilizarse'"></span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Zona de Residencia: </strong><span th:text="${publicacion.getZonaDeResidencia()}"></span>
+                </li>
+            </ul>
+        </section>
+    </article>
+</article>
+</body>
+</html>

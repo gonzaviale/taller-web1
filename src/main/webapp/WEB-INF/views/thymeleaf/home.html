@@ -11,9 +11,7 @@
 
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand" href="#">UNLAM</a>
-</nav>
+<header th:replace="fragments/header :: header"></header>
 
 <main role="main" class="container">
   <div class = "container">
@@ -24,43 +22,17 @@
     <a href="crear-publicacion.html" class="btn btn-lg btn-primary btn-block">crear publicacion</a>
     <a href="/spring/chat" class="btn btn-lg btn-primary btn-block">Chat</a>
     <a href="/spring/buscar" class="btn btn-lg btn-primary btn-block">Buscar</a>
+    <a href="/spring/scoring" class="btn btn-lg btn-primary btn-block">Scoring</a>
   </div>
 </main>
 
-<!-- Mostrar el mensaje si existe -->
 <div th:if="${mensaje}" class="alert alert-success text-center mx-auto" style="width: fit-content;">
   <p th:text="${mensaje}"></p>
 </div>
 
 <section th:if="${!publicaciones.isEmpty()}" class="container mt-4">
-  <h1 class="mb-4">Lista de Publicaciones</h1>
-  <article th:each="publicacion : ${publicaciones}" class="card mb-3">
-    <section class="card-body">
-      <h5 class="card-title" th:text="${publicacion.getTitulo()}"></h5>
-      <p class="card-text" th:text="${publicacion.getDescripcion()}"></p>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          <strong>Tipo de Publicación: </strong><span th:text="${publicacion.getTipoDePublicacion()}"></span>
-        </li>
-        <li class="list-group-item">
-          <strong>Tipo de Sangre: </strong><span th:text="${publicacion.getTipoDeSangre()}"></span>
-        </li>
-        <li class="list-group-item">
-          <strong>Estado: </strong><span th:text="${publicacion.getEstaActiva()} ? 'Activa' : 'Inactiva'"></span>
-        </li>
-        <li class="list-group-item">
-          <strong>Movilidad: </strong><span th:text="${publicacion.getPuedeMovilizarse()} ? 'Puede movilizarse' : 'No puede movilizarse'"></span>
-        </li>
-        <li class="list-group-item">
-          <strong>Zona de Residencia: </strong><span th:text="${publicacion.getZonaDeResidencia()}"></span>
-        </li>
-      </ul>
-    </section>
-  </article>
+  <article th:replace="fragments/listarPublicaciones"></article>
 </section>
-<a href="ver-solicitudes-donantes">Ver solicitudes de donantes</a>
-<a href="formulario-donante">Agregar mascota donante</a>
-
 
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>

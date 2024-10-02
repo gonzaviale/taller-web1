@@ -1,6 +1,5 @@
 package com.tallerwebi.infraestructura;
 
-
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
@@ -15,8 +14,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
@@ -26,7 +25,9 @@ public class ServicioFiltroTest {
     @Autowired
     RepositorioMascota repositorioMascota;
     @Autowired
-    ServicioFiltro servicioFiltro = new ServicioFiltroImpl(repositorioMascota);
+    RepositorioPublicacion repositorioPublicacion;
+    @Autowired
+    ServicioFiltro servicioFiltro = new ServicioFiltroImpl(repositorioMascota,repositorioPublicacion);
 
     @Test
     @Transactional
@@ -35,13 +36,13 @@ public class ServicioFiltroTest {
         Mascota mascota = new Mascota();
         mascota.setNombre("Mascota");
         mascota.setSangre("0+");
-        mascota.setTipo("Canino");
+        mascota.setTipo("Donante");
 
         repositorioMascota.agregarMascota(mascota);
-        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("Mascota", "0+", "Canino");
+        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("Mascota", "0+", "Donante");
         Mascota recibida = mascotas.get(0);
 
-        assertEquals(recibida, mascota);
+        assertThat(recibida, equalTo(mascota));
     }
 
     @Test
@@ -51,27 +52,135 @@ public class ServicioFiltroTest {
         Mascota mascota = new Mascota();
         mascota.setNombre("Mascota");
         mascota.setSangre("0+");
-        mascota.setTipo("Felino");
+        mascota.setTipo("Donante");
 
         Mascota mascota1 = new Mascota();
         mascota1.setNombre("Mascota1");
         mascota1.setSangre("0+");
-        mascota1.setTipo("Canino");
+        mascota1.setTipo("Donante");
 
         Mascota mascota2 = new Mascota();
         mascota2.setNombre("Mascota2");
         mascota2.setSangre("0+");
-        mascota2.setTipo("Felino");
+        mascota2.setTipo("Recibe");
 
         repositorioMascota.agregarMascota(mascota);
         repositorioMascota.agregarMascota(mascota1);
         repositorioMascota.agregarMascota(mascota2);
 
-        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("", "", "Felino");
+        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("", "", "Donante");
         ArrayList<Mascota> esperadas = new ArrayList<>();
         esperadas.add(mascota);
         esperadas.add(mascota1);
 
-        assertEquals(mascotas.size(), esperadas.size());
+        assertThat(mascotas, equalTo(esperadas));
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void filtrarUnaPublicacion() {
+        Publicacion publicacion = new Publicacion();
+        publicacion.setTitulo("Mascota");
+        publicacion.setTipoDeSangre("0+");
+        publicacion.setTipoDePublicacion("Donante");
+        Publicacion publicacion1 = new Publicacion();
+        publicacion.setTitulo("Mascota");
+        publicacion.setTipoDeSangre("A+");
+        publicacion.setTipoDePublicacion("Donante");
+
+
+        repositorioPublicacion.guardarPublicacion(publicacion);
+        repositorioPublicacion.guardarPublicacion(publicacion1);
+        ArrayList<Publicacion> publicaciones = servicioFiltro.consultarPublicaciones("Mascota","A+","","Donante");
+
+        assertThat(publicaciones.size(), equalTo(1));
+        assertThat(publicaciones, hasItem(hasProperty("titulo",is("Mascota"))));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void filtrarVariasPublicaciones() {
+        Publicacion publicacion = new Publicacion();
+        publicacion.setTitulo("Mascota");
+        publicacion.setTipoDeSangre("0+");
+        publicacion.setTipoDePublicacion("Donante");
+
+        Publicacion publicacion1 = new Publicacion();
+        publicacion1.setTitulo("Mascota");
+        publicacion1.setTipoDeSangre("A+");
+        publicacion1.setTipoDePublicacion("Donante");
+
+        Publicacion publicacion2 = new Publicacion();
+        publicacion2.setTitulo("Mascota");
+        publicacion2.setTipoDeSangre("A+");
+        publicacion2.setTipoDePublicacion("Donante");
+
+        repositorioPublicacion.guardarPublicacion(publicacion);
+        repositorioPublicacion.guardarPublicacion(publicacion2);
+        repositorioPublicacion.guardarPublicacion(publicacion1);
+
+        ArrayList<Publicacion> publicaciones = servicioFiltro.consultarPublicaciones("Mascota", "", "","Donante");
+
+        assertThat(publicaciones.size(), equalTo(3));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void siNoHayParametrosElResultadoEsUnaListaConTodasLasPublicaciones() {
+        Publicacion publicacion = new Publicacion();
+        publicacion.setTitulo("Mascota");
+        publicacion.setTipoDeSangre("0+");
+        publicacion.setTipoDePublicacion("Donante");
+
+        Publicacion publicacion1 = new Publicacion();
+        publicacion1.setTitulo("Mascota");
+        publicacion1.setTipoDeSangre("A+");
+        publicacion1.setTipoDePublicacion("Donante");
+
+        Publicacion publicacion2 = new Publicacion();
+        publicacion2.setTitulo("Mascota");
+        publicacion2.setTipoDeSangre("A+");
+        publicacion2.setTipoDePublicacion("Donante");
+
+        repositorioPublicacion.guardarPublicacion(publicacion);
+        repositorioPublicacion.guardarPublicacion(publicacion2);
+        repositorioPublicacion.guardarPublicacion(publicacion1);
+
+        ArrayList<Publicacion> publicaciones = servicioFiltro.consultarPublicaciones("", "", "","");
+
+        assertThat(publicaciones.size(), equalTo(3));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void siNoHayCoincidenciasDevuelveUnaListaVacia() {
+        Publicacion publicacion = new Publicacion();
+        publicacion.setTitulo("Mascota");
+        publicacion.setTipoDeSangre("0+");
+        publicacion.setTipoDePublicacion("Donante");
+
+        Publicacion publicacion1 = new Publicacion();
+        publicacion1.setTitulo("Mascota");
+        publicacion1.setTipoDeSangre("A+");
+        publicacion1.setTipoDePublicacion("Donante");
+
+        Publicacion publicacion2 = new Publicacion();
+        publicacion2.setTitulo("Mascota");
+        publicacion2.setTipoDeSangre("A+");
+        publicacion2.setTipoDePublicacion("Donante");
+
+        repositorioPublicacion.guardarPublicacion(publicacion);
+        repositorioPublicacion.guardarPublicacion(publicacion2);
+        repositorioPublicacion.guardarPublicacion(publicacion1);
+
+        ArrayList<Publicacion> publicaciones = servicioFiltro.consultarPublicaciones("busco vendedor", "A++", "Chile","venta");
+
+        assertThat(publicaciones.size(), equalTo(0));
+    }
+
+
 }

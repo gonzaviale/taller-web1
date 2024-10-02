@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Ver Peticiones</title>
+
+    <!-- Bootstrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+
+    <!-- Custom style -->
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+
+<main role="main" class="container mt-4">
+
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{'/bancoHome'}">
+                            Agregar Sangre
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{'/verStock'}">
+                            Ver Stock
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{'/verPeticiones'}">
+                            Ver Peticiones
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <form action="#" th:action="@{/logout}" method="get">
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+            <h1>Ver Peticiones de Sangre</h1>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Id del Solicitante</th>
+                    <th scope="col">Tipo de Sangre Solicitada</th>
+                    <th scope="col">Tipo de Producto</th>
+                    <th scope="col">Cantidad Solicitada</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th> <!-- Nueva columna para el botón -->
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(solicitudes)}">
+                    <td colspan="6">No hay solicitudes.</td>
+                </tr>
+                <tr th:each="solicitud : ${solicitudes}">
+                    <td th:text="${solicitud.usuarioId}">Nombre del Solicitante</td>
+                    <td th:text="${solicitud.tipoSangre}">Tipo de Sangre</td>
+                    <td th:text="${solicitud.tipoProducto}">Tipo de Producto</td>
+                    <td th:text="${solicitud.cantidad}">Cantidad</td>
+                    <td th:text="${solicitud.estado}">Estado</td>
+                    <td>
+                        <a class="btn btn-primary"
+                           th:href="@{/revisarSolicitud(solicitudId=${solicitud.id})}">
+                            Revisar
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</main>
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

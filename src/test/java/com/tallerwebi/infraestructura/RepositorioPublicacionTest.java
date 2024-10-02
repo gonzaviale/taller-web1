@@ -32,6 +32,7 @@ public class RepositorioPublicacionTest {
     SessionFactory sessionFactory;
     @Autowired
     RepositorioPublicacion repositorio;
+
     @Test
     @Transactional
     @Rollback
@@ -140,6 +141,223 @@ public class RepositorioPublicacionTest {
 
     private void thenObtengoUnaListaVaciaDePublicaciones(List<Publicacion> publicaciones) {
         assertThat(publicaciones,is(equalTo(Collections.emptyList())));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queCuandoBusqueSinParametrosNoObtengaPublicaciones() {
+        //given --> no obtengo publicaciones
+        List<Publicacion> publicacionesEsperadas= new ArrayList<>();
+        //when
+        List<Publicacion> publicacionesObtenidas= whenObtengoLasPublicacionesPorCoincidenciasSinParametros();
+        //then
+        thenNoObtengoPublicaciones(publicacionesEsperadas,publicacionesObtenidas);
+    }
+
+    private void thenNoObtengoPublicaciones(List<Publicacion> publicacionesEsperadas, List<Publicacion> publicacionesObtenidas) {
+        assertThat(publicacionesObtenidas.size(),equalTo(publicacionesEsperadas.size()));
+        assertThat(publicacionesObtenidas.size(),is(0));
+    }
+
+    private List<Publicacion> whenObtengoLasPublicacionesPorCoincidenciasSinParametros() {
+        return repositorio.buscarPublicaciones("","","","");
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void quePuedaEncontrarDosCoincidenciasCuandoCargoDosPublicacionesConCoincidenciasEnSangre() {
+        //given
+        givenGuardoTresPublicacionesConSoloDosCoincidenciasEnPublicaciones();
+        //when
+        List<Publicacion> publicacionesObtenidas= whenObtengoLasPublicaionesPorCoincidencias();
+        //then
+        thenEncuentroDosCoincidenciasConLaInicialDEA(publicacionesObtenidas);
+    }
+
+    private List<Publicacion> whenObtengoLasPublicaionesPorCoincidencias() {
+        return repositorio.buscarPublicaciones("","DEA","","");
+    }
+
+    private void thenEncuentroDosCoincidenciasConLaInicialDEA(List<Publicacion> publicacionesObtenidas) {
+        assertThat(publicacionesObtenidas.size(),is(2));
+        assertThat(publicacionesObtenidas, hasItem(hasProperty("tipoDeSangre",is("DEA-1.1."))));
+        assertThat(publicacionesObtenidas, hasItem(hasProperty("tipoDeSangre",is("DEA-1.2."))));
+        assertThat(repositorio.obtenerTodasLasPublicaciones(),hasItem(hasProperty("tipoDeSangre",is("INVALIDA"))));
+    }
+
+
+    private void givenGuardoTresPublicacionesConSoloDosCoincidenciasEnPublicaciones() {
+
+        Publicacion nuevaPublicacion=new Publicacion();
+        nuevaPublicacion.setTipoDeSangre("DEA-1.1.");
+        Publicacion nuevaPublicacion1= new Publicacion();
+        nuevaPublicacion1.setTipoDeSangre("DEA-1.2.");
+        Publicacion nuevaPublicacion2= new Publicacion();
+        nuevaPublicacion2.setTipoDeSangre("INVALIDA");
+        repositorio.guardarPublicacion(nuevaPublicacion2);
+        repositorio.guardarPublicacion(nuevaPublicacion);
+        repositorio.guardarPublicacion(nuevaPublicacion1);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void quePuedaEncontrarDosCoincidenciasCuandoCargoDosPublicacionesConCoincidenciasEnTipoDePublicacion(){
+        //given
+        givenGuardoTresPublicacionesConSoloDosCoincidenciasEnPublicacionesDeTipoPublicacion();
+        //when
+        List<Publicacion> publicacionesObtenidas= whenObtengoLasPublicaionesPorCoincidenciasDeTipoDePublicacionDeDonacion();
+        //then
+        thenEncuentroDosCoincidenciasConLaInicialDonaEnElTipoPublicacion(publicacionesObtenidas);
+    }
+
+    private void thenEncuentroDosCoincidenciasConLaInicialDonaEnElTipoPublicacion(List<Publicacion> publicacionesObtenidas) {
+        assertThat(publicacionesObtenidas.size(),is(2));
+        assertThat(publicacionesObtenidas, hasItem(hasProperty("tipoDePublicacion",is("Donacion"))));
+        assertThat(repositorio.obtenerTodasLasPublicaciones(),hasItem(hasProperty("tipoDePublicacion",is("INVALIDA"))));
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void quePuedaEncontrarDosCoincidenciasCuandoCargoDosPublicacionesConCoincidenciasEnTitulo(){
+        //given
+        givenGuardoTresPublicacionesConSoloDosCoincidenciasEnPublicacionesTitulo();
+        //when
+        List<Publicacion> publicacionesObtenidas= whenObtengoLasPublicaionesPorCoincidenciasDeTituloDeDonacion();
+        //then
+        thenEncuentroDosCoincidenciasConLaInicialDona(publicacionesObtenidas);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void quePuedaEncontrarDosCoincidenciasCuandoCargoDosPublicacionesConCoincidenciasEnZonaDeResidencia(){
+        //given
+        givenGuardoTresPublicacionesConSoloDosCoincidenciasEnPublicacionesConZonasDeResidencia();
+        //when
+        List<Publicacion> publicacionesObtenidas= whenObtengoLasPublicaionesPorCoincidenciasDeZonaDeResidencia();
+        //then
+        thenEncuentroDosCoincidenciasConLaInicialDonaEnZonaDeResidencia(publicacionesObtenidas);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void quePuedaEncontrarDosCoincidenciasCuandoCargoDosPublicacionesConCoincidenciasEnZonaDeResidenciaYTitulo(){
+        //given
+        givenGuardoTresPublicacionesConCoincidenciasEnPublicacionesConZonasDeResidenciaYTitulo();
+        //when
+        List<Publicacion> publicacionesObtenidas= whenObtengoLasPublicaionesPorCoincidenciasDeZonaDeResidenciaYTitulo();
+        //then
+        thenEncuentroDosCoincidenciasConLaInicialDonaEnZonaDeResidenciaYTitulo(publicacionesObtenidas);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queCuandoNoTengaCoincidenciasObtengaUnaListaVacia(){
+        //given
+        givenGuardoTresPublicacionesConCoincidenciasEnPublicacionesConZonasDeResidenciaYTitulo();
+        //when
+        List<Publicacion> publicacionesObtenidas= whenObtengoLasPublicaionesPorCoincidenciasDeZonaDeResidenciaYTituloNoExistentes();
+        //then
+        thenObtengoUnaListaVaciaDePublicaciones(publicacionesObtenidas);
+    }
+
+    private List<Publicacion> whenObtengoLasPublicaionesPorCoincidenciasDeZonaDeResidenciaYTituloNoExistentes() {
+        return repositorio.buscarPublicaciones("venta","","inglaterra","");
+    }
+
+
+    private void thenEncuentroDosCoincidenciasConLaInicialDonaEnZonaDeResidenciaYTitulo(List<Publicacion> publicacionesObtenidas) {
+        assertThat(publicacionesObtenidas.size(),is(2));
+        assertThat(publicacionesObtenidas, hasItem(hasProperty("zonaDeResidencia",is("argentina"))));
+        assertThat(repositorio.obtenerTodasLasPublicaciones(),hasItem(hasProperty("zonaDeResidencia",is("Chile"))));
+    }
+
+    private List<Publicacion> whenObtengoLasPublicaionesPorCoincidenciasDeZonaDeResidenciaYTitulo() {
+        return repositorio.buscarPublicaciones("busqueda","","argentina","");
+    }
+
+    private void givenGuardoTresPublicacionesConCoincidenciasEnPublicacionesConZonasDeResidenciaYTitulo() {
+        Publicacion nuevaPublicacion=new Publicacion();
+        nuevaPublicacion.setZonaDeResidencia("argentina");
+        nuevaPublicacion.setTitulo("busqueda");
+        Publicacion nuevaPublicacion1= new Publicacion();
+        nuevaPublicacion1.setZonaDeResidencia("argentina");
+        nuevaPublicacion1.setTitulo("busqueda");
+        Publicacion nuevaPublicacion2= new Publicacion();
+        nuevaPublicacion2.setZonaDeResidencia("Chile");
+        nuevaPublicacion2.setTitulo("donacion");
+        repositorio.guardarPublicacion(nuevaPublicacion2);
+        repositorio.guardarPublicacion(nuevaPublicacion);
+        repositorio.guardarPublicacion(nuevaPublicacion1);
+
+    }
+
+    private void thenEncuentroDosCoincidenciasConLaInicialDonaEnZonaDeResidencia(List<Publicacion> publicacionesObtenidas) {
+        assertThat(publicacionesObtenidas.size(),is(2));
+        assertThat(publicacionesObtenidas, hasItem(hasProperty("zonaDeResidencia",is("Donacion"))));
+        assertThat(repositorio.obtenerTodasLasPublicaciones(),hasItem(hasProperty("zonaDeResidencia",is("INVALIDA"))));
+    }
+
+    private List<Publicacion> whenObtengoLasPublicaionesPorCoincidenciasDeZonaDeResidencia() {
+        return repositorio.buscarPublicaciones("","","Dona","");
+    }
+
+    private void givenGuardoTresPublicacionesConSoloDosCoincidenciasEnPublicacionesConZonasDeResidencia() {
+        Publicacion nuevaPublicacion=new Publicacion();
+        nuevaPublicacion.setZonaDeResidencia("Donacion");
+        Publicacion nuevaPublicacion1= new Publicacion();
+        nuevaPublicacion1.setZonaDeResidencia("Donacion");
+        Publicacion nuevaPublicacion2= new Publicacion();
+        nuevaPublicacion2.setZonaDeResidencia("INVALIDA");
+        repositorio.guardarPublicacion(nuevaPublicacion2);
+        repositorio.guardarPublicacion(nuevaPublicacion);
+        repositorio.guardarPublicacion(nuevaPublicacion1);
+    }
+
+    private List<Publicacion> whenObtengoLasPublicaionesPorCoincidenciasDeTituloDeDonacion() {
+        return repositorio.buscarPublicaciones("Dona","","","");
+    }
+
+    private void givenGuardoTresPublicacionesConSoloDosCoincidenciasEnPublicacionesTitulo() {
+        Publicacion nuevaPublicacion=new Publicacion();
+        nuevaPublicacion.setTitulo("Donacion");
+        Publicacion nuevaPublicacion1= new Publicacion();
+        nuevaPublicacion1.setTitulo("Donacion");
+        Publicacion nuevaPublicacion2= new Publicacion();
+        nuevaPublicacion2.setTitulo("INVALIDA");
+        repositorio.guardarPublicacion(nuevaPublicacion2);
+        repositorio.guardarPublicacion(nuevaPublicacion);
+        repositorio.guardarPublicacion(nuevaPublicacion1);
+    }
+
+    private void thenEncuentroDosCoincidenciasConLaInicialDona(List<Publicacion> publicacionesObtenidas) {
+        assertThat(publicacionesObtenidas.size(),is(2));
+        assertThat(publicacionesObtenidas, hasItem(hasProperty("titulo",is("Donacion"))));
+        assertThat(repositorio.obtenerTodasLasPublicaciones(),hasItem(hasProperty("titulo",is("INVALIDA"))));
+    }
+
+    private List<Publicacion> whenObtengoLasPublicaionesPorCoincidenciasDeTipoDePublicacionDeDonacion() {
+        return repositorio.buscarPublicaciones("","","","Dona");
+    }
+
+    private void givenGuardoTresPublicacionesConSoloDosCoincidenciasEnPublicacionesDeTipoPublicacion() {
+        Publicacion nuevaPublicacion=new Publicacion();
+        nuevaPublicacion.setTipoDePublicacion("Donacion");
+        Publicacion nuevaPublicacion1= new Publicacion();
+        nuevaPublicacion1.setTipoDePublicacion("Donacion");
+        Publicacion nuevaPublicacion2= new Publicacion();
+        nuevaPublicacion2.setTipoDePublicacion("INVALIDA");
+        repositorio.guardarPublicacion(nuevaPublicacion2);
+        repositorio.guardarPublicacion(nuevaPublicacion);
+        repositorio.guardarPublicacion(nuevaPublicacion1);
+
     }
 
 }
