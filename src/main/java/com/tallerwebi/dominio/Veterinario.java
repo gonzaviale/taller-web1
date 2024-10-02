@@ -3,15 +3,16 @@ package com.tallerwebi.dominio;
 import javax.persistence.*;
 
 @Entity
-public class DuenoMascota extends Usuario{
+public class Veterinario extends Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne
     Usuario usuario;
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {

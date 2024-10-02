@@ -1,40 +1,118 @@
 package com.tallerwebi.dominio;
 
-public interface Mascota {
+import javax.persistence.*;
 
-    Long getId();
+@Entity
+public class Mascota {
 
-    void setId(Long id);
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    String getNombre();
+    private String nombre;
+    private String tipo;
+    private String sangre;
+    private boolean donante;
+    private boolean receptor;
+    private Integer anios;
+    private Float peso;
+    private boolean enRevision;
+    private boolean aprobado;
+    private boolean rechazado;
 
-    void setNombre(String nombre);
+    @ManyToOne
+    private Usuario duenio;
 
-    String getRaza();
+    public Long getId() {
+        return id;
+    }
 
-    void setRaza(String raza);
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    String getSangre();
+    public String getNombre() {
+        return nombre;
+    }
 
-    void setSangre(String sangre);
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    Usuario getDuenio();
+    public String getTipo() {
+        return tipo;
+    }
 
-    void setDuenio(Usuario duenio);
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
-    boolean isDonante();
+    public String getSangre() {
+        return sangre;
+    }
 
-    void setDonante(boolean donante);
+    public void setSangre(String sangre) {
+        this.sangre = sangre;
+    }
 
-    boolean isReceptor();
+    public Usuario getDuenio() {
+        return duenio;
+    }
 
-    void setReceptor(boolean receptor);
+    public void setDuenio(Usuario duenio) {
+        this.duenio = duenio;
+    }
 
-    void setAnios(Integer anios);
 
-    Integer getAnios();
+    public void setDonante(boolean donante) {
+        this.donante = donante;
+    }
 
-    void setPeso(Float peso);
+    public boolean isEnRevision() {
+        return this.enRevision;
+    }
 
-    Float getPeso();
+    public void setRevision(boolean revision) {
+        this.enRevision = revision;
+    }
+
+    public boolean isAprobado() {
+        return this.aprobado;
+    }
+
+    public void setAprobado(boolean aprobado) {
+        this.aprobado = aprobado;
+    }
+
+    public boolean isRechazado() {
+        return this.rechazado;
+    }
+
+    public void setRechazado(boolean rechazado) {
+        this.rechazado = rechazado;
+    }
+
+    public boolean isReceptor() {
+        return receptor;
+    }
+
+    public void setReceptor(boolean receptor) {
+        this.receptor = receptor;
+    }
+
+    public void setAnios(Integer anios) {
+        this.anios = anios;
+    }
+
+    public Integer getAnios() {
+        return this.anios;
+    }
+
+    public void setPeso(Float peso) {
+        this.peso = peso;
+    }
+
+    public Float getPeso() {
+        return this.peso;
+    }
 }

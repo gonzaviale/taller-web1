@@ -1,5 +1,7 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.Canino;
+import com.tallerwebi.dominio.Felino;
 import com.tallerwebi.dominio.Mascota;
 import com.tallerwebi.dominio.RepositorioMascota;
 import org.hibernate.Criteria;
@@ -21,7 +23,7 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
     }
 
     @Override
-    public ArrayList<Mascota> buscarMascota(String nombre, String sangre, String tipo) {
+    public ArrayList<Mascota> buscarMascota(String nombre, String sangre, String raza) {
         final Session session = sessionFactory.getCurrentSession();
 
         Criteria criteria = session.createCriteria(Mascota.class);
@@ -34,8 +36,8 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
             criteria.add(Restrictions.eq("sangre", sangre));
         }
 
-        if (tipo != null && !tipo.isEmpty()) {
-            criteria.add(Restrictions.eq("tipo", tipo));
+        if (raza != null && !raza.isEmpty()) {
+            criteria.add(Restrictions.eq("tipo", raza));
         }
 
         List<Mascota> mascotas = criteria.list();
@@ -59,5 +61,42 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
     public void actualizarMascota(Mascota mascota) {
         final Session session = sessionFactory.getCurrentSession();
         session.update(mascota);
+    }
+
+    @Override
+    public List<Mascota> buscarMascotaEnRevision() {
+        Session session = sessionFactory.openSession();
+        List<Mascota> mascotasEnRevision = null;
+
+        mascotasEnRevision = session.createCriteria(Mascota.class)
+                .add(Restrictions.eq("enRevision", true))
+                .list();
+
+        return mascotasEnRevision;
+    }
+
+    @Override
+    public void aprobarMascotaDonante(Long mascotaId) {
+        Session session = sessionFactory.openSession();
+        Mascota mascota = (Mascota) session.createCriteria(Mascota.class)
+                .add(Restrictions.eq("id", mascotaId))
+                .uniqueResult();
+        mascota.setRevision(false);
+        mascota.setAprobado(true);
+
+        // Actualizamos la mascota en la sesión
+        session.saveOrUpdate(mascota);
+    }
+
+    @Override
+    public void rechazarMascotaDonante(Long mascotaId) {
+        Session session = sessionFactory.openSession();
+        Mascota mascota = (Mascota) session.createCriteria(Mascota.class)
+                .add(Restrictions.eq("id", mascotaId))
+                .uniqueResult();
+        mascota.setRevision(false);
+        mascota.setRechazado(true);
+
+        session.saveOrUpdate(mascota);
     }
 }

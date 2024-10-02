@@ -32,13 +32,13 @@ public class ServicioFiltroTest {
     @Transactional
     @Rollback
     public void filtrarMascota() {
-        Mascota mascota = new Canino();
+        Mascota mascota = new Mascota();
         mascota.setNombre("Mascota");
         mascota.setSangre("0+");
-        mascota.setRaza("Donante");
+        mascota.setTipo("Canino");
 
         repositorioMascota.agregarMascota(mascota);
-        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("Mascota", "0+", "Donante");
+        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("Mascota", "0+", "Canino");
         Mascota recibida = mascotas.get(0);
 
         assertEquals(recibida, mascota);
@@ -48,26 +48,26 @@ public class ServicioFiltroTest {
     @Transactional
     @Rollback
     public void filtrarVariasMascotas() {
-        Mascota mascota = new Felino();
+        Mascota mascota = new Mascota();
         mascota.setNombre("Mascota");
         mascota.setSangre("0+");
-        mascota.setRaza("Donante");
+        mascota.setTipo("Felino");
 
-        Mascota mascota1 = new Canino();
+        Mascota mascota1 = new Mascota();
         mascota1.setNombre("Mascota1");
         mascota1.setSangre("0+");
-        mascota1.setRaza("Donante");
+        mascota1.setTipo("Canino");
 
-        Mascota mascota2 = new Felino();
+        Mascota mascota2 = new Mascota();
         mascota2.setNombre("Mascota2");
         mascota2.setSangre("0+");
-        mascota2.setRaza("Recibe");
+        mascota2.setTipo("Felino");
 
         repositorioMascota.agregarMascota(mascota);
         repositorioMascota.agregarMascota(mascota1);
         repositorioMascota.agregarMascota(mascota2);
 
-        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("", "", "Donante");
+        ArrayList<Mascota> mascotas = servicioFiltro.consultarMascota("", "", "Felino");
         ArrayList<Mascota> esperadas = new ArrayList<>();
         esperadas.add(mascota);
         esperadas.add(mascota1);
