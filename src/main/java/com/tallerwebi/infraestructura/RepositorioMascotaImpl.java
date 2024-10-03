@@ -17,12 +17,16 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
 
     private final SessionFactory sessionFactory;
 
+    public RepositorioMascotaImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public List<Mascota> buscarMascotaEnRevision() {
         Session session = sessionFactory.openSession();
         List<Mascota> mascotasEnRevision = null;
         mascotasEnRevision = session.createCriteria(Mascota.class)
-                .add(Restrictions.eq("enRevision", true))
+                .add(Restrictions.eq("enRevision", 1))
                 .list();
         return mascotasEnRevision;
     }
@@ -46,10 +50,6 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
         mascota.setRevision(false);
         mascota.setRechazado(true);
         session.saveOrUpdate(mascota);
-    }
-
-    public RepositorioMascotaImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 
     @Override
