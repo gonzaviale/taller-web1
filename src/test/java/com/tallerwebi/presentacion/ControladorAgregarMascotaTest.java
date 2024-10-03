@@ -62,7 +62,7 @@ public class ControladorAgregarMascotaTest {
         when(usuarioMock.getId()).thenReturn(1L);
         when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
 
-        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), requestMock);
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock, imagenesMock, requestMock);
 
         thenRegistroExitoso(mav, "redirect:/home");
         assertThat(mascotaMock.getDuenio().getId(), equalTo(usuarioMock.getId()));
