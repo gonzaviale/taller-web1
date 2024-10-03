@@ -64,7 +64,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), requestMock);
 
-        thenRegistroExitoso(mav, "home");
+        thenRegistroExitoso(mav, "redirect:/home");
         assertThat(mascotaMock.getDuenio().getId(), equalTo(usuarioMock.getId()));
     }
 
