@@ -26,7 +26,7 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
         Session session = sessionFactory.openSession();
         List<Mascota> mascotasEnRevision = null;
         mascotasEnRevision = session.createCriteria(Mascota.class)
-                .add(Restrictions.eq("enRevision", 1))
+                .add(Restrictions.eq("enRevision", true))
                 .list();
         return mascotasEnRevision;
     }

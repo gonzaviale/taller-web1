@@ -36,19 +36,18 @@ public class ControladorAgregarMascota {
 
     @RequestMapping(path = "/agregar-donante", method = RequestMethod.POST)
     public ModelAndView agregarDonante(
-            @RequestParam(name = "nombre") String nombre,
-            @RequestParam(name = "anios") Integer anios,
-            @RequestParam(name = "peso") Float peso,
-            @RequestParam(name = "tipo") String tipo,
+            @ModelAttribute("mascota") Mascota mascota,
+            @RequestParam (name = "imagenes")MultipartFile[] imagenes,
             HttpServletRequest request) {
-        Mascota mascota = new Mascota();
 
         Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
 
-        mascota.setNombre(nombre);
-        mascota.setAnios(anios);
-        mascota.setPeso(peso);
-        mascota.setTipo(tipo);
+        try {
+            guardarImagenes(imagenes, mascota.getId());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         mascota.setDuenio(duenoMascota);
         mascota.setDonante(true);
         mascota.setRevision(true);
