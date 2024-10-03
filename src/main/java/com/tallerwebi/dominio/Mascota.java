@@ -1,7 +1,5 @@
 package com.tallerwebi.dominio;
 
-import org.hibernate.annotations.Columns;
-
 import javax.persistence.*;
 
 @Entity
@@ -14,10 +12,17 @@ public class Mascota {
     private String nombre;
     private String tipo;
     private String sangre;
-    @ManyToOne
-    private Usuario dueño;
+    private boolean donante;
+    private boolean receptor;
+    private Integer anios;
+    private Float peso;
+    private boolean enRevision;
+    private boolean aprobado;
+    private boolean rechazado;
 
-    // Getters y setters
+    @ManyToOne
+    private Usuario duenio;
+
     public Long getId() {
         return id;
     }
@@ -49,11 +54,65 @@ public class Mascota {
     public void setSangre(String sangre) {
         this.sangre = sangre;
     }
-    public Usuario getDueño() {
-        return dueño;
+
+    public Usuario getDuenio() {
+        return duenio;
     }
 
-    public void setDueño(Usuario dueño) {
-        this.dueño = dueño;
+    public void setDuenio(Usuario duenio) {
+        this.duenio = duenio;
+    }
+
+
+    public void setDonante(boolean donante) {
+        this.donante = donante;
+    }
+
+    public boolean isEnRevision() {
+        return this.enRevision;
+    }
+
+    public void setRevision(boolean revision) {
+        this.enRevision = revision;
+    }
+
+    public boolean isAprobado() {
+        return this.aprobado;
+    }
+
+    public void setAprobado(boolean aprobado) {
+        this.aprobado = aprobado;
+    }
+
+    public boolean isRechazado() {
+        return this.rechazado;
+    }
+
+    public void setRechazado(boolean rechazado) {
+        this.rechazado = rechazado;
+    }
+
+    public boolean isReceptor() {
+        return receptor;
+    }
+
+    public void setReceptor(boolean receptor) {
+        this.receptor = receptor;
+    }
+
+    public void setAnios(Integer anios) {
+        this.anios = anios;
+    }
+
+    public Integer getAnios() {
+        return this.anios;
+    }
+
+    public void setPeso(Float peso) {
+        this.peso = peso;
+    }
+
+    public Float getPeso() {
+        return this.peso;
     }
 }

@@ -1,11 +1,12 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.Canino;
 import com.tallerwebi.dominio.Mascota;
 import com.tallerwebi.dominio.RepositorioMascota;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
@@ -42,7 +41,7 @@ public class RepositorioMascotaTest {
     @Rollback
     public void queGuardeMascota(){
         //preparacion
-        Mascota mascota = new Mascota();
+        Mascota mascota = new Canino();
         mascota.setNombre("tobi");
 
         //ejecucion
@@ -57,7 +56,7 @@ public class RepositorioMascotaTest {
     @Transactional
     @Rollback
     public void queMeTraigaMascotasPorNombre(){
-        Mascota mascota = new Mascota();
+        Mascota mascota = new Canino();
         mascota.setNombre("tobi");
 
         repositorioMascota.agregarMascota(mascota);
@@ -72,7 +71,7 @@ public class RepositorioMascotaTest {
     @Transactional
     @Rollback
     public void queMeTraigaMascotasPorSangre(){
-        Mascota mascota = new Mascota();
+        Mascota mascota = new Canino();
         mascota.setSangre("0+");
 
         repositorioMascota.agregarMascota(mascota);
@@ -87,13 +86,63 @@ public class RepositorioMascotaTest {
     @Rollback
     public void queMeTraigaMascotasPorTipo(){
         Mascota mascota = new Mascota();
-        mascota.setTipo("Donante");
+        mascota.setTipo("Canino");
 
         repositorioMascota.agregarMascota(mascota);
-        ArrayList<Mascota> mascotasPorTipo = repositorioMascota.buscarMascota("","","Donante");
+        ArrayList<Mascota> mascotasPorTipo = repositorioMascota.buscarMascota("","","Canino");
         String tipoRecibida = mascotasPorTipo.get(0).getTipo();
 
-        assertEquals(tipoRecibida, "Donante");
+        assertEquals(tipoRecibida, "Canino");
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void queMeTraigaMascotasEnRevision(){
+        Mascota mascota = new Mascota();
+        mascota.setRevision(true);
+
+        Mascota mascota2 = new Mascota();
+        mascota2.setRevision(true);
+
+        Mascota mascota3 = new Mascota();
+        mascota3.setRevision(false);
+
+        repositorioMascota.agregarMascota(mascota);
+        repositorioMascota.agregarMascota(mascota2);
+        repositorioMascota.agregarMascota(mascota3);
+        List<Mascota> mascotasEnRevision = repositorioMascota.buscarMascotaEnRevision();
+
+        assertEquals(mascotasEnRevision.size(), 2);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaAprobarMascotaDonante() {
+
+        Mascota mascota = new Mascota();
+        mascota.setRevision(true);
+        repositorioMascota.agregarMascota(mascota);
+
+        repositorioMascota.aprobarMascotaDonante(mascota.getId());
+
+
+        assertFalse(mascota.isEnRevision());
+        assertTrue(mascota.isAprobado());
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queRechazarMascotaDonante() {
+
+        Mascota mascota = new Mascota();
+        mascota.setRevision(true);
+        repositorioMascota.agregarMascota(mascota);
+        repositorioMascota.rechazarMascotaDonante(mascota.getId());
+
+        assertFalse(mascota.isEnRevision());
+        assertTrue(mascota.isRechazado());
+    }
 }
