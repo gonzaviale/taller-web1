@@ -3,7 +3,7 @@ package com.tallerwebi.dominio;
 import javax.persistence.*;
 
 @Entity
-public class DuenoMascota extends Usuario{
+public class DuenoMascota{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
