@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.RepositorioMascota;
+import com.tallerwebi.presentacion.BancoConTiposDeSangre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -13,11 +14,13 @@ public class ServicioFiltroImpl implements ServicioFiltro {
 
     private final RepositorioMascota repositorioMascota;
     private final RepositorioPublicacion repositorioPublicacion;
+    private final RepositorioBanco repositorioBanco;
 
     @Autowired
-    public ServicioFiltroImpl(RepositorioMascota repositorioMascota,RepositorioPublicacion repositorioPublicacion){
+    public ServicioFiltroImpl(RepositorioMascota repositorioMascota,RepositorioPublicacion repositorioPublicacion, RepositorioBanco repositorioBanco){
         this.repositorioMascota = repositorioMascota;
         this.repositorioPublicacion= repositorioPublicacion;
+        this.repositorioBanco=repositorioBanco;
     }
 
     @Override
@@ -40,6 +43,23 @@ public class ServicioFiltroImpl implements ServicioFiltro {
 
         return new ArrayList<>(repositorioPublicacion.buscarPublicaciones(titulo, tipoDeSangre, zonaDeResidencia,tipoDePublicacion));
     }
+
+    @Override
+    public ArrayList<BancoConTiposDeSangre> obtenerCoincidenciasEnBancosDeSangre(String sangreBuscada, String tipoProducto) {
+
+        if (validadorCampo(sangreBuscada).equals(sangreBuscada) && validadorCampo(tipoProducto).isEmpty()) {
+            return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
+        }
+        if (validadorCampo(sangreBuscada).isEmpty() && validadorCampo(tipoProducto).equals(tipoProducto)) {
+            return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(tipoProducto));
+        }
+        if (validadorCampo(sangreBuscada).equals(sangreBuscada) && validadorCampo(tipoProducto).equals(tipoProducto)) {
+            return new ArrayList<>(repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(tipoProducto));
+        }
+
+        return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
+    }
+
 
     private String validadorCampo(String campo) {
         return (campo == null || campo.isEmpty()) ? "" : campo;

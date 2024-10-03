@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" >
+<body>
+<article th:if="${listaBancos}" class="container mt-4">
+    <h1 class="mb-4">Lista de Bancos de Sangre</h1>
+    <article th:each="banco : ${listaBancos}" class="card mb-3">
+        <section class="card-body">
+            <h5 class="card-title" th:text="${banco.getNombreBanco()}"></h5>
+            <p class="card-text">
+                <strong>Dirección: </strong><span th:text="${banco.getDireccion()}"></span>,
+                <strong>Ciudad: </strong><span th:text="${banco.getCiudad()}"></span>,
+                <strong>País: </strong><span th:text="${banco.getPais()}"></span>
+            </p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>Tipo de Producto: </strong><span th:text="${banco.getTipoProducto()}"></span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Tipo de Sangre: </strong><span th:text="${banco.getTipoSangre()}"></span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Cantidad: </strong><span th:text="${banco.getCantidad()}"></span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Teléfono: </strong><span th:text="${banco.getTelefono()}"></span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Email: </strong><span th:text="${banco.getEmail()}"></span>
+                </li>
+            </ul>
+        </section>
+    </article>
+</article>
+
+</body>
+</html>

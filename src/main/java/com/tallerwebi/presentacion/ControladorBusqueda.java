@@ -35,6 +35,10 @@ public class ControladorBusqueda {
             List<Publicacion> publicaciones= this.servicioFiltro.consultarPublicaciones("",search,"","");
             model.put("publicaciones",publicaciones);
         }
+        if(tipoDeBusqueda.equals("banco de sangre")){
+            List<BancoConTiposDeSangre> bancoConTiposDeSangres= this.servicioFiltro.obtenerCoincidenciasEnBancosDeSangre(search,"");
+            model.put("listaBancos",bancoConTiposDeSangres);
+        }
 
         return new ModelAndView("busqueda", model);
     }
