@@ -1,6 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
 <body>
+
+<!-- Contenedor principal con márgenes para el formulario -->
+<div class="container mt-5 pt-5">
+    <!-- Título del buscador -->
+    <h2 class="text-center mb-4 text-primary">Busqueda Avanzada</h2>
+
+    <!-- Formulario con método GET para buscar -->
+    <form class="row g-4" action="/spring/busquedaFiltradaPublicaciones" method="get">
+        <!-- Campo de búsqueda por título -->
+        <div class="col-md-3">
+            <label for="titulo" class="form-label">Título</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título de la publicación">
+        </div>
+
+        <!-- Campo de búsqueda por tipo de publicación -->
+        <div class="col-md-3">
+            <label for="tipoDePublicacion" class="form-label">Tipo de Publicación</label>
+            <input type="text" class="form-control" id="tipoDePublicacion" name="tipoDePublicacion" placeholder="Tipo de publicación">
+        </div>
+
+        <!-- Campo de búsqueda por tipo de sangre -->
+        <div class="col-md-3">
+            <label for="sangre" class="form-label">Sangre</label>
+            <input type="text" class="form-control" id="sangre" name="sangre" placeholder="Tipo de sangre">
+        </div>
+
+        <!-- Campo de búsqueda por zona de residencia -->
+        <div class="col-md-3">
+            <label for="zonaDeResidencia" class="form-label">Zona de Residencia</label>
+            <input type="text" class="form-control" id="zonaDeResidencia" name="zonaDeResidencia" placeholder="Zona de residencia">
+        </div>
+
+        <!-- Botón para buscar -->
+        <div class="col-12 text-center mt-4">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+</div>
+
+
 <article th:if="${publicaciones}" class="container mt-4">
     <h1 class="mb-4">Lista de Publicaciones</h1>
     <article th:each="publicacion : ${publicaciones}" class="card mb-3">

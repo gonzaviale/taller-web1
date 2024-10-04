@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.RepositorioBanco;
 import com.tallerwebi.dominio.Solicitud;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
+import com.tallerwebi.presentacion.BancoConTiposDeSangre;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -82,6 +83,7 @@ public class RepositorioBancoTest {
     @Transactional
     @Rollback
     void testAgregarPaqueteDeSangreSiBancoExiste() {
+        // Crear un banco de prueba
         Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
                 "123456789", "test@example.com", "testpassword", "Horario Test");
 
@@ -106,25 +108,30 @@ public class RepositorioBancoTest {
     @Transactional
     @Rollback
     void testAgregarVariosPaquetesDeSangreSiBancoExiste() {
+        // Crear un banco de prueba
         Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
                 "123456789", "test@example.com", "testpassword", "Horario Test");
 
-        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "", banco);
-        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, "", banco);
-        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, "", banco);
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5,"", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3,"", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7,"", banco);
 
         banco.agregarPaqueteDeSangre(paqueteA);
         banco.agregarPaqueteDeSangre(paqueteB);
         banco.agregarPaqueteDeSangre(paqueteO);
 
-
+        // Guardar el banco en la base de datos
         Banco bancoConPaquetes = repositorioBanco.guardar(banco);
 
+        // Verificar que el banco no es nulo
         assertThat(bancoConPaquetes, is(notNullValue()));
 
+        // Verificar que se guardaron los tres paquetes
         List<PaqueteDeSangre> paquetes = bancoConPaquetes.getPaquetesDeSangre();
         assertThat(paquetes, hasSize(3));
 
+        // Verificar las propiedades de los paquetes
         assertThat(paquetes, hasItems(
                 allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
                 allOf(hasProperty("tipoSangre", is("B-")), hasProperty("cantidad", is(3))),
@@ -219,7 +226,6 @@ public class RepositorioBancoTest {
 
     }
 
-
     @Test
     @Transactional
     @Rollback
@@ -239,8 +245,280 @@ public class RepositorioBancoTest {
 
 
 
+    @Test
+    @Transactional
+    @Rollback
+    void siNoIngresoUnaSangreValidaParaBuscarNoEncuentroResultados() {
+        // Crear un banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5,"", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3,"", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7,"", banco);
+
+        repositorioBanco.guardar(banco);
+        repositorioBanco.guardar(banco1);
+
+        repositorioBanco.guardarSangre(paqueteA,banco);
+        repositorioBanco.guardarSangre(paqueteB,banco);
+        repositorioBanco.guardarSangre(paqueteO,banco);
+
+        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos("C");
+
+        assertThat(resultados.size(),is(0));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void siIngresoUnaSangreValidaParaBuscarEncuentroResultados() {
+        // Crear un banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, "", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, "", banco);
+
+        // Guardar el banco en la base de datos
+        repositorioBanco.guardar(banco);
+        repositorioBanco.guardar(banco1);
+
+        repositorioBanco.guardarSangre(paqueteA,banco);
+        repositorioBanco.guardarSangre(paqueteB,banco);
+        repositorioBanco.guardarSangre(paqueteO,banco);
+
+        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos("+");
+
+        assertThat(resultados.size(), is(2) );
+        assertThat(resultados, hasItems(
+                allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
+                allOf(hasProperty("tipoSangre", is("O+")), hasProperty("cantidad", is(7)))
+        ));
 
 
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void siIngresaSangreComoVacioMeDaraTodosLosResultados() {
+        // Crear un banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, "", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, "", banco);
+
+        // Guardar el banco en la base de datos
+        repositorioBanco.guardar(banco);
+        repositorioBanco.guardar(banco1);
+
+        repositorioBanco.guardarSangre(paqueteA,banco);
+        repositorioBanco.guardarSangre(paqueteB,banco);
+        repositorioBanco.guardarSangre(paqueteO,banco);
+
+        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos("");
+
+        assertThat(resultados.size(), is(3) );
+        assertThat(resultados, hasItems(
+                allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
+                allOf(hasProperty("tipoSangre", is("B-")), hasProperty("cantidad", is(3))),
+                allOf(hasProperty("tipoSangre", is("O+")), hasProperty("cantidad", is(7)))
+        ));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void siIngresaSangreComoVacioMeDaraTodosLosResultadosEnCoincidenciasDeTipo() {
+        // Crear un banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, "", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, "", banco);
+
+        // Guardar el banco en la base de datos
+        repositorioBanco.guardar(banco);
+        repositorioBanco.guardar(banco1);
+
+        repositorioBanco.guardarSangre(paqueteA,banco);
+        repositorioBanco.guardarSangre(paqueteB,banco);
+        repositorioBanco.guardarSangre(paqueteO,banco);
+
+        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos("");
+
+        assertThat(resultados.size(), is(3) );
+        assertThat(resultados, hasItems(
+                allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
+                allOf(hasProperty("tipoSangre", is("B-")), hasProperty("cantidad", is(3))),
+                allOf(hasProperty("tipoSangre", is("O+")), hasProperty("cantidad", is(7)))
+        ));
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void noObtengoCoincidenciasSiElParametroDeTipoDeProductoEsInvalidoNoExiste() {
+        // Crear un banco de prueba
+            Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                    "123456789", "test@example.com", "testpassword", "Horario Test");
+            Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "total", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, "globulos", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, "total", banco);
+
+        // Guardar el banco en la base de datos
+        repositorioBanco.guardar(banco);
+        repositorioBanco.guardar(banco1);
+
+        repositorioBanco.guardarSangre(paqueteA,banco);
+        repositorioBanco.guardarSangre(paqueteB,banco);
+        repositorioBanco.guardarSangre(paqueteO,banco);
+
+        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos("A+");
+
+        assertThat(resultados.size(), is(0) );
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    void obtenerDosCoincidenciasEnTipoDeProductoDeTodosLosBancos() {
+        // Crear un banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "total", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, "globulos", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, "total", banco);
+
+        // Guardar el banco en la base de datos
+        repositorioBanco.guardar(banco);
+        repositorioBanco.guardar(banco1);
+
+        repositorioBanco.guardarSangre(paqueteA,banco);
+        repositorioBanco.guardarSangre(paqueteB,banco);
+        repositorioBanco.guardarSangre(paqueteO,banco);
+
+        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos("total");
+
+        assertThat(resultados.size(), is(2) );
+        assertThat(resultados, hasItems(
+                allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
+                allOf(hasProperty("tipoSangre", is("O+")), hasProperty("cantidad", is(7)))
+        ));
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    void siIngresaSangreComoVacioMeDaraTodosLosResultadosEnCoincidenciasDeTipoYSangre() {
+        // Crear un banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, "", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, "", banco);
+
+        // Guardar el banco en la base de datos
+        repositorioBanco.guardar(banco);
+        repositorioBanco.guardar(banco1);
+
+        repositorioBanco.guardarSangre(paqueteA,banco);
+        repositorioBanco.guardarSangre(paqueteB,banco);
+        repositorioBanco.guardarSangre(paqueteO,banco);
+
+        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos("","");
+
+        assertThat(resultados.size(), is(3) );
+        assertThat(resultados, hasItems(
+                allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
+                allOf(hasProperty("tipoSangre", is("B-")), hasProperty("cantidad", is(3))),
+                allOf(hasProperty("tipoSangre", is("O+")), hasProperty("cantidad", is(7)))
+        ));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void noObtengoCoincidenciasSiElParametroDeTipoDeProductoYElDeSangreEsInvalidoNoExiste() {
+        // Crear un banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "total", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, "globulos", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, "total", banco);
+
+        // Guardar el banco en la base de datos
+        repositorioBanco.guardar(banco);
+        repositorioBanco.guardar(banco1);
+
+        repositorioBanco.guardarSangre(paqueteA,banco);
+        repositorioBanco.guardarSangre(paqueteB,banco);
+        repositorioBanco.guardarSangre(paqueteO,banco);
+
+        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos("---","---");
+
+        assertThat(resultados.size(), is(0) );
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback
+    void obtenerDosCoincidenciasEnTipoDeProductoYSangreDeTodosLosBancos() {
+        // Crear un banco de prueba
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
+
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "total", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, "globulos", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, "total", banco);
+
+        // Guardar el banco en la base de datos
+        repositorioBanco.guardar(banco);
+        repositorioBanco.guardar(banco1);
+
+        repositorioBanco.guardarSangre(paqueteA,banco);
+        repositorioBanco.guardarSangre(paqueteB,banco);
+        repositorioBanco.guardarSangre(paqueteO,banco);
+
+        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos("+","total");
+
+        assertThat(resultados.size(), is(2) );
+        assertThat(resultados, hasItems(
+                allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
+                allOf(hasProperty("tipoSangre", is("O+")), hasProperty("cantidad", is(7)))
+        ));
+    }
 
 
 }

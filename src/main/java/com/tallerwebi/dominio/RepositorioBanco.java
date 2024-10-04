@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.presentacion.BancoConTiposDeSangre;
+
 import java.util.List;
 
 public interface RepositorioBanco {
@@ -9,6 +11,9 @@ public interface RepositorioBanco {
     Banco buscarPorId(Long idBanco);
     PaqueteDeSangre buscarSangre(String s);
     List<PaqueteDeSangre> obtenerPaquetesDeSangrePorBanco(Long idBanco);
+    List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnSangreDeTodosLosBancos(String sangreBuscada);
+    List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(String tipoProducto);
+    List<BancoConTiposDeSangre> obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(String sangreBuscada,String tipoProducto);
     List<Solicitud> solicitudesPorBanco(Long idBanco);
     Solicitud guardarSolicitud(Solicitud solicitud1);
     Solicitud buscarSolicitudPorId(int id);

@@ -37,7 +37,6 @@ public class ServicioBancoTest {
 
         Banco bancoEncontrado = servicioBanco.BuscarBancoId(1L);
 
-
         verify(repositorioBancoMock).buscarPorId(1L);
         assertEquals(bancoMock, bancoEncontrado);
     }
