@@ -30,7 +30,7 @@ public class ControladorBusquedaTest {
         //given
         givenMockeoElServicioParaQueMeDevuelvaUnaCiertaCantidadDeMascotas(2);
 
-        ModelAndView modelAndView = controladorBusqueda.buscar("mascotas", "");
+        ModelAndView modelAndView = controladorBusqueda.filtrarMascotas("", "","");
 
         assertThat(modelAndView.getModel().get("listaMascotas"), not(IsEmptyCollection.class));
         assertThat(modelAndView.getModel().get("listaMascotas"), equalTo(servicioFiltro.consultarMascota("","","")));
@@ -59,7 +59,7 @@ public class ControladorBusquedaTest {
 
         givenMockeoElServicioParaQueMeDevuelvaDosMascotasDonantes();
 
-        ModelAndView modelAndView= controladorBusqueda.buscar("mascotas","+");
+        ModelAndView modelAndView= controladorBusqueda.filtrarMascotas("","+","");
 
         thenEncuentraCoincidenciasDeDosMascotas(modelAndView);
     }
@@ -90,12 +90,27 @@ public class ControladorBusquedaTest {
         publicacions.add(publicacion1);
         when(servicioFiltro.consultarPublicaciones("","A+","","")).thenReturn(publicacions);
 
-        ModelAndView modelAndView= controladorBusqueda.buscar("publicacion","A+");
+        ModelAndView modelAndView= controladorBusqueda.filtrarPublicaciones("","A+","","");
 
         ArrayList <Publicacion> publicaciones = (ArrayList<Publicacion>) modelAndView.getModel().get("publicaciones");
         assertThat(publicaciones, hasItem(hasProperty("titulo",is("Mascota"))));
         assertThat(publicaciones.size(), is(1));
     }
+
+    @Test
+    public void filtrarUnBancoDeSangre() {
+        ArrayList <Publicacion> publicacions= new ArrayList<>();
+        Publicacion publicacion1 = getPublicacion("Mascota","A+","Donante");
+        publicacions.add(publicacion1);
+        when(servicioFiltro.consultarPublicaciones("","A+","","")).thenReturn(publicacions);
+
+        ModelAndView modelAndView= controladorBusqueda.filtrarPublicaciones("","A+","","");
+
+        ArrayList <Publicacion> publicaciones = (ArrayList<Publicacion>) modelAndView.getModel().get("publicaciones");
+        assertThat(publicaciones, hasItem(hasProperty("titulo",is("Mascota"))));
+        assertThat(publicaciones.size(), is(1));
+    }
+
 
     private static Publicacion getPublicacion(String titulo, String sangre,String tipo) {
         Publicacion publicacion = new Publicacion();
@@ -123,7 +138,7 @@ public class ControladorBusquedaTest {
 
         when(servicioFiltro.consultarPublicaciones("","A+","","")).thenReturn(publicacions);
 
-        ModelAndView modelAndView= controladorBusqueda.buscar("publicacion","A+");
+        ModelAndView modelAndView= controladorBusqueda.filtrarPublicaciones("","A+","","");
 
         ArrayList <Publicacion> publicaciones = (ArrayList<Publicacion>) modelAndView.getModel().get("publicaciones");
         assertThat(publicaciones, hasItem(hasProperty("tipoDeSangre",is("A+"))));
@@ -153,7 +168,7 @@ public class ControladorBusquedaTest {
         publicacions.add(publicacion2);
         when(servicioFiltro.consultarPublicaciones("","","","")).thenReturn(publicacions);
 
-        ModelAndView modelAndView = controladorBusqueda.buscar("publicacion", "");
+        ModelAndView modelAndView = controladorBusqueda.filtrarPublicaciones("", "","","");
         ArrayList <Publicacion> publicaciones = (ArrayList<Publicacion>) modelAndView.getModel().get("publicaciones");
         assertThat(publicaciones, hasItem(hasProperty("titulo",is("-"))));
         assertThat(publicaciones.size(), equalTo(3));
@@ -164,10 +179,68 @@ public class ControladorBusquedaTest {
 
         when(servicioFiltro.consultarPublicaciones("","","","")).thenReturn(new ArrayList<>());
 
-        ModelAndView modelAndView = controladorBusqueda.buscar("publicacion", "A++");
+        ModelAndView modelAndView = controladorBusqueda.filtrarPublicaciones("", "A++","","");
 
         ArrayList <Publicacion> publicaciones = (ArrayList<Publicacion>) modelAndView.getModel().get("publicaciones");
         assertThat(publicaciones.size(), equalTo(0));
+    }
+
+    @Test
+    public void siNoHayCoincidenciasDevuelveUnaListaVaciaDeBancosDeTipo() {
+
+        when(servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("","")).thenReturn(new ArrayList<>());
+
+        ModelAndView modelAndView = controladorBusqueda.filtrarBancos("sadasd", "");
+
+        ArrayList <BancoConTiposDeSangre> BancoConTiposDeSangre = (ArrayList<BancoConTiposDeSangre>) modelAndView.getModel().get("listaBancos");
+        assertThat(BancoConTiposDeSangre.size(), equalTo(0));
+    }
+
+    @Test
+    public void siSeEnviaVacioComoParametroMeDevuelveLaListaEnteraDeBancos() {
+
+        givenMockeoElServicioParaQueMeDevuelvaLaListaCompletaDeBancosConSagre();
+
+        ModelAndView modelAndView = controladorBusqueda.filtrarBancos("", "");
+
+        ArrayList <BancoConTiposDeSangre> BancoConTiposDeSangre = (ArrayList<BancoConTiposDeSangre>) modelAndView.getModel().get("listaBancos");
+        assertThat(BancoConTiposDeSangre.size(), equalTo(3));
+    }
+
+    @Test
+    public void siSeEnviaUnParametroMeDevuelveElObjetoDeLaLista() {
+
+        givenMockeoElServicioParaQueMeDevuelvaLaListaCompletaDeBancosConSagreConValores();
+
+        ModelAndView modelAndView = controladorBusqueda.filtrarBancos("1", "");
+
+        ArrayList <BancoConTiposDeSangre> BancoConTiposDeSangre = (ArrayList<BancoConTiposDeSangre>) modelAndView.getModel().get("listaBancos");
+        assertThat(BancoConTiposDeSangre.size(),equalTo(1));
+        assertThat(BancoConTiposDeSangre, hasItem(hasProperty("tipoSangre",is("1"))));
+    }
+
+
+    private void givenMockeoElServicioParaQueMeDevuelvaLaListaCompletaDeBancosConSagre() {
+
+        ArrayList <BancoConTiposDeSangre> bancos= new ArrayList<>();
+
+        for (int i = 0; i < 3; i++) {
+            bancos.add(new BancoConTiposDeSangre());
+        }
+
+        when(servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("","")).thenReturn(bancos);
+
+    }
+
+    private void givenMockeoElServicioParaQueMeDevuelvaLaListaCompletaDeBancosConSagreConValores() {
+
+        ArrayList <BancoConTiposDeSangre> bancos= new ArrayList<>();
+        BancoConTiposDeSangre bancoPrueba=new BancoConTiposDeSangre();
+            bancoPrueba.setTipoSangre("1");
+            bancos.add(bancoPrueba);
+
+        when(servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("1","")).thenReturn(bancos);
+
     }
 
 }

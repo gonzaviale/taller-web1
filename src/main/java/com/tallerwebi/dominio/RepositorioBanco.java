@@ -13,5 +13,5 @@ public interface RepositorioBanco {
     List<PaqueteDeSangre> obtenerPaquetesDeSangrePorBanco(Long idBanco);
     List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnSangreDeTodosLosBancos(String sangreBuscada);
     List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(String tipoProducto);
-    List<BancoConTiposDeSangre> obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(String tipoProducto);
+    List<BancoConTiposDeSangre> obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(String sangreBuscada,String tipoProducto);
 }

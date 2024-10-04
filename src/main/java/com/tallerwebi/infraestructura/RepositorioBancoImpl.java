@@ -111,8 +111,7 @@ public class RepositorioBancoImpl implements RepositorioBanco {
                 if (paquete.getTipoSangre().contains(sangreBuscada)) {
                     BancoConTiposDeSangre bancoConTipos = getBancoConTiposDeSangre(banco, paquete);
                     //guardo el objeto
-                    resultados.
-                            add(bancoConTipos);
+                    resultados.add(bancoConTipos);
                 }
             }
 
@@ -123,12 +122,53 @@ public class RepositorioBancoImpl implements RepositorioBanco {
 
     @Override
     public List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(String tipoProducto) {
-        return List.of();
+        //necesito un lugar donde almacenar los resultados
+        List<BancoConTiposDeSangre> resultados = new ArrayList<>();
+
+        //obtengo todos los bancos
+        List<Banco> bancos = getAllBanco();
+
+        //recorro todos los bancos
+        for (Banco banco : bancos) {
+            //recorro los paquetes de el banco del que este en iteracion
+            for (PaqueteDeSangre paquete : banco.getPaquetesDeSangre()) {
+                //si el paquete que contiene es igual
+                if (paquete.getTipoProducto().contains(tipoProducto)) {
+                    BancoConTiposDeSangre bancoConTipos = getBancoConTiposDeSangre(banco, paquete);
+                    //guardo el objeto
+                    resultados.add(bancoConTipos);
+                }
+            }
+
+        }
+
+        return resultados;
     }
 
     @Override
-    public List<BancoConTiposDeSangre> obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(String tipoProducto) {
-        return List.of();
+    public List<BancoConTiposDeSangre> obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(String sangreBuscada ,String tipoProducto) {
+
+        //necesito un lugar donde almacenar los resultados
+        List<BancoConTiposDeSangre> resultados = new ArrayList<>();
+
+        //obtengo todos los bancos
+        List<Banco> bancos = getAllBanco();
+
+        //recorro todos los bancos
+        for (Banco banco : bancos) {
+            //recorro los paquetes de el banco del que este en iteracion
+            for (PaqueteDeSangre paquete : banco.getPaquetesDeSangre()) {
+                //si el paquete que contiene es igual
+                if (paquete.getTipoSangre().contains(sangreBuscada) && paquete.getTipoProducto().contains(tipoProducto)) {
+                    BancoConTiposDeSangre bancoConTipos = getBancoConTiposDeSangre(banco, paquete);
+                    //guardo el objeto
+                    resultados.add(bancoConTipos);
+                }
+            }
+
+        }
+
+        return resultados;
     }
 
     private static BancoConTiposDeSangre getBancoConTiposDeSangre(Banco banco, PaqueteDeSangre paquete) {

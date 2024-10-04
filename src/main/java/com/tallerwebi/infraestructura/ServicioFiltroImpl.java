@@ -54,7 +54,7 @@ public class ServicioFiltroImpl implements ServicioFiltro {
             return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(tipoProducto));
         }
         if (validadorCampo(sangreBuscada).equals(sangreBuscada) && validadorCampo(tipoProducto).equals(tipoProducto)) {
-            return new ArrayList<>(repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(tipoProducto));
+            return new ArrayList<>(repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(sangreBuscada,tipoProducto));
         }
 
         return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
