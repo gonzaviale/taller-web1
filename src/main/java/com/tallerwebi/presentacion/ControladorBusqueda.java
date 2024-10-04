@@ -51,7 +51,7 @@ public class ControladorBusqueda {
         return new ModelAndView("busqueda",model);
     }
 
-    @RequestMapping(path = "/busquedaFiltrada/Mascotas", method = RequestMethod.GET)
+    @RequestMapping(path = "/busquedaFiltradaMascotas", method = RequestMethod.GET)
     public ModelAndView filtrarMascotas(
             @RequestParam(required = false) String nombre,
             @RequestParam(required = false) String sangre,
@@ -65,7 +65,7 @@ public class ControladorBusqueda {
         return new ModelAndView("busqueda", model);
     }
 
-    @RequestMapping(path = "/busquedaFiltrada/Publicaciones", method = RequestMethod.GET)
+    @RequestMapping(path = "/busquedaFiltradaPublicaciones", method = RequestMethod.GET)
     public ModelAndView filtrarPublicaciones(
             @RequestParam(required = false) String titulo,
             @RequestParam(required = false) String sangre,
@@ -79,7 +79,7 @@ public class ControladorBusqueda {
         return new ModelAndView("busqueda", model);
     }
 
-    @RequestMapping(path = "/busquedaFiltrada/Bancos", method = RequestMethod.GET)
+    @RequestMapping(path = "/busquedaFiltradaBancos", method = RequestMethod.GET)
     public ModelAndView filtrarBancos(
             @RequestParam(required = false) String sangreBuscada,
             @RequestParam(required = false) String tipoDeProducto) {

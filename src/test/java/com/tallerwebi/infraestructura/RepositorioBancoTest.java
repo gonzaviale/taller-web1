@@ -42,7 +42,8 @@ public class RepositorioBancoTest {
     @Rollback
     void testSaveBanco() {
 
-        Banco banco = getBancoTextExamplePuntoCom();
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
 
         Banco savedBanco = repositorioBanco.guardar(banco);
 
@@ -54,7 +55,8 @@ public class RepositorioBancoTest {
     @Rollback
     void testBuscarBancoPorId() {
 
-        Banco banco = getBancoTextExamplePuntoCom();
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
         Banco savedBanco = repositorioBanco.guardar(banco);
 
         Banco bancoEncontrado = repositorioBanco.buscarPorId(savedBanco.getId());
@@ -66,7 +68,7 @@ public class RepositorioBancoTest {
     @Rollback
     @Test
     public void testGuardarSangre() {
-        Banco banco = getBancoEmailTestPuntoCom();
+        Banco banco = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
         repositorioBanco.guardar(banco);
         PaqueteDeSangre paquete = new PaqueteDeSangre("O-", 5, "", banco);
 
@@ -84,6 +86,7 @@ public class RepositorioBancoTest {
         // Crear un banco de prueba
         Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
                 "123456789", "test@example.com", "testpassword", "Horario Test");
+
 
         PaqueteDeSangre paquete = new PaqueteDeSangre("A+", 5, "", banco);
         banco.agregarPaqueteDeSangre(paquete);
@@ -109,22 +112,26 @@ public class RepositorioBancoTest {
         Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
                 "123456789", "test@example.com", "testpassword", "Horario Test");
 
-        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "", banco);
-        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3, "", banco);
-        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7, "", banco);
+        // Agregar varios paquetes de sangre
+        PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5,"", banco);
+        PaqueteDeSangre paqueteB = new PaqueteDeSangre("B-", 3,"", banco);
+        PaqueteDeSangre paqueteO = new PaqueteDeSangre("O+", 7,"", banco);
 
         banco.agregarPaqueteDeSangre(paqueteA);
         banco.agregarPaqueteDeSangre(paqueteB);
         banco.agregarPaqueteDeSangre(paqueteO);
 
-
+        // Guardar el banco en la base de datos
         Banco bancoConPaquetes = repositorioBanco.guardar(banco);
 
+        // Verificar que el banco no es nulo
         assertThat(bancoConPaquetes, is(notNullValue()));
 
+        // Verificar que se guardaron los tres paquetes
         List<PaqueteDeSangre> paquetes = bancoConPaquetes.getPaquetesDeSangre();
         assertThat(paquetes, hasSize(3));
 
+        // Verificar las propiedades de los paquetes
         assertThat(paquetes, hasItems(
                 allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
                 allOf(hasProperty("tipoSangre", is("B-")), hasProperty("cantidad", is(3))),
@@ -219,7 +226,6 @@ public class RepositorioBancoTest {
 
     }
 
-
     @Test
     @Transactional
     @Rollback
@@ -244,8 +250,9 @@ public class RepositorioBancoTest {
     @Rollback
     void siNoIngresoUnaSangreValidaParaBuscarNoEncuentroResultados() {
         // Crear un banco de prueba
-        Banco banco = getBancoTextExamplePuntoCom();
-        Banco banco1 = getBancoEmailTestPuntoCom();
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
 
         // Agregar varios paquetes de sangre
         PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5,"", banco);
@@ -269,8 +276,9 @@ public class RepositorioBancoTest {
     @Rollback
     void siIngresoUnaSangreValidaParaBuscarEncuentroResultados() {
         // Crear un banco de prueba
-        Banco banco = getBancoTextExamplePuntoCom();
-        Banco banco1 = getBancoEmailTestPuntoCom();
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
 
         // Agregar varios paquetes de sangre
         PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "", banco);
@@ -301,8 +309,9 @@ public class RepositorioBancoTest {
     @Rollback
     void siIngresaSangreComoVacioMeDaraTodosLosResultados() {
         // Crear un banco de prueba
-        Banco banco = getBancoTextExamplePuntoCom();
-        Banco banco1 = getBancoEmailTestPuntoCom();
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
 
         // Agregar varios paquetes de sangre
         PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "", banco);
@@ -332,8 +341,9 @@ public class RepositorioBancoTest {
     @Rollback
     void siIngresaSangreComoVacioMeDaraTodosLosResultadosEnCoincidenciasDeTipo() {
         // Crear un banco de prueba
-        Banco banco = getBancoTextExamplePuntoCom();
-        Banco banco1 = getBancoEmailTestPuntoCom();
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
 
         // Agregar varios paquetes de sangre
         PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "", banco);
@@ -356,6 +366,7 @@ public class RepositorioBancoTest {
                 allOf(hasProperty("tipoSangre", is("B-")), hasProperty("cantidad", is(3))),
                 allOf(hasProperty("tipoSangre", is("O+")), hasProperty("cantidad", is(7)))
         ));
+
     }
 
     @Test
@@ -363,8 +374,9 @@ public class RepositorioBancoTest {
     @Rollback
     void noObtengoCoincidenciasSiElParametroDeTipoDeProductoEsInvalidoNoExiste() {
         // Crear un banco de prueba
-        Banco banco = getBancoTextExamplePuntoCom();
-        Banco banco1 = getBancoEmailTestPuntoCom();
+            Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                    "123456789", "test@example.com", "testpassword", "Horario Test");
+            Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
 
         // Agregar varios paquetes de sangre
         PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "total", banco);
@@ -390,8 +402,9 @@ public class RepositorioBancoTest {
     @Rollback
     void obtenerDosCoincidenciasEnTipoDeProductoDeTodosLosBancos() {
         // Crear un banco de prueba
-        Banco banco = getBancoTextExamplePuntoCom();
-        Banco banco1 = getBancoEmailTestPuntoCom();
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
 
         // Agregar varios paquetes de sangre
         PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "total", banco);
@@ -421,8 +434,9 @@ public class RepositorioBancoTest {
     @Rollback
     void siIngresaSangreComoVacioMeDaraTodosLosResultadosEnCoincidenciasDeTipoYSangre() {
         // Crear un banco de prueba
-        Banco banco = getBancoTextExamplePuntoCom();
-        Banco banco1 = getBancoEmailTestPuntoCom();
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
 
         // Agregar varios paquetes de sangre
         PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "", banco);
@@ -452,8 +466,9 @@ public class RepositorioBancoTest {
     @Rollback
     void noObtengoCoincidenciasSiElParametroDeTipoDeProductoYElDeSangreEsInvalidoNoExiste() {
         // Crear un banco de prueba
-        Banco banco = getBancoTextExamplePuntoCom();
-        Banco banco1 = getBancoEmailTestPuntoCom();
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
 
         // Agregar varios paquetes de sangre
         PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "total", banco);
@@ -479,8 +494,9 @@ public class RepositorioBancoTest {
     @Rollback
     void obtenerDosCoincidenciasEnTipoDeProductoYSangreDeTodosLosBancos() {
         // Crear un banco de prueba
-        Banco banco = getBancoTextExamplePuntoCom();
-        Banco banco1 = getBancoEmailTestPuntoCom();
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco banco1 = new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
 
         // Agregar varios paquetes de sangre
         PaqueteDeSangre paqueteA = new PaqueteDeSangre("A+", 5, "total", banco);
@@ -504,15 +520,5 @@ public class RepositorioBancoTest {
         ));
     }
 
-
-
-    private static Banco getBancoEmailTestPuntoCom() {
-        return new Banco("Banco Test", "Ciudad", "Dirección", "email@test.com", "9-18", "País", "12345", "123456789");
-    }
-
-    private static Banco getBancoTextExamplePuntoCom() {
-        return new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
-                "123456789", "test@example.com", "testpassword", "Horario Test");
-    }
 
 }
