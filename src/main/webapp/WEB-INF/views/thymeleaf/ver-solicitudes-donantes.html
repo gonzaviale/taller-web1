@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Solicitudes de Donantes</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+</head>
+<body>
+<h1>Solicitudes de donantes</h1>
+<div class="container mt-4">
+    <div th:each="entry : ${mascotasConImagenes}" class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${entry.key.nombre}"></h5>
+                    <p class="card-text">
+                        <span th:text="${entry.key.tipo}"></span><br>
+                        <strong>Años:</strong> <span th:text="${entry.key.anios}"></span><br>
+                        <strong>Peso:</strong> <span th:text="${entry.key.peso}"></span> kg<br>
+                        <strong>Dueño:</strong> <span th:text="${entry.key.duenio.nombre}"></span>
+                    </p>
+                    <div class="row">
+                        <div class="col-12">
+                            <h6>Imágenes:</h6>
+                        </div>
+                        <div class="col-12" th:each="imagen : ${entry.value}">
+                            <img th:src="@{/resources/images/subidas/{imagen}(imagen=${imagen})}"
+                                 class="img-fluid mb-2" alt="Imagen de mascota">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-3">
+                        <!-- Formulario de Aprobación -->
+                        <form th:action="@{/aprobar}" method="POST" class="d-inline-block">
+                            <input type="hidden" th:value="${entry.key.id}" name="mascotaId">
+                            <button type="submit" class="btn btn-success">Aprobar</button>
+                        </form>
+
+                        <!-- Formulario de Rechazo -->
+                        <form th:action="@{/rechazar}" method="POST" class="d-inline-block">
+                            <input type="hidden" th:value="${entry.key.id}" name="mascotaId">
+                            <button type="submit" class="btn btn-danger">Rechazar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

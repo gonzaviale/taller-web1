@@ -14,4 +14,11 @@ public interface RepositorioBanco {
     List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnSangreDeTodosLosBancos(String sangreBuscada);
     List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(String tipoProducto);
     List<BancoConTiposDeSangre> obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(String sangreBuscada,String tipoProducto);
+    List<Solicitud> solicitudesPorBanco(Long idBanco);
+    Solicitud guardarSolicitud(Solicitud solicitud1);
+    Solicitud buscarSolicitudPorId(int id);
+    List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatible(Solicitud solicitud);
+    void rechazarSolicitud(int solicitudId);
+    PaqueteDeSangre buscarSangreXId(int paqueteId);
+    void solicitudAprobar(int solicitudId);
 }
