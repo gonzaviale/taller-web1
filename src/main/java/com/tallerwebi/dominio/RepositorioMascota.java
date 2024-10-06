@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidad.Mascota;
+
 import java.util.ArrayList;
 import java.util.List;
 

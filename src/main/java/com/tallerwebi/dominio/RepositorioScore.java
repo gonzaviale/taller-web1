@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidad.Score;
+
 import java.util.ArrayList;
 
 public interface RepositorioScore {

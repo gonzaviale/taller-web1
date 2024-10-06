@@ -1,9 +1,9 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Banco;
-import com.tallerwebi.dominio.PaqueteDeSangre;
+import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.RepositorioBanco;
-import com.tallerwebi.dominio.Solicitud;
+import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import com.tallerwebi.presentacion.BancoConTiposDeSangre;

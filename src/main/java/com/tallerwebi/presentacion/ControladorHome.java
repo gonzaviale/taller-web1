@@ -1,8 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Publicacion;
-import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.ServicioPublicacion;
+import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.servicio.ServicioPublicacion;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;

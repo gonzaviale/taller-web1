@@ -1,5 +1,7 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicio;
 
+import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.presentacion.BancoConTiposDeSangre;
 
 import java.util.ArrayList;

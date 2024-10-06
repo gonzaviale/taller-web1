@@ -1,6 +1,5 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio.servicio;
 
-import com.tallerwebi.dominio.ServicioImagenes;
 import org.springframework.stereotype.Service;
 
 import java.io.File;

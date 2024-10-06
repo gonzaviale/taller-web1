@@ -1,6 +1,6 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Publicacion;
+import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.RepositorioPublicacion;
 import com.tallerwebi.dominio.excepcion.PublicacionNoExistente;
 import com.tallerwebi.integracion.config.HibernateTestConfig;

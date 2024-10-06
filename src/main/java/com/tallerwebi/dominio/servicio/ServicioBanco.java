@@ -1,4 +1,8 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.servicio;
+
+import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
+import com.tallerwebi.dominio.entidad.Solicitud;
 
 import java.util.List;
 

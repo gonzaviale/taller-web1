@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.excepcion.PublicacionNoExistente;
 
 import java.util.ArrayList;

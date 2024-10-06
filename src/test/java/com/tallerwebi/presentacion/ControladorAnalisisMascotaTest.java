@@ -1,12 +1,10 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Mascota;
-import com.tallerwebi.dominio.ServicioImagenes;
-import com.tallerwebi.dominio.ServicioMascota;
+import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.servicio.ServicioImagenes;
+import com.tallerwebi.dominio.servicio.ServicioMascota;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;

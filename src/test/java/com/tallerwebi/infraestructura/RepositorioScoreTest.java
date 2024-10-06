@@ -1,9 +1,9 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Banco;
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.RepositorioBanco;
 import com.tallerwebi.dominio.RepositorioScore;
-import com.tallerwebi.dominio.Score;
+import com.tallerwebi.dominio.entidad.Score;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.junit.jupiter.api.BeforeEach;
