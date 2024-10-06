@@ -2,10 +2,13 @@ package com.tallerwebi.infraestructura;
 
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
+import com.tallerwebi.dominio.entidad.Solicitud;
+import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.presentacion.BancoConTiposDeSangre;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;

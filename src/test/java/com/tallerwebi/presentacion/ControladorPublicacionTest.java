@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Publicacion;
-import com.tallerwebi.dominio.ServicioPublicacion;
+import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.servicio.ServicioPublicacion;
 
 import com.tallerwebi.dominio.excepcion.PublicacionNoValida;
 import com.tallerwebi.dominio.excepcion.PublicacionSinTipoDePublicacion;

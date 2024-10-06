@@ -1,8 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Publicacion;
-import com.tallerwebi.dominio.ServicioPublicacion;
-import com.tallerwebi.infraestructura.ServicioPublicacionImpl;
+import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.servicio.ServicioPublicacion;
+import com.tallerwebi.dominio.servicio.ServicioPublicacionImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;

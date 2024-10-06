@@ -1,9 +1,8 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Canino;
-import com.tallerwebi.dominio.Mascota;
+import com.tallerwebi.dominio.entidad.Canino;
+import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.RepositorioMascota;
-import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.hibernate.SessionFactory;
@@ -20,7 +19,6 @@ import javax.transaction.Transactional;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;

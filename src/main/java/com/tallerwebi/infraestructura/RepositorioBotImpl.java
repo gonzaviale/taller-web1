@@ -1,6 +1,6 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Bot;
+import com.tallerwebi.dominio.entidad.Bot;
 import com.tallerwebi.dominio.RepositorioBot;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

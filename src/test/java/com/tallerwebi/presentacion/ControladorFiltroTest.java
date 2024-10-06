@@ -1,10 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Mascota;
-import com.tallerwebi.dominio.ServicioFiltro;
-import com.tallerwebi.dominio.ServicioLogin;
-import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.excepcion.UsuarioExistente;
+import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.servicio.ServicioFiltro;
+import com.tallerwebi.dominio.entidad.Usuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;

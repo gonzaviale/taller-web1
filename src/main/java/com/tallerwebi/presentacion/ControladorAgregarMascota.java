@@ -1,7 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.*;
-import org.eclipse.jetty.util.annotation.ManagedObject;
+import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.servicio.ServicioMascota;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.entidad;
 
 public class MensajeChat {
     private String message;

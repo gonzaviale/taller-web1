@@ -1,8 +1,7 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio.servicio;
 
-import com.tallerwebi.dominio.Bot;
+import com.tallerwebi.dominio.entidad.Bot;
 import com.tallerwebi.dominio.RepositorioBot;
-import com.tallerwebi.dominio.ServicioBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

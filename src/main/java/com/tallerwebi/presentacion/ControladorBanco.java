@@ -1,10 +1,10 @@
 package com.tallerwebi.presentacion;
 
 
-import com.tallerwebi.dominio.Banco;
-import com.tallerwebi.dominio.PaqueteDeSangre;
-import com.tallerwebi.dominio.ServicioBanco;
-import com.tallerwebi.dominio.Solicitud;
+import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
+import com.tallerwebi.dominio.servicio.ServicioBanco;
+import com.tallerwebi.dominio.entidad.Solicitud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.ModelMap;
 
 import javax.servlet.http.HttpSession;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller

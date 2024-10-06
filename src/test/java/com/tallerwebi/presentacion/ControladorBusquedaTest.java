@@ -1,6 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.servicio.ServicioFiltro;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
