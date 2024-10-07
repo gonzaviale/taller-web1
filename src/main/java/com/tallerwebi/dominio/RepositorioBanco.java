@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.presentacion.BancoConTiposDeSangre;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface RepositorioBanco {
@@ -24,4 +25,7 @@ public interface RepositorioBanco {
     void rechazarSolicitud(int solicitudId);
     PaqueteDeSangre buscarSangreXId(int paqueteId);
     void solicitudAprobar(int solicitudId);
+    ArrayList<Banco>searchBankByScore();
+    ArrayList<Banco> searchBankByScoreAndBlood(String sangre);
+    void actualizarBanco(Banco banco);
 }
