@@ -35,6 +35,7 @@ public class ControladorHome {
             // Crear el mensaje de bienvenida usando el nombre del usuario
             String mensajeBienvenida = "Bienvenido, " + usuarioEnSesion.getNombre();  // Asumo que tienes un getNombre() en Usuario
             model.addAttribute("mensajeBienvenida", mensajeBienvenida);
+            model.addAttribute("rol", usuarioEnSesion.getRol());
         }
 
         List<Publicacion> publicaciones = servicioPublicacion.obtenerTodasLasPublicaciones();

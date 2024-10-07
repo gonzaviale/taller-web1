@@ -30,26 +30,27 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
                 .list();
         return mascotasEnRevision;
     }
+
     @Override
     public void aprobarMascotaDonante(Long mascotaId) {
-        Session session = sessionFactory.openSession();
-        Mascota mascota = (Mascota) session.createCriteria(Mascota.class)
+        Mascota mascota = (Mascota) sessionFactory.getCurrentSession()
+                .createCriteria(Mascota.class)
                 .add(Restrictions.eq("id", mascotaId))
                 .uniqueResult();
         mascota.setRevision(false);
         mascota.setAprobado(true);
-        // Actualizamos la mascota en la sesión
-        session.saveOrUpdate(mascota);
+        sessionFactory.getCurrentSession().saveOrUpdate(mascota);
     }
+
     @Override
     public void rechazarMascotaDonante(Long mascotaId) {
-        Session session = sessionFactory.openSession();
-        Mascota mascota = (Mascota) session.createCriteria(Mascota.class)
+        Mascota mascota = (Mascota) sessionFactory.getCurrentSession()
+                .createCriteria(Mascota.class)
                 .add(Restrictions.eq("id", mascotaId))
                 .uniqueResult();
         mascota.setRevision(false);
         mascota.setRechazado(true);
-        session.saveOrUpdate(mascota);
+        sessionFactory.getCurrentSession().saveOrUpdate(mascota);
     }
 
     @Override
