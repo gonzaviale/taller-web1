@@ -3,7 +3,8 @@ package com.tallerwebi.dominio.entidad;
 import javax.persistence.*;
 
 @Entity
-public class Veterinario{
+@DiscriminatorValue("veterinario")
+public class Veterinario extends Usuario{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

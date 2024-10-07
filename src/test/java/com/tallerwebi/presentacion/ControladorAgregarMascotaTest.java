@@ -1,6 +1,10 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidad.Felino;
+import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.servicio.ServicioMascota;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.multipart.MultipartFile;
@@ -62,7 +66,7 @@ public class ControladorAgregarMascotaTest {
         when(usuarioMock.getId()).thenReturn(1L);
         when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
 
-        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock, imagenesMock, "No", requestMock);
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "No", requestMock);
 
         thenRegistroExitoso(mav, "redirect:/home");
         assertThat(mascotaMock.getDuenio().getId(), equalTo(usuarioMock.getId()));
@@ -73,9 +77,9 @@ public class ControladorAgregarMascotaTest {
         when(usuarioMock.getId()).thenReturn(1L);
         when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
 
-        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock, imagenesMock, "Si", requestMock);
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "Si", requestMock);
 
-        thenRegistroFalla(mav, "formulario-donante", "errorTransfusion", "Un animal ya transfundido no puede ser donante");
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorTransfusion", "Un animal ya transfundido no puede ser donante");
     }
 
     private void thenRegistroExitoso(ModelAndView mav, String vista) {
