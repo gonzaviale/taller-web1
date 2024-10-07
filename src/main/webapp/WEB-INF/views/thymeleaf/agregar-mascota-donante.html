@@ -11,6 +11,12 @@
 <h1>Formulario de Mascota Donante</h1>
 
 <form th:action="@{/agregar-donante}" method="POST" accept-charset="UTF-8" th:object="${mascota}" enctype="multipart/form-data">
+    <label>¿Tu mascota alguna vez recibió una transfusión?</label><br>
+    <input type="radio" id="si" name="transfusion" value="Si">
+    <label for="si">Si</label>
+    <input type="radio" id="no" name="transfusion" value="No">
+    <label for="no">No</label><br><br>
+
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" placeholder="Nombre" th:field="*{nombre}"><br><br>
 
@@ -49,6 +55,34 @@
 
     <button type="submit">Registrar</button>
 </form>
+<p th:if="${errorTransfusion != null}" class="alert alert-danger" th:text="'Error: ' + ${errorTransfusion}">
+</p>
+<script>
+    // Función para verificar la transfusión
+    function verificarTransfusion() {
+        var transfusionSi = document.getElementById('si');
+        if (transfusionSi.checked) {
+            alert("No se pueden registrar mascotas que hayan sido transfundidas como donantes.");
+            transfusionSi.checked = false;  // Deselecciona la opción "Sí"
+        }
+    }
+
+    // Función para mostrar estudios de gatos o perros
+    function mostrarEstudios() {
+        var tipoFelino = document.getElementById('felino');
+        var tipoCanino = document.getElementById('canino');
+        var estudiosGato = document.getElementById('estudios-gato');
+        var estudiosPerro = document.getElementById('estudios-perro');
+
+        if (tipoFelino.checked) {
+            estudiosGato.style.display = 'block';
+            estudiosPerro.style.display = 'none';
+        } else if (tipoCanino.checked) {
+            estudiosGato.style.display = 'none';
+            estudiosPerro.style.display = 'block';
+        }
+    }
+</script>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>

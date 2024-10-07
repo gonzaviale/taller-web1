@@ -34,11 +34,22 @@ public class ControladorAgregarMascota {
         return new ModelAndView("agregar-mascota-donante", modelo);
     }
 
+    @RequestMapping(path = "/formulario-receptora", method = RequestMethod.GET)
+    public ModelAndView formularioReceptora() {
+        modelo.put("mascota", new Mascota());
+        return new ModelAndView("agregar-mascota-receptora", modelo);
+    }
+
     @RequestMapping(path = "/agregar-donante", method = RequestMethod.POST)
-    public ModelAndView agregarDonante(
-            @ModelAttribute("mascota") Mascota mascota,
+    public ModelAndView agregarDonante(@ModelAttribute("mascota") Mascota mascota,
             @RequestParam (name = "imagenes")MultipartFile[] imagenes,
+            @RequestParam(name = "transfusion") String transfusion,
             HttpServletRequest request) {
+
+        if (transfusion.equals("Si")){
+            modelo.put("errorTransfusion", "Un animal ya transfundido no puede ser donante");
+            return new ModelAndView("formulario-donante", modelo);
+        }
 
         Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
 
@@ -59,6 +70,29 @@ public class ControladorAgregarMascota {
         return new ModelAndView("redirect:/home");
     }
 
+    @RequestMapping(path = "/agregar-receptora", method = RequestMethod.POST)
+    public ModelAndView agregarReceptora(@ModelAttribute("mascota") Mascota mascota,
+                                       @RequestParam (name = "imagenes")MultipartFile[] imagenes,
+                                       HttpServletRequest request) {
+
+        Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+
+        try {
+            guardarImagenes(imagenes, mascota.getId());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        mascota.setDuenio(duenoMascota);
+        mascota.setReceptor(true);
+        mascota.setRevision(true);
+        mascota.setAprobado(false);
+        mascota.setRechazado(false);
+
+        servicioMascota.registrarMascota(mascota);
+
+        return new ModelAndView("redirect:/home");
+    }
 
     private void guardarImagenes(MultipartFile[] imagenes, Long id) throws IOException {
         String basePath = System.getProperty("user.dir");

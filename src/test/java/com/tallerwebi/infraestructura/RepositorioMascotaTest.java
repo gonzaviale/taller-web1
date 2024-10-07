@@ -136,7 +136,7 @@ public class RepositorioMascotaTest {
 //    @Test
 //    @Transactional
 //    @Rollback
-//    public void queRechazarMascotaDonante() {
+//    public void quePuedaRechazarMascotaDonante() {
 //
 //        Mascota mascota = new Mascota();
 //        mascota.setRevision(true);

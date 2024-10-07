@@ -1,4 +1,4 @@
-/*package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,7 @@ public class ControladorAgregarMascotaTest {
     ServicioMascota servicioMascotaMock = mock(ServicioMascota.class);
     ControladorAgregarMascota agregarMascota = new ControladorAgregarMascota(servicioMascotaMock);
     Mascota mascotaMock = mock(Felino.class);
-    DuenoMascota usuarioMock = mock(DuenoMascota.class);
+    Usuario usuarioMock = mock(Usuario.class);
     private HttpServletRequest requestMock;
     private HttpSession sessionMock;
     MultipartFile[] imagenesMock;
@@ -62,13 +62,28 @@ public class ControladorAgregarMascotaTest {
         when(usuarioMock.getId()).thenReturn(1L);
         when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
 
-        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock, imagenesMock, requestMock);
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock, imagenesMock, "No", requestMock);
 
         thenRegistroExitoso(mav, "redirect:/home");
         assertThat(mascotaMock.getDuenio().getId(), equalTo(usuarioMock.getId()));
     }
 
+    @Test
+    public void queUnDuenoNoPuedaAgregarUnaMascotaDonanteSiFueTransfundida() {
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock, imagenesMock, "Si", requestMock);
+
+        thenRegistroFalla(mav, "formulario-donante", "errorTransfusion", "Un animal ya transfundido no puede ser donante");
+    }
+
     private void thenRegistroExitoso(ModelAndView mav, String vista) {
         assertThat(mav.getViewName(), equalToIgnoringCase(vista));
     }
-}*/
+
+    private void thenRegistroFalla(ModelAndView mav, String vista, String errorKey, String error) {
+        assertThat(mav.getViewName(), equalToIgnoringCase(vista));
+        assertThat(mav.getModel().get(errorKey).toString(), equalToIgnoringCase(error));
+    }
+}
