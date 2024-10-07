@@ -38,6 +38,7 @@
                 <th scope="col" class="text-center">Posición</th>
                 <th scope="col" class="text-center">Score</th>
                 <th scope="col" class="text-center">Banco</th>
+                <th scope="col" class="text-center">Contactar</th>
             </tr>
             </thead>
             <tbody>
@@ -46,6 +47,7 @@
                 <td th:text="${iterStat.index + 1}" class="text-center">1</td>
                 <td th:text="${scoreItem.puntos}" class="text-center">Score</td>
                 <td th:text="${scoreItem.nombreBanco}" class="text-center">Nombre del Banco</td>
+                <td class="text-center"><a th:href="@{/enviarMensajeABancoScoring(idBanco=${scoreItem.id})}">Enviar Mensaje</a></td>
             </tr>
             </tbody>
         </table>
