@@ -36,10 +36,13 @@ public class ServicioScoreImpl implements ServicioScore {
     public void decrementarScore(int idBanco) throws Exception {
         Long idBancoLong = (long) idBanco;
         Banco banco = repositorioBanco.buscarPorId(idBancoLong);
-        if(banco.getPuntos() <= 0){
+        if(banco == null){
+            throw new Exception("No se puede decrementar el score de un banco inexistente");
+        }
+        else if(banco.getPuntos() <= 0){
             throw new Exception("No se puede decrementar el score");
         }
-        if(banco.getPuntos() > 0){
+        else if(banco.getPuntos() > 0){
             banco.setPuntos(banco.getPuntos() - 1);
             repositorioBanco.actualizarBanco(banco);
         }
