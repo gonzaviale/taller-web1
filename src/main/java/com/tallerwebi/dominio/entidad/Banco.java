@@ -35,7 +35,7 @@ public class Banco {
     @Column(name = "horario", nullable = false, length = 255)
     private String horario;
 
-    @Column(name = "puntos", nullable = true, length = 255)
+    @Column(name = "puntos", nullable = false)
     private Integer puntos;
 
     @OneToMany(mappedBy = "banco", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -59,6 +59,7 @@ public class Banco {
 
     public Banco() {
         this.stockSangre  = new ArrayList<>();
+        this.puntos = 0;
     }
 
 
