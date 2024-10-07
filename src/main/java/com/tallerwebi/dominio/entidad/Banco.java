@@ -35,6 +35,9 @@ public class Banco {
     @Column(name = "horario", nullable = false, length = 255)
     private String horario;
 
+    @Column(name = "puntos", nullable = true, length = 255)
+    private Integer puntos;
+
     @OneToMany(mappedBy = "banco", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PaqueteDeSangre> stockSangre;
 
@@ -50,6 +53,7 @@ public class Banco {
         this.password = password;
         this.horario = horario;
         this.stockSangre  = new ArrayList<>();
+        this.puntos = 0;
 
     }
 
@@ -140,6 +144,10 @@ public class Banco {
     public void setHorario(String horario) {
         this.horario = horario;
     }
+
+    public Integer getPuntos() { return puntos; }
+
+    public void setPuntos(Integer puntos) { this.puntos = puntos; }
 
 
 
