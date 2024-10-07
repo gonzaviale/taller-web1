@@ -1,6 +1,8 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Score;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

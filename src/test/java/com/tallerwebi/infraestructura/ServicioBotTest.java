@@ -1,8 +1,9 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Bot;
+import com.tallerwebi.dominio.entidad.Bot;
 import com.tallerwebi.dominio.RepositorioBot;
-import com.tallerwebi.dominio.ServicioBot;
+import com.tallerwebi.dominio.servicio.ServicioBot;
+import com.tallerwebi.dominio.servicio.ServicioBotImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.junit.jupiter.api.BeforeEach;

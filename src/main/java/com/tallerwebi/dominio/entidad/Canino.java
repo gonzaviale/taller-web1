@@ -1,14 +1,13 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.entidad;
 
 import javax.persistence.*;
 
 @Entity
+@DiscriminatorValue("Canino")
 public class Canino extends Mascota {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    private Mascota mascota;
 
     public void setId(Long id) {
         this.id = id;
@@ -18,11 +17,4 @@ public class Canino extends Mascota {
         return this.id;
     }
 
-    public void setMascota(Mascota mascota) {
-        this.mascota = mascota;
-    }
-
-    public Mascota getMascota() {
-        return this.mascota;
-    }
 }

@@ -20,7 +20,6 @@
     <section>
 
         <form action="#" th:action="@{/busquedaFiltrada}" method="post" class="d-flex">
-
             <label for="tipoDeBusqueda">
                 <select id="tipoDeBusqueda" name="tipoDeBusqueda" class="form-select" required >
                     <option value="">selecciona el tipo de busqueda</option>
@@ -30,10 +29,6 @@
                     <option value="veterinarios">Veterinarios</option>
                     <option value="banco de sangre">Banco de sangre</option>
                 </select>
-            </label>
-
-            <label>
-                <input type="text" placeholder="Buscar..." name="search" class="form-control me-2" style="max-width: 300px;">
             </label>
             <button type="submit" class="btn btn-primary">Buscar</button>
         </form>

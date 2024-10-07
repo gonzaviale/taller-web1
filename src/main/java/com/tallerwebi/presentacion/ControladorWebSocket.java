@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Bot;
-import com.tallerwebi.dominio.ServicioBot;
+import com.tallerwebi.dominio.entidad.Bot;
+import com.tallerwebi.dominio.servicio.ServicioBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;

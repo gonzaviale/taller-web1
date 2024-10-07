@@ -1,8 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Mascota;
-import com.tallerwebi.dominio.ServicioImagenes;
-import com.tallerwebi.dominio.ServicioMascota;
+import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.servicio.ServicioImagenes;
+import com.tallerwebi.dominio.servicio.ServicioMascota;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

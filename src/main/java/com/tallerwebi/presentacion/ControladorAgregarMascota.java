@@ -1,120 +1,71 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.*;
-import org.eclipse.jetty.util.annotation.ManagedObject;
+import com.tallerwebi.dominio.entidad.Canino;
+import com.tallerwebi.dominio.entidad.Felino;
+import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.servicio.ServicioMascota;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Controller
 public class ControladorAgregarMascota {
-    private ModelMap modelo = new ModelMap();
-    private ServicioMascota servicioMascota;
+
+    private final ServicioMascota servicioMascota;
 
     @Autowired
     public ControladorAgregarMascota(ServicioMascota servicioMascota) {
         this.servicioMascota = servicioMascota;
     }
 
-    @RequestMapping(path = "/formulario-donante", method = RequestMethod.GET)
+    //requestmapping maneja las dos tipos de solicitudes dejalo ser
+    @RequestMapping(path = "/agregar-mascota-donante")
     public ModelAndView formularioDonante() {
-        modelo.put("mascota", new Mascota());
-        return new ModelAndView("agregar-mascota-donante", modelo);
+        //no puedo instanciar un objeto mascota ya que no deberia de tener instancias de tipo animal mascota
+        return new ModelAndView("agregar-mascota-donante");
     }
 
-    @RequestMapping(path = "/formulario-receptora", method = RequestMethod.GET)
-    public ModelAndView formularioReceptora() {
-        modelo.put("mascota", new Mascota());
-        return new ModelAndView("agregar-mascota-receptora", modelo);
-    }
+    @PostMapping("/agregar-donante")
+    public ModelAndView agregarDonante(            @RequestParam("nombre") String nombre,
+                                                   @RequestParam("anios") int anios,
+                                                   @RequestParam("peso") float peso,
+                                                   @RequestParam("tipo") String tipo) {
 
-    @RequestMapping(path = "/agregar-donante", method = RequestMethod.POST)
-    public ModelAndView agregarDonante(@ModelAttribute("mascota") Mascota mascota,
-            @RequestParam (name = "imagenes")MultipartFile[] imagenes,
-            @RequestParam(name = "transfusion") String transfusion,
-            HttpServletRequest request) {
 
-        if (transfusion.equals("Si")){
-            modelo.put("errorTransfusion", "Un animal ya transfundido no puede ser donante");
-            return new ModelAndView("formulario-donante", modelo);
+        //Creamo mascota
+
+        Mascota mascota;
+        //la seteamos dependiendo del tipo
+        if(tipo.equals("Felino")){
+            mascota=new Felino();
+            mascota.setNombre(nombre);
+            mascota.setAnios(anios);
+            mascota.setPeso(peso);
+            mascota.setTipo(tipo);
+            mascota.setDonante(true);
+            mascota.setRevision(true);
+            mascota.setAprobado(false);
+            mascota.setRechazado(false);
+
+            servicioMascota.registrarMascota(mascota);
         }
+        if(tipo.equals("Canino")){
+            mascota=new Canino();
+            mascota.setNombre(nombre);
+            mascota.setAnios(anios);
+            mascota.setPeso(peso);
+            mascota.setTipo(tipo);
+            mascota.setDonante(true);
+            mascota.setRevision(true);
+            mascota.setAprobado(false);
+            mascota.setRechazado(false);
 
-        Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
-
-        try {
-            guardarImagenes(imagenes, mascota.getId());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            servicioMascota.registrarMascota(mascota);
         }
-
-        mascota.setDuenio(duenoMascota);
-        mascota.setDonante(true);
-        mascota.setRevision(true);
-        mascota.setAprobado(false);
-        mascota.setRechazado(false);
-
-        servicioMascota.registrarMascota(mascota);
 
         return new ModelAndView("redirect:/home");
     }
 
-    @RequestMapping(path = "/agregar-receptora", method = RequestMethod.POST)
-    public ModelAndView agregarReceptora(@ModelAttribute("mascota") Mascota mascota,
-                                       @RequestParam (name = "imagenes")MultipartFile[] imagenes,
-                                       HttpServletRequest request) {
-
-        Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
-
-        try {
-            guardarImagenes(imagenes, mascota.getId());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        mascota.setDuenio(duenoMascota);
-        mascota.setReceptor(true);
-        mascota.setRevision(true);
-        mascota.setAprobado(false);
-        mascota.setRechazado(false);
-
-        servicioMascota.registrarMascota(mascota);
-
-        return new ModelAndView("redirect:/home");
-    }
-
-    private void guardarImagenes(MultipartFile[] imagenes, Long id) throws IOException {
-        String basePath = System.getProperty("user.dir");
-
-        Path uploadDirectory = Paths.get(basePath, "src", "main", "webapp", "resources", "images", "subidas");
-
-        if (Files.notExists(uploadDirectory)) {
-            Files.createDirectories(uploadDirectory);
-        }
-
-        for (MultipartFile imagen : imagenes) {
-            if (!imagen.isEmpty()) {
-                String nombreOriginal = imagen.getOriginalFilename();
-
-                if (nombreOriginal != null) {
-                    String nuevoNombre = id + "_" + nombreOriginal;
-
-                    Path path = uploadDirectory.resolve(nuevoNombre);
-
-                    Files.write(path, imagen.getBytes());
-                }
-            }
-        }
-    }
 }

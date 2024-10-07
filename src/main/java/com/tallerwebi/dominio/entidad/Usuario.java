@@ -1,9 +1,8 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.entidad;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Usuario {
@@ -17,6 +16,21 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+
+    @OneToMany(mappedBy = "duenio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Mascota> mascotas = new ArrayList<>();
+
+    // Métodos para gestionar la relación bidireccional
+    public void agregarMascota(Mascota mascota) {
+        mascotas.add(mascota);
+        mascota.setDuenio(this);
+    }
+
+    public void removerMascota(Mascota mascota) {
+        mascotas.remove(mascota);
+        mascota.setDuenio(null);
+    }
+
 
     public Long getId() {
         return id;

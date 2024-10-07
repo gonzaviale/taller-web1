@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Score;
-import com.tallerwebi.dominio.ServicioScore;
+import com.tallerwebi.dominio.entidad.Score;
+import com.tallerwebi.dominio.servicio.ServicioScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

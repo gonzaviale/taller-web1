@@ -1,8 +1,7 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio.servicio;
 
-import com.tallerwebi.dominio.Mascota;
+import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.RepositorioMascota;
-import com.tallerwebi.dominio.ServicioMascota;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
