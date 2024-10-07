@@ -32,14 +32,6 @@ public class Publicacion {
         this.descripcion = descripcion;
     }
 
-    public Boolean getPuedeMovilizarse() {
-        return puedeMovilizarse;
-    }
-
-    public void movilzarse() {
-        this.puedeMovilizarse = true;
-    }
-
     public String getTitulo() {
         return titulo;
     }
@@ -78,5 +70,13 @@ public class Publicacion {
 
     public void setTipoDePublicacion(String tipoDePublicacion) {
         this.tipoDePublicacion = tipoDePublicacion;
+    }
+
+    public Boolean getPuedeMovilizarse() {
+        return puedeMovilizarse;
+    }
+
+    public void setPuedeMovilizarse(Boolean puedeMovilizarse) {
+        this.puedeMovilizarse = puedeMovilizarse;
     }
 }

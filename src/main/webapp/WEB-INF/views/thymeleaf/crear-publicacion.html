@@ -13,7 +13,7 @@
     <h1 class="text-center mb-4">Registrar Publicación</h1>
 
     <!-- El formulario envía una solicitud POST a /registrarPublicacion -->
-    <form id="formPublicacion" th:action="@{/publicarPublicacion}" method="post" th:object="${publicacion}" class="needs-validation" novalidate>
+    <form id="formPublicacion"  action="#" th:action="@{/publicarPublicacion}" method="post" th:object="${publicacion}" class="needs-validation" novalidate>
 
         <!-- Campo Título -->
         <div class="mb-3">
@@ -28,7 +28,7 @@
             <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="4"></textarea>
         </div>
 
-        <!-- Campo Puede Movilizarse NO ANDA -->
+        <!-- Campo Puede Movilizarse -->
         <div class="mb-3">
             <label class="form-label">¿Puede movilizarse?</label><br>
             <div class="form-check form-check-inline">
@@ -76,9 +76,8 @@
             <div class="invalid-feedback">Por favor, seleccione un tipo de publicación.</div>
         </div>
 
-        <!-- Botón Registrar -->
         <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary">Publicar</button>
+            <input type="submit" class="btn btn-primary">
         </div>
 
     </form>
