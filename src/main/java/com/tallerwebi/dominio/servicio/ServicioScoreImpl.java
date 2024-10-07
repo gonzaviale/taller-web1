@@ -13,54 +13,49 @@ import java.util.ArrayList;
 @Transactional
 public class ServicioScoreImpl implements ServicioScore {
 
-    private RepositorioScore repositorioScore;
     private RepositorioBanco repositorioBanco;
 
     @Autowired
-    public ServicioScoreImpl(RepositorioScore repositorioScore, RepositorioBanco repositorioBanco) {
-        this.repositorioScore = repositorioScore;
+    public ServicioScoreImpl(RepositorioBanco repositorioBanco) {
         this.repositorioBanco = repositorioBanco;
     }
 
-    @Override
-    public void guardarScore(Score score) {
-        repositorioScore.guardarScoring(score);
-    }
 
     @Override
     public void incrementarScore(int idBanco) {
         Long idBancoLong1 = (long) idBanco;
-        Score score = repositorioScore.obtenerScore(idBancoLong1);
-        if(score != null){
-            score.setScore(score.getScore() + 1);
-            repositorioScore.updateScore(score);
+        Banco banco = repositorioBanco.buscarPorId(idBancoLong1);
+        if(banco != null){
+            banco.setPuntos(banco.getPuntos() + 1);
+            repositorioBanco.actualizarBanco(banco);
         } else{
-            Score newScore = new Score();
-            newScore.setScore(1);
-            Long idBancoLong = (long) idBanco;
-            Banco banco = repositorioBanco.buscarPorId(idBancoLong);
-            newScore.setBanco(banco);
-            repositorioScore.guardarScoring(newScore);
+            throw new RuntimeException("No se puede incrementar el score de la banco");
         }
     }
 
     @Override
     public void decrementarScore(int idBanco) throws Exception {
         Long idBancoLong = (long) idBanco;
-        Score score = repositorioScore.obtenerScore(idBancoLong);
-        if(score == null){
+        Banco banco = repositorioBanco.buscarPorId(idBancoLong);
+        if(banco.getPuntos() <= 0){
             throw new Exception("No se puede decrementar el score");
         }
-        if(score.getScore() > 0){
-            score.setScore(score.getScore() - 1);
-            repositorioScore.updateScore(score);
+        if(banco.getPuntos() > 0){
+            banco.setPuntos(banco.getPuntos() - 1);
+            repositorioBanco.actualizarBanco(banco);
         }
     }
 
     @Override
-    public ArrayList<Score> obtenerScoring() {
-        ArrayList<Score> scoring = repositorioScore.obtenerScoring();
-        scoring.sort((o1, o2) -> o2.getScore().compareTo(o1.getScore()));
-        return scoring;
+    public ArrayList<Banco> obtenerScoring(String sangre) {
+        if(sangre != null && !sangre.equals("")){
+            ArrayList<Banco> scoring = repositorioBanco.searchBankByScoreAndBlood(sangre);
+            scoring.sort((o1, o2) -> o2.getPuntos().compareTo(o1.getPuntos()));
+            return scoring;
+        } else {
+            ArrayList<Banco> scoring = repositorioBanco.searchBankByScore();
+            scoring.sort((o1, o2) -> o2.getPuntos().compareTo(o1.getPuntos()));
+            return scoring;
+        }
     }
 }
