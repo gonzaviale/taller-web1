@@ -32,6 +32,10 @@
   <p th:text="${mensaje}"></p>
 </div>
 
+<div th:if="${mensajeUsuarioBanco}" class="alert alert-success text-center mx-auto" style="width: fit-content;">
+  <p th:text="${mensajeUsuarioBanco}"></p>
+</div>
+
 <section th:if="${!publicaciones.isEmpty()}" class="container mt-4">
   <article th:replace="fragments/listarPublicaciones"></article>
 </section>

@@ -34,4 +34,11 @@ public class ControladorScoring {
         model.put("scoring", scoring);
         return new ModelAndView("scoring", model);
     }
+
+    @RequestMapping(path="/enviarMensajeABancoScoring")
+    public ModelAndView enviarMensajeABancoScoring(@ModelAttribute("idBanco") Long idBanco) {
+        ModelMap model = new ModelMap();
+        model.put("idBanco", idBanco);
+        return new ModelAndView("enviarMensajeABancoScoring", model);
+    }
 }
