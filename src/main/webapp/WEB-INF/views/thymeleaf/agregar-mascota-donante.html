@@ -1,54 +1,33 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Mascota Donante</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <title>Formulario de Mascota Donante</title>
+
 </head>
 <body>
 <h1>Formulario de Mascota Donante</h1>
 
-<form th:action="@{/agregar-donante}" method="POST" accept-charset="UTF-8" th:object="${mascota}" enctype="multipart/form-data">
+<form action="#" th:action="@{/agregar-donante}" method="POST">
     <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" placeholder="Nombre" th:field="*{nombre}"><br><br>
+    <input type="text" id="nombre" name="nombre" placeholder="Nombre"><br><br>
 
     <label for="anios">Años:</label>
-    <input type="number" id="anios" placeholder="Años" th:field="*{anios}"><br><br>
+    <input type="number" id="anios" name="anios" placeholder="Años"><br><br>
 
     <label for="peso">Peso:</label>
-    <input type="number" step="0.1" id="peso" placeholder="Peso (kg)" th:field="*{peso}"><br><br>
+    <input type="number" step="0.1" id="peso" name="peso" placeholder="Peso (kg)"><br><br>
 
     <label>Tipo de Mascota:</label><br>
-    <input type="radio" id="felino" name="tipo" value="Felino" th:field="*{tipo}">
+    <input type="radio" id="felino" name="tipo" value="Felino">
     <label for="felino">Felino</label>
-    <input type="radio" id="canino" name="tipo" value="Canino" th:field="*{tipo}">
+    <input type="radio" id="canino" name="tipo" value="Canino">
     <label for="canino">Canino</label><br><br>
 
-    <div id="estudios-gato">
-        <h3>Estudios requeridos para Gatos</h3>
-        <ul>
-            <li>FeLV (Virus de la Leucemia Felina)</li>
-            <li>FIV (Virus de la Inmunodeficiencia Felina)</li>
-            <li>Hemoplasmas</li>
-            <li>Exámenes recientes de sangre</li>
-            <li>Vacunaciones y desparasitaciones al día</li>
-        </ul>
-    </div>
-
-    <div id="estudios-perro">
-        <h3>Estudios requeridos para Perros</h3>
-        <ul>
-            <li>PCR (Reacción en Cadena de la Polimerasa)</li>
-            <li>Exámenes recientes de sangre</li>
-        </ul>
-    </div>
-    <label for="imagenes">Subir imágenes de los estudios:</label><br>
-    <input type="file" id="imagenes" name="imagenes" multiple accept="image/*"><br><br>
-
-    <button type="submit">Registrar</button>
+    <input type="submit">Registrar</input>
 </form>
-<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>
