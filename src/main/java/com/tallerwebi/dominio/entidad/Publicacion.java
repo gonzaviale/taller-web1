@@ -16,6 +16,17 @@ public class Publicacion {
     private Boolean estaActiva;
     private String tipoDePublicacion;
 
+    @ManyToOne
+    Usuario duenioPublicacion;
+
+    public Usuario getDuenioPublicacion() {
+        return duenioPublicacion;
+    }
+
+    public void setDuenioPublicacion(Usuario duenioPublicacion) {
+        this.duenioPublicacion = duenioPublicacion;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
