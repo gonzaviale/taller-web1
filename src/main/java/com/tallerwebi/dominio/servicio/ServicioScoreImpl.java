@@ -2,7 +2,6 @@ package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidad.Banco;
-import com.tallerwebi.dominio.entidad.Score;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +28,7 @@ public class ServicioScoreImpl implements ServicioScore {
             banco.setPuntos(banco.getPuntos() + 1);
             repositorioBanco.actualizarBanco(banco);
         } else{
-            throw new RuntimeException("No se puede incrementar el score de la banco");
+            throw new RuntimeException("No se puede incrementar el score del banco");
         }
     }
 
