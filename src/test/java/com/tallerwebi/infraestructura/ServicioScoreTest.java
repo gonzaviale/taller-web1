@@ -2,7 +2,6 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidad.Banco;
-import com.tallerwebi.dominio.entidad.Score;
 import com.tallerwebi.dominio.servicio.ServicioScore;
 import com.tallerwebi.dominio.servicio.ServicioScoreImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,24 +11,24 @@ import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class ServicioScoreTest {
-    private RepositorioScore repositorioScore;
     private RepositorioBanco repositorioBanco;
     private ServicioScore servicioScore;
 
     @BeforeEach
     public void setUp() {
         repositorioBanco = mock(RepositorioBanco.class);
-        repositorioScore = mock(RepositorioScore.class);
-        servicioScore = new ServicioScoreImpl(repositorioScore, repositorioBanco);
+        servicioScore = new ServicioScoreImpl(repositorioBanco);
     }
 
     @Test
     public void incrementarScore() {
-        // Crear los objetos Score y Banco
         Banco banco = new Banco();
+        banco.setId(1L);
         banco.setNombreBanco("Banco 1");
         banco.setCiudad("Merlo");
         banco.setDireccion("aa123");
@@ -39,31 +38,30 @@ public class ServicioScoreTest {
         banco.setHorario("12.00");
         banco.setTelefono("12345678");
 
-        Score score = new Score();
-        score.setBanco(banco);
-        score.setScore(10);
+        when(repositorioBanco.guardar(banco)).thenReturn(banco);
+        when(repositorioBanco.buscarPorId(1L)).thenReturn(banco);
+        ArrayList<Banco> bancoList = new ArrayList<>();
+        bancoList.add(banco);
+        when(repositorioBanco.searchBankByScore()).thenReturn(bancoList);
 
-        // Configuración del mock para repositorioScore y repositorioBanco
-        when(repositorioScore.obtenerScore(1L)).thenReturn(score);
+        repositorioBanco.guardar(banco);
+        verify(repositorioBanco).guardar(banco);
 
-        // Guardar banco y score
-        servicioScore.guardarScore(score);
-
-        // Incrementar el score
         servicioScore.incrementarScore(1);
+        verify(repositorioBanco).actualizarBanco(banco);
 
-        // Verificar que el score incrementó
-        Score scoreObtenido = repositorioScore.obtenerScore(1L);
-        assertThat(scoreObtenido.getScore(), equalTo(11));
+        ArrayList<Banco> bancoArrayList = servicioScore.obtenerScoring("");
+        verify(repositorioBanco).searchBankByScore();
 
-        // Verificar que el método guardarScore fue llamado con el score actualizado
-        verify(repositorioScore).guardarScoring(score);
+        assertThat(bancoArrayList, notNullValue());
+        assertThat(bancoArrayList.size(), equalTo(1));
+        assertThat(bancoArrayList.get(0).getPuntos(), equalTo(1));
     }
 
     @Test
     public void decrementarScore() throws Exception {
-        // Crear los objetos Score y Banco
         Banco banco = new Banco();
+        banco.setId(1L);
         banco.setNombreBanco("Banco 1");
         banco.setCiudad("Merlo");
         banco.setDireccion("aa123");
@@ -73,63 +71,69 @@ public class ServicioScoreTest {
         banco.setHorario("12.00");
         banco.setTelefono("12345678");
 
-        Score score = new Score();
-        score.setBanco(banco);
-        score.setScore(10);
+        when(repositorioBanco.guardar(banco)).thenReturn(banco);
+        when(repositorioBanco.buscarPorId(1L)).thenReturn(banco);
+        ArrayList<Banco> bancoList = new ArrayList<>();
+        bancoList.add(banco);
+        when(repositorioBanco.searchBankByScore()).thenReturn(bancoList);
 
-        // Configuración del mock para repositorioScore y repositorioBanco
-        when(repositorioScore.obtenerScore(1L)).thenReturn(score);
+        repositorioBanco.guardar(banco);
+        verify(repositorioBanco).guardar(banco);
 
-        // Guardar banco y score
-        servicioScore.guardarScore(score);
-
-        // Incrementar el score
+        servicioScore.incrementarScore(1);
         servicioScore.decrementarScore(1);
+        verify(repositorioBanco, times(2)).actualizarBanco(banco);
 
-        // Verificar que el score incrementó
-        Score scoreObtenido = repositorioScore.obtenerScore(1L);
-        assertThat(scoreObtenido.getScore(), equalTo(9));
+        ArrayList<Banco> bancoArrayList = servicioScore.obtenerScoring("");
+        verify(repositorioBanco).searchBankByScore();
 
-        // Verificar que el método guardarScore fue llamado con el score actualizado
-        verify(repositorioScore).guardarScoring(score);
+        assertThat(bancoArrayList, notNullValue());
+        assertThat(bancoArrayList.size(), equalTo(1));
+        assertThat(bancoArrayList.get(0).getPuntos(), equalTo(0));
     }
 
     @Test
-    public void obtenerScoringList() {
-        ArrayList<Score> scoreList = new ArrayList<>();
-        Score score = new Score();
-        Score score2 = new Score();
-        Banco banco = new Banco();
-        Banco banco2 = new Banco();
-        banco.setNombreBanco("Banco 1");
-        banco.setCiudad("Merlo");
-        banco.setDireccion("aa123");
-        banco.setEmail("aa@aaaa.com");
-        banco.setPais("Argentina");
-        banco.setPassword("aaaa");
-        banco.setHorario("12.00");
-        banco.setTelefono("12345678");
-        banco2.setNombreBanco("Banco 2");
-        banco2.setCiudad("Merlo");
-        banco2.setDireccion("aa123");
-        banco2.setEmail("aa@aaaa.com");
-        banco2.setPais("Argentina");
-        banco2.setPassword("aaaa");
-        banco2.setHorario("12.00");
-        banco2.setTelefono("12345678");
-        score.setBanco(banco);
-        score.setScore(10);
-        score2.setBanco(banco2);
-        score2.setScore(20);
-        scoreList.add(score);
-        scoreList.add(score2);
+    public void obtenerExceptionAlIncrementarBancoInexistente() throws RuntimeException {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            servicioScore.incrementarScore(1);
+        });
 
-        when(repositorioScore.obtenerScoring()).thenReturn(scoreList);
+        assertThat(exception.getMessage(), equalTo("No se puede incrementar el score del banco"));
+    }
 
-        servicioScore.guardarScore(score);
-        servicioScore.guardarScore(score2);
-        ArrayList<Score> scoreListObtenido = repositorioScore.obtenerScoring();
+    @Test
+    public void obtenerExceptionAlDecrementarBancoInexistente(){
+        Exception exception = assertThrows(Exception.class, () -> {
+            servicioScore.decrementarScore(1);
+        });
 
-        assertThat(scoreListObtenido.size(), equalTo(2));
+        assertThat(exception.getMessage(), equalTo("No se puede decrementar el score de un banco inexistente"));
+    }
+
+    @Test
+    public void obtenerExceptionAlDecrementarBancoQueTienePuntosIgualACero(){
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            Banco banco = new Banco();
+            banco.setId(1L);
+            banco.setNombreBanco("Banco 1");
+            banco.setCiudad("Merlo");
+            banco.setDireccion("aa123");
+            banco.setEmail("aa@aaaa.com");
+            banco.setPais("Argentina");
+            banco.setPassword("aaaa");
+            banco.setHorario("12.00");
+            banco.setTelefono("12345678");
+
+            when(repositorioBanco.guardar(banco)).thenReturn(banco);
+            when(repositorioBanco.buscarPorId(1L)).thenReturn(banco);
+
+            repositorioBanco.guardar(banco);
+            verify(repositorioBanco).guardar(banco);
+
+            servicioScore.decrementarScore(1);
+            verify(repositorioBanco).actualizarBanco(banco);
+        });
+        assertThat(exception.getMessage(), equalTo("No se puede decrementar el score"));
     }
 }

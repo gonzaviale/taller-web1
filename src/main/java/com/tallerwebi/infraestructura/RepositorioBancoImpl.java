@@ -7,6 +7,7 @@ import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.presentacion.BancoConTiposDeSangre;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -42,6 +43,27 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         sessionFactory.getCurrentSession().save(paquete);
         sessionFactory.getCurrentSession().saveOrUpdate(banco);
         return paquete;
+    }
+
+    @Override
+    public ArrayList<Banco> searchBankByScore(){
+        return (ArrayList<Banco>) sessionFactory.getCurrentSession().createCriteria(Banco.class)
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+                .list();
+    }
+
+    @Override
+    public ArrayList<Banco> searchBankByScoreAndBlood(String sangre){
+        return (ArrayList<Banco>) sessionFactory.getCurrentSession().createCriteria(Banco.class)
+                .createAlias("stockSangre", "s")
+                .add(Restrictions.eq("s.tipoSangre", sangre))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+                .list();
+    }
+
+    @Override
+    public void actualizarBanco(Banco banco){
+        sessionFactory.getCurrentSession().update(banco);
     }
 
     @Override

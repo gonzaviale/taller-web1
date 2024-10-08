@@ -1,5 +1,7 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidad.DuenoMascota;
+import com.tallerwebi.dominio.entidad.Veterinario;
 import com.tallerwebi.dominio.servicio.ServicioLogin;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
@@ -90,6 +92,12 @@ public class ControladorLogin {
         } catch (Exception e) {
             modelo.put("error", "Error al registrar el nuevo usuario");
             return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        if(usuario.getRol().equals("veterinario")){
+            usuario = new Veterinario();
+        } else {
+            usuario = new DuenoMascota();
         }
 
         return new ModelAndView("redirect:/login");

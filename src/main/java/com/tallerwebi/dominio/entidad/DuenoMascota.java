@@ -3,7 +3,8 @@ package com.tallerwebi.dominio.entidad;
 import javax.persistence.*;
 
 @Entity
-public class DuenoMascota{
+@DiscriminatorValue("duenoMascota")
+public class DuenoMascota extends Usuario{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
