@@ -1,6 +1,5 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioPerfil;
 import com.tallerwebi.dominio.servicio.ServicioPerfilImpl;
