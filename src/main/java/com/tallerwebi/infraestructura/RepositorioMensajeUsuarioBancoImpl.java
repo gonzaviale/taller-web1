@@ -13,7 +13,7 @@ public class RepositorioMensajeUsuarioBancoImpl implements RepositorioMensajeUsu
     private SessionFactory sessionFactory;
 
     @Autowired
-    public void setSessionFactory(SessionFactory sessionFactory) {this.sessionFactory = sessionFactory;}
+    public RepositorioMensajeUsuarioBancoImpl(SessionFactory sessionFactory) {this.sessionFactory = sessionFactory;}
 
 
     @Override
