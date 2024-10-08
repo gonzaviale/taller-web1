@@ -1,11 +1,9 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
-import com.tallerwebi.dominio.excepcion.PublicacionNoValida;
-import com.tallerwebi.dominio.excepcion.PublicacionSinTipoDePublicacion;
-import com.tallerwebi.dominio.excepcion.PublicacionSinTipoDeSangre;
-import com.tallerwebi.dominio.excepcion.PublicacionSinTitulo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ControladorPublicacion {
@@ -24,8 +24,13 @@ public class ControladorPublicacion {
         this.servicioPublicacion = servicioPublicacion;
     }
     @RequestMapping(path ="/publicarPublicacion", method = RequestMethod.POST)
-    public ModelAndView publicarPublicacion(@ModelAttribute("publicacion") Publicacion nuevaPublicacion) {
+    public ModelAndView publicarPublicacion(@ModelAttribute("publicacion") Publicacion nuevaPublicacion, HttpServletRequest request) {
         ModelMap model;
+
+        if(request!=null && request.getSession().getAttribute("usuarioEnSesion") !=null){
+            nuevaPublicacion.setDuenioPublicacion((Usuario) request.getSession().getAttribute("usuarioEnSesion"));
+        }
+
         try {
             servicioPublicacion.guardarPublicacion(nuevaPublicacion);
         }catch (PublicacionSinTipoDeSangre ex){
@@ -42,6 +47,7 @@ public class ControladorPublicacion {
             return new ModelAndView("redirect:/home", model);
         }
         model = new ModelMap("mensaje", "la publicacion fue registrada correctamente");
+
         return new ModelAndView("redirect:/home", model);
     }
 
@@ -49,6 +55,7 @@ public class ControladorPublicacion {
     public ModelAndView nuevaPublicacion() {
         ModelMap model= new ModelMap();
         model.put("publicacion", new Publicacion());
+
         return new ModelAndView("crear-publicacion",model);
     }
 

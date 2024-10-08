@@ -44,8 +44,13 @@
 <article th:if="${publicaciones}" class="container mt-4">
     <h1 class="mb-4">Lista de Publicaciones</h1>
     <article th:each="publicacion : ${publicaciones}" class="card mb-3">
-        <section class="card-body">
+        <section class="card-body d-flex justify-content-between align-items-center">
             <h5 class="card-title" th:text="${publicacion.getTitulo()}"></h5>
+            <a th:href="@{/perfil{id}(id=${publicacion.duenioPublicacion.id})}">
+            <span class="text-muted" th:text="${publicacion.duenioPublicacion.nombre + ' ' + publicacion.duenioPublicacion.apellido}"></span>
+            </a>
+        </section>
+        <section class="card-body">
             <p class="card-text" th:text="${publicacion.getDescripcion()}"></p>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
