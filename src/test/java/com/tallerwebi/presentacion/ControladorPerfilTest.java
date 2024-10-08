@@ -42,6 +42,16 @@ public class ControladorPerfilTest {
         thenObtengoLaVistaPerfilYEncuentroAMiUsuarioBuscado(result, usuarioBuscado);
     }
 
+    @Test
+    public void cuandoIntentoAccederAMiPerfilYNoEstoyLogeadoMeRedirigueAHome() {
+        givenMockeoElBuscarPorIdParaNoEncontrarUsuario();
+
+        ModelAndView result = controladorPerfil.irAMiPerfil(request);
+
+        thenMeRedirigueAHome(result);
+    }
+
+
     private static void thenObtengoLaVistaPerfilYEncuentroAMiUsuarioBuscado(ModelAndView result, Usuario usuarioBuscado) {
         assertThat(result.getViewName(), equalTo("perfil"));
         assertThat(result.getModel().get("usuarioBuscado"), is(equalTo(usuarioBuscado)));
@@ -56,6 +66,34 @@ public class ControladorPerfilTest {
 
         return usuario;
 
+    }
+    private void givenMockeoElBuscarPorIdParaNoEncontrarUsuario() {
+
+        when(request.getSession().getAttribute("usuarioEnSesion")).thenReturn(null);
+        when(servicioPerfil.buscarUsuarioPorId(1L)).thenReturn(null);
+    }
+
+
+    @Test
+    public void muestroUnPerfilExistenteYaQueExisteEseUsuarioConEseId() {
+        Usuario usuarioBuscado = givenPreparoLaRespuestaDeLaSesionYDelServicioParaQueMeDevuelvaElUsuaioConIdUno();
+
+        ModelAndView result = controladorPerfil.mostrarPerfil(1L);
+
+        thenObtengoLaVistaPerfilYEncuentroAMiUsuarioBuscado(result, usuarioBuscado);
+    }
+
+    @Test
+    public void siIntentoAccederAUnPerfilInexistenteMeDevuelveAlHome() {
+        givenMockeoElBuscarPorIdParaNoEncontrarUsuario();
+
+        ModelAndView result = controladorPerfil.mostrarPerfil(1L);
+
+        thenMeRedirigueAHome(result);
+    }
+
+    private void thenMeRedirigueAHome(ModelAndView result) {
+        assertThat(result.getViewName(), equalTo("redirect:home"));
     }
 
 }
