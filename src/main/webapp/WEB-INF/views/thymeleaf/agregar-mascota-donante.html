@@ -10,8 +10,16 @@
 </head>
 <body>
 <h1>Formulario de Mascota Donante</h1>
+<p th:if="${errorTransfusion != null}" class="alert alert-danger" th:text="'Error: ' + ${errorTransfusion}">
+</p>
 
 <form action="#" th:action="@{/agregar-donante}" method="POST">
+    <label>¿Tu mascota alguna vez recibió una transfusión?</label><br>
+    <input type="radio" id="si" name="transfusion" value="Si">
+    <label for="si">Si</label>
+    <input type="radio" id="no" name="transfusion" value="No">
+    <label for="no">No</label><br><br>
+
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre" placeholder="Nombre"><br><br>
 
@@ -27,7 +35,30 @@
     <input type="radio" id="canino" name="tipo" value="Canino">
     <label for="canino">Canino</label><br><br>
 
-    <input type="submit">
+    <div id="estudios-gato">
+        <h3>Estudios requeridos para Gatos</h3>
+        <ul>
+            <li>FeLV (Virus de la Leucemia Felina)</li>
+            <li>FIV (Virus de la Inmunodeficiencia Felina)</li>
+            <li>Hemoplasmas</li>
+            <li>Exámenes recientes de sangre</li>
+            <li>Vacunaciones y desparasitaciones al día</li>
+        </ul>
+    </div>
+
+    <div id="estudios-perro">
+        <h3>Estudios requeridos para Perros</h3>
+        <ul>
+            <li>PCR (Reacción en Cadena de la Polimerasa)</li>
+            <li>Exámenes recientes de sangre</li>
+        </ul>
+    </div>
+
+    <label for="imagenes">Subir imágenes de los estudios:</label><br>
+    <input type="file" id="imagenes" name="imagenes" multiple accept="image/*"><br><br>
+
+
+    <input type="submit" value="Registrar">
 </form>
 </body>
 </html>
