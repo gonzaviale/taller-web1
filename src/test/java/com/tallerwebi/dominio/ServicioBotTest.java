@@ -1,7 +1,6 @@
-package com.tallerwebi.infraestructura;
+package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Bot;
-import com.tallerwebi.dominio.RepositorioBot;
 import com.tallerwebi.dominio.servicio.ServicioBot;
 import com.tallerwebi.dominio.servicio.ServicioBotImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
