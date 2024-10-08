@@ -7,6 +7,6 @@ import java.util.List;
 public interface ServicioMascota {
     void registrarMascota(Mascota mascota);
     List<Mascota> obtenerMascotasEnRevision();
-    void aprobarMascotaDonante(Long mascotaId);
-    void rechazarMascotaDonante(Long mascotaId);
+    void aprobarMascota(Long mascotaId);
+    void rechazarMascota(Long mascotaId);
 }

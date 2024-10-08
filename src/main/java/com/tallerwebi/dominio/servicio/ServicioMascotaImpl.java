@@ -28,12 +28,12 @@ public class ServicioMascotaImpl implements ServicioMascota {
     }
 
     @Override
-    public void aprobarMascotaDonante(Long mascotaId) {
-        repositorioMascota.aprobarMascotaDonante(mascotaId);
+    public void aprobarMascota(Long mascotaId) {
+        repositorioMascota.aprobarMascota(mascotaId);
     }
 
     @Override
-    public void rechazarMascotaDonante(Long mascotaId) {
-        repositorioMascota.rechazarMascotaDonante(mascotaId);
+    public void rechazarMascota(Long mascotaId) {
+        repositorioMascota.rechazarMascota(mascotaId);
     }
 }
