@@ -31,13 +31,11 @@ public class RepositorioUsuarioTest {
     @Rollback
     public void buscarPorIdAUnUsuarioExistenteMeRetornaAlUsuario() {
         //given
-        Long id = 1L;
         Usuario usuarioGuardado = new Usuario();
-        usuarioGuardado.setId(id);
         usuarioGuardado.setNombre("Carlos");
         //when
         repositorio.guardar(usuarioGuardado);
-        Usuario usuarioEncontrado= repositorio.buscarPorId(id);
+        Usuario usuarioEncontrado= repositorio.buscarPorId(usuarioGuardado.getId());
 
         //then
         assertThat(usuarioEncontrado, notNullValue());
