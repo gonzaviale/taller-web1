@@ -36,20 +36,12 @@ public class ControladorMensajeUsuarioBanco {
             Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
             MensajeUsuarioBanco mensajeEnviado = servicioMensajeUsuarioBanco.
                     enviarMensaje(mensajeUsuarioBanco, "Usuario", usuarioEnSesion, idBancoLong);
-
-            if(mensajeEnviado != null){
-                System.out.println(mensajeEnviado);
-                model.put("mensajeUsuarioBanco", "Mensaje enviado al banco con exito");
-                model.put("publicaciones", "");
-            } else{
-                model.remove("mensajeUsuarioBanco");
-                model.put("errorAlEnviarMensaje", "ERROR AL ENVIAR EL MENSAJE");
-            }
+            model.put("mensajeUsuarioBanco", "Mensaje enviado al banco con exito");
+            model.put("publicaciones", "");
         }catch (Exception e){
             model.remove("mensajeUsuarioBanco");
             model.put("errorAlEnviarMensaje", e.getMessage());
             model.put("publicaciones", "");
-            System.out.println("Modelo antes de la vista: " + model);
         }
         return new ModelAndView("home", model);
     }

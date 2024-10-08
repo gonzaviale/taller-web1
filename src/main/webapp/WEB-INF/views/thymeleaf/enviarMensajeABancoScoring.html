@@ -10,7 +10,7 @@
 <header th:replace="fragments/header :: header"></header>
 <div class="container">
     <form action="/spring/enviarMensajeUsuarioBanco" method="POST">
-        <input name="idBanco" type="hidden" th:value="${idBanco}"th:text="${idBanco}"/>
+        <input name="idBanco" type="hidden" th:value="${idBanco}"/>
         <input name="mensajeUsuarioBanco" type="text" id="messageInput" class="form-control mb-2" placeholder="Escribe un mensaje..."/>
         <button type="submit" class="btn btn-primary">Enviar</button>
     </form>
