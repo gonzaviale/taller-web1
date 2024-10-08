@@ -34,8 +34,12 @@
   <p th:text="${mensaje}"></p>
 </div>
 
-<div th:if="${mensajeUsuarioBanco}" class="alert alert-success text-center mx-auto" style="width: fit-content;">
+<div th:if="${mensajeUsuarioBanco != null and mensajeUsuarioBanco != ''}" class="alert alert-success text-center mx-auto" style="width: fit-content;">
   <p th:text="${mensajeUsuarioBanco}"></p>
+</div>
+
+<div th:if="${errorAlEnviarMensaje != null and errorAlEnviarMensaje != ''}" class="alert alert-danger text-center mx-auto" style="width: fit-content;">
+  <p th:text="${errorAlEnviarMensaje}"></p>
 </div>
 
 <section th:if="${!publicaciones.isEmpty()}" class="container mt-4">
