@@ -20,6 +20,21 @@ public class Usuario {
     @OneToMany(mappedBy = "duenio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Mascota> mascotas = new ArrayList<>();
 
+    @OneToMany(mappedBy = "duenioPublicacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List <Publicacion> publicaciones = new ArrayList<>();
+
+
+    // Métodos para gestionar la relación bidireccional
+    public void agregarPublicaciones(Publicacion publicacion) {
+        publicaciones.add(publicacion);
+        publicacion.setDuenioPublicacion(this);
+    }
+
+    public void removerPublicaciones(Publicacion publicacion) {
+        publicaciones.remove(publicacion);
+        publicacion.setDuenioPublicacion(null);
+    }
+
     // Métodos para gestionar la relación bidireccional
     public void agregarMascota(Mascota mascota) {
         mascotas.add(mascota);

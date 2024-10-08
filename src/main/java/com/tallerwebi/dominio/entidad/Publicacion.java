@@ -16,6 +16,17 @@ public class Publicacion {
     private Boolean estaActiva;
     private String tipoDePublicacion;
 
+    @ManyToOne
+    Usuario duenioPublicacion;
+
+    public Usuario getDuenioPublicacion() {
+        return duenioPublicacion;
+    }
+
+    public void setDuenioPublicacion(Usuario duenioPublicacion) {
+        this.duenioPublicacion = duenioPublicacion;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -30,14 +41,6 @@ public class Publicacion {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Boolean getPuedeMovilizarse() {
-        return puedeMovilizarse;
-    }
-
-    public void movilzarse() {
-        this.puedeMovilizarse = true;
     }
 
     public String getTitulo() {
@@ -78,5 +81,13 @@ public class Publicacion {
 
     public void setTipoDePublicacion(String tipoDePublicacion) {
         this.tipoDePublicacion = tipoDePublicacion;
+    }
+
+    public Boolean getPuedeMovilizarse() {
+        return puedeMovilizarse;
+    }
+
+    public void setPuedeMovilizarse(Boolean puedeMovilizarse) {
+        this.puedeMovilizarse = puedeMovilizarse;
     }
 }

@@ -1,7 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.Banco;
-import com.tallerwebi.dominio.entidad.Score;
 import com.tallerwebi.dominio.servicio.ServicioScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,5 +33,12 @@ public class ControladorScoring {
         ModelMap model = new ModelMap();
         model.put("scoring", scoring);
         return new ModelAndView("scoring", model);
+    }
+
+    @RequestMapping(path="/enviarMensajeABancoScoring")
+    public ModelAndView enviarMensajeABancoScoring(@ModelAttribute("idBanco") Long idBanco) {
+        ModelMap model = new ModelMap();
+        model.put("idBanco", idBanco);
+        return new ModelAndView("enviarMensajeABancoScoring", model);
     }
 }

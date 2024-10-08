@@ -3,81 +3,47 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <title>Ver Stock</title>
-
-    <!-- Bootstrap core css -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-
-    <!-- Custom style -->
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 
 <body>
-
+<div th:insert="~{fragments/headerbanco :: headerBanco}"></div>
 <main role="main" class="container mt-4">
 
-
     <div class="row">
-
         <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-                <div class="position-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{'/bancoHome'}">
-                                Agregar Sangre
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{'/verStock'}">
-                                Ver Stock
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{'/verPeticiones'}">
-                                Ver Peticiones
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
 
-        <!-- Main content -->
-        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <form action="#" th:action="@{/logout}" method="get">
-                <button type="submit" class="btn btn-danger">Logout</button>
-            </form>
-            <h1>Ver Stock de Sangre</h1>
+            <div th:replace="fragments/navbanco :: sidebar"></div>
 
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Tipo de Sangre</th>
-                    <th scope="col">TipoProducto</th>
-                    <th scope="col">Cantidad</th>
-                </tr>
-                </thead>
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <h1>Ver Stock de Sangre</h1>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Tipo de Sangre</th>
+                        <th scope="col">TipoProducto</th>
+                        <th scope="col">Cantidad</th>
+                    </tr>
+                    </thead>
 
-                <tr th:if="${#lists.isEmpty(paquetes)}">
-                    <td colspan="2">No hay paquetes de sangre disponibles.</td>
-                </tr>
-                <tr th:each="paquete : ${paquetes}">
-                    <td th:text="${paquete.tipoSangre}">Tipo de Sangre</td>
-                    <td th:text="${paquete.tipoProducto}">Tipo de Sangre</td>
-                    <td th:text="${paquete.cantidad}">Cantidad</td>
-                </tr>
+                    <tr th:if="${#lists.isEmpty(paquetes)}">
+                        <td colspan="2">No hay paquetes de sangre disponibles.</td>
+                    </tr>
+                    <tr th:each="paquete : ${paquetes}">
+                        <td th:text="${paquete.tipoSangre}">Tipo de Sangre</td>
+                        <td th:text="${paquete.tipoProducto}">Tipo de Sangre</td>
+                        <td th:text="${paquete.cantidad}">Cantidad</td>
+                    </tr>
 
-            </table>
+                </table>
 
-
+            </div>
         </div>
     </div>
-
+    <div th:replace="fragments/footer :: footer"></div>
 </main>
-
-<!-- Bootstrap core js -->
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>

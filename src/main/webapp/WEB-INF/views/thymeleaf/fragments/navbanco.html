@@ -1,0 +1,23 @@
+
+<div th:fragment="sidebar">
+    <!-- Horizontal Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{'/crearCampania'}">Crear campaña</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{'/verPeticiones'}">Ver Peticiones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{'/bancoHome'}">Agregar Sangre</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{'/verStock'}">Ver Stock</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+</div>

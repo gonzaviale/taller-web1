@@ -28,7 +28,7 @@ public class ControladorWebSocket {
 
     @RequestMapping(path = "/chat")
     public ModelAndView chat() {
-        return new ModelAndView("chat");
+        return new ModelAndView("chatbot");
     }
 
 
