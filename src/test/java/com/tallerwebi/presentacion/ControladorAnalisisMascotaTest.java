@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -26,8 +27,8 @@ public class ControladorAnalisisMascotaTest {
         servicioMascotaMock.registrarMascota(mascota1);
         servicioMascotaMock.registrarMascota(mascota2);
 
-        ModelAndView mav = controladorAnalisisMascota.verSolicitudesDonantes();
+        ModelAndView mav = controladorAnalisisMascota.verSolicitudes();
 
-        assertEquals(mav.getViewName(), "ver-solicitudes-donantes");
+        assertThat(mav.getViewName().toString(), equalToIgnoringCase("ver-solicitudes"));
     }
 }

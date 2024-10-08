@@ -11,6 +11,6 @@ public interface RepositorioMascota {
     public void eliminarMascota(Mascota mascota);
     public void actualizarMascota(Mascota mascota);
     public List<Mascota> buscarMascotaEnRevision();
-    public void aprobarMascotaDonante(Long mascotaId);
-    public void rechazarMascotaDonante(Long mascotaId);
+    public void aprobarMascota(Long mascotaId);
+    public void rechazarMascota(Long mascotaId);
 }

@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -25,14 +26,18 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
     public List<Mascota> buscarMascotaEnRevision() {
         Session session = sessionFactory.openSession();
         List<Mascota> mascotasEnRevision = null;
+
         mascotasEnRevision = session.createCriteria(Mascota.class)
                 .add(Restrictions.eq("enRevision", true))
+                .addOrder(Order.desc("receptor"))
+                .addOrder(Order.asc("id"))
                 .list();
+
         return mascotasEnRevision;
     }
 
     @Override
-    public void aprobarMascotaDonante(Long mascotaId) {
+    public void aprobarMascota(Long mascotaId) {
         Mascota mascota = (Mascota) sessionFactory.getCurrentSession()
                 .createCriteria(Mascota.class)
                 .add(Restrictions.eq("id", mascotaId))
@@ -43,7 +48,7 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
     }
 
     @Override
-    public void rechazarMascotaDonante(Long mascotaId) {
+    public void rechazarMascota(Long mascotaId) {
         Mascota mascota = (Mascota) sessionFactory.getCurrentSession()
                 .createCriteria(Mascota.class)
                 .add(Restrictions.eq("id", mascotaId))
