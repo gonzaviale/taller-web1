@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Crear Campaña de Donación</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>CrearCampaña</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
+
 <body>
+<div th:insert="~{fragments/headerbanco :: headerBanco}"></div>
+<div th:replace="fragments/navbanco :: sidebar"></div>
+<main>
 <div class="container mt-5">
     <h2>Crear Campaña de Donación</h2>
     <form th:action="@{/campanas/crear}" method="post" th:object="${campana}">
@@ -31,6 +38,9 @@
         <button type="submit" class="btn btn-primary">Crear Campaña</button>
     </form>
 </div>
+
+
+</main>
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

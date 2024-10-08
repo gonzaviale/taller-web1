@@ -3,7 +3,7 @@ import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
-import com.tallerwebi.presentacion.Campana;
+import com.tallerwebi.presentacion.CampanaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -73,7 +73,7 @@ public class ServicioBancoImpl implements ServicioBanco {
     }
 
     @Override
-    public void guardarCampania(Campana campana) {
+    public void guardarCampania(CampanaDTO campana) {
         //todo
     }
 

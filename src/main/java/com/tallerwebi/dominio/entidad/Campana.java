@@ -1,27 +1,35 @@
-package com.tallerwebi.presentacion;
-
+package com.tallerwebi.dominio.entidad;
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 public class Campana {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private String ubicacion;
     private String descripcion;
 
-    // Constructor vacío
+    @ManyToOne
+    @JoinColumn(name = "banco_id", nullable = false)
+    private Banco banco;
+
     public Campana() {
     }
 
     // Constructor con parámetros
-    public Campana(String nombre, LocalDate fechaInicio, LocalDate fechaFin, String ubicacion, String descripcion) {
+    public Campana(String nombre, LocalDate fechaInicio, LocalDate fechaFin, String ubicacion, String descripcion, Banco banco) {
         this.nombre = nombre;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.ubicacion = ubicacion;
         this.descripcion = descripcion;
+        this.banco = banco;
     }
 
     // Getters y Setters
@@ -72,5 +80,26 @@ public class Campana {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Banco getBanco() {
+        return banco;
+    }
+
+    public void setBanco(Banco banco) {
+        this.banco = banco;
+    }
+
+    @Override
+    public String toString() {
+        return "Campana{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", fechaInicio=" + fechaInicio +
+                ", fechaFin=" + fechaFin +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", banco=" + banco + // Imprimir detalles del banco
+                '}';
     }
 }
