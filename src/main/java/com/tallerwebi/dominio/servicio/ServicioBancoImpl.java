@@ -60,7 +60,7 @@ public class ServicioBancoImpl implements ServicioBanco {
 
     @Override
     public void asignarPaqueteASolicitud(int solicitudId, int paqueteId) {
-
+        //TODO
        // Entrega entrega = new Entrega(solicitudId,paqueteId);
        // this.guardarEntrega(entrega) ;
         this.repositorio.solicitudAprobar(solicitudId);
