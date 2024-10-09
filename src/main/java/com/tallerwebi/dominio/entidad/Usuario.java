@@ -17,10 +17,10 @@ public class Usuario {
     private String rol;
     private Boolean activo = false;
 
-    @OneToMany(mappedBy = "duenio", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "duenio", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Mascota> mascotas = new ArrayList<>();
 
-    @OneToMany(mappedBy = "duenioPublicacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "duenioPublicacion", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List <Publicacion> publicaciones = new ArrayList<>();
 
 

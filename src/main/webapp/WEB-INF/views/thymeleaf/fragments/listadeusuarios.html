@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<body>
+
+<div class="container mt-5 pt-5">
+    <!-- Título del buscador -->
+    <h2 class="text-center mb-4 text-primary">Búsqueda Avanzada</h2>
+
+    <!-- Formulario con método GET para buscar -->
+    <form th:action="@{/filtradodeusuarios}" method="get" class="row g-4 needs-validation" novalidate>
+        <!-- Campo de búsqueda por sangre -->
+        <div class="col-md-6">
+            <label for="sangreBuscada" class="form-label">Sangre Buscada</label>
+            <input type="text" class="form-control" id="sangreBuscada" name="sangreBuscada"
+                   placeholder="Ingresa el tipo de sangre" th:value="${sangreBuscada}">
+        </div>
+
+        <!-- Campo de búsqueda por tipo de búsqueda -->
+        <div class="col-md-6">
+            <label for="tipoDeBusqueda" class="form-label">Tipo de Búsqueda</label>
+            <select class="form-select" id="tipoDeBusqueda" name="tipoDeBusqueda" required>
+                <option value="" selected disabled>Selecciona un tipo de búsqueda</option>
+                <option value="publicacion" th:selected="${tipoDeBusqueda == 'publicacion'}">Publicación</option>
+                <option value="mascota" th:selected="${tipoDeBusqueda == 'mascota'}">Mascota</option>
+            </select>
+            <div class="invalid-feedback">
+                Por favor selecciona un tipo de búsqueda.
+            </div>
+        </div>
+
+        <!-- Botón para buscar -->
+        <div class="col-12 text-center mt-4">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Bootstrap form validation
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+
+
+
+<article th:if="${listaUsuarios}" class="container mt-4">
+    <h1 class="mb-4">Lista de Perfiles de USUARIOS</h1>
+    <article th:each="usuario : ${listaUsuarios}" class="card mb-3">
+        <section class="card-body">
+            <a th:href="@{/perfil{id}(id=${usuario.id})}">
+                <h5 class="text-muted" th:text="${usuario.nombre + ' ' + usuario.apellido}"></h5>
+            </a>
+            <p class="card-text">
+                <strong>Email: </strong><span th:text="${usuario.email}"></span>
+            </p>
+        </section>
+    </article>
+</article>
+</body>
+</html>
