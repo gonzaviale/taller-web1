@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
+import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.presentacion.BancoConTiposDeSangre;
 
 import java.util.ArrayList;
