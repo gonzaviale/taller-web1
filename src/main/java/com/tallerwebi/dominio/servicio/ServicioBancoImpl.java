@@ -72,9 +72,11 @@ public class ServicioBancoImpl implements ServicioBanco {
         return this.repositorio.buscarSangreXId(paqueteId);
     }
 
+
+
     @Override
-    public void guardarCampania(Campana campana) {
-        //todo
+    public void guardarCampania(Campana campana, Banco banco) {
+       this.repositorio.guardarCampania(campana,banco);
     }
 
     @Override

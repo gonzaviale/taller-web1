@@ -43,6 +43,8 @@ public class Banco {
 
 
 
+
+
     public Banco(String nombreBanco, String direccion, String ciudad, String pais, String telefono, String email, String password, String horario) {
         this.nombreBanco = nombreBanco;
         this.direccion = direccion;
@@ -183,4 +185,6 @@ public class Banco {
     }
 
 
+    public void agregarCampania(Campana nuevaCampana) {
+    }
 }

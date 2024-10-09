@@ -62,7 +62,8 @@ public class ControladorCampanias {
         nuevaCampana.setUbicacion(ubicacion);
         nuevaCampana.setDescripcion(descripcion);
         nuevaCampana.setBanco(banco);
-        servicioBanco.guardarCampania(nuevaCampana);
+        banco.agregarCampania(nuevaCampana);
+        servicioBanco.guardarCampania(nuevaCampana,banco);
 
         redirectAttributes.addFlashAttribute("success", "Campaña creada con éxito");
         return "redirect:/crearCampania";
