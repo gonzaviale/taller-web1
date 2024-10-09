@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.RepositorioMascota;
+import com.tallerwebi.dominio.entidad.Usuario;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -56,6 +57,15 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
         mascota.setRevision(false);
         mascota.setRechazado(true);
         sessionFactory.getCurrentSession().saveOrUpdate(mascota);
+    }
+
+    @Override
+    public List<Mascota> obtenerMascotasPorDueno(Usuario dueno) {
+        List<Mascota> misMascotas =  sessionFactory.getCurrentSession()
+                .createCriteria(Mascota.class)
+                .add(Restrictions.eq("duenio", dueno))
+                .list();
+        return misMascotas;
     }
 
     @Override

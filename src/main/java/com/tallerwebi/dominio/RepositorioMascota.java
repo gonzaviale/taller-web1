@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.entidad.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,4 +14,5 @@ public interface RepositorioMascota {
     public List<Mascota> buscarMascotaEnRevision();
     public void aprobarMascota(Long mascotaId);
     public void rechazarMascota(Long mascotaId);
+    List<Mascota> obtenerMascotasPorDueno(Usuario dueno);
 }

@@ -27,7 +27,8 @@
     <a href="/spring/scoring" class="btn btn-lg btn-primary btn-block">Scoring</a>
     <a th:if="${rol == 'dueño mascota'}" href="/spring/agregar-mascota-donante" class="btn btn-lg btn-primary btn-block">Agregar mascota donante</a>
     <a th:if="${rol == 'dueño mascota'}" href="/spring/agregar-mascota-receptora" class="btn btn-lg btn-primary btn-block">Agregar mascota receptora</a>
-    <a th:if="${rol == 'veterinario'}" href="/spring/ver-solicitudes-donantes" class="btn btn-lg btn-primary btn-block">Ver solicitudes de donantes</a>
+    <a th:if="${rol == 'dueño mascota'}" href="/spring/ver-mis-mascotas" class="btn btn-lg btn-primary btn-block">Ver mis mascotas</a>
+    <a th:if="${rol == 'veterinario'}" href="/spring/ver-solicitudes" class="btn btn-lg btn-primary btn-block">Ver solicitudes de donantes</a>
   </div>
 </main>
 
