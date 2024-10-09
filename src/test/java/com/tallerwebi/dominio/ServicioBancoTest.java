@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.dominio.servicio.ServicioBancoImpl;
@@ -48,7 +49,7 @@ public class ServicioBancoTest {
     @Test
     public void agregarPaqueteDeSangreSiBancoExisteDeberiaAgregarPaquete() {
         Banco bancoMock = mock(Banco.class);
-        PaqueteDeSangre paquete = new PaqueteDeSangre("Tipo A", 10,"plaquetas" ,bancoMock);
+        PaqueteDeSangre paquete = new PaqueteDeSangre("Tipo A", 10, "plaquetas", bancoMock);
 
         when(repositorioBancoMock.buscarPorId(1L)).thenReturn(bancoMock);
 
@@ -56,6 +57,7 @@ public class ServicioBancoTest {
 
         verify(repositorioBancoMock).guardarSangre(paquete, bancoMock);
     }
+
     @Rollback
     @Transactional
     @Test
@@ -70,6 +72,7 @@ public class ServicioBancoTest {
         verify(repositorioBancoMock).obtenerPaquetesDeSangrePorBanco(1L);
         assertEquals(paquetesMock, paquetes);
     }
+
     @Rollback
     @Transactional
     @Test
@@ -82,6 +85,7 @@ public class ServicioBancoTest {
         verify(repositorioBancoMock).guardarSolicitud(solicitud);
         assertEquals(solicitud, solicitudGuardada);
     }
+
     @Rollback
     @Transactional
     @Test
@@ -94,7 +98,6 @@ public class ServicioBancoTest {
         verify(repositorioBancoMock).solicitudesPorBanco(1L);
         assertEquals(solicitudesMock, solicitudes);
     }
-
 
 
     @Rollback
@@ -142,7 +145,20 @@ public class ServicioBancoTest {
 
         verify(repositorioBancoMock).rechazarSolicitud(1);
     }
+
+
+    @Rollback
+    @Transactional
+    @Test
+    public void guardarCampaniaDeberiaGuardarCampania() {
+        Banco bancoMock = mock(Banco.class);
+        Campana campanaMock = mock(Campana.class);
+
+
+        servicioBanco.guardarCampania(campanaMock, bancoMock);
+
+        // Assert
+        verify(repositorioBancoMock).guardarCampania(campanaMock, bancoMock);
+    }
+
 }
-
-
-
