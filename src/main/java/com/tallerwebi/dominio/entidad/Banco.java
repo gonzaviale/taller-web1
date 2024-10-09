@@ -41,6 +41,9 @@ public class Banco {
     @OneToMany(mappedBy = "banco", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PaqueteDeSangre> stockSangre;
 
+    @OneToMany(mappedBy = "banco", fetch = FetchType.LAZY)
+    private List<Campana> campanas;
+
 
 
 
@@ -55,12 +58,14 @@ public class Banco {
         this.password = password;
         this.horario = horario;
         this.stockSangre  = new ArrayList<>();
+        this.campanas  = new ArrayList<>();
         this.puntos = 0;
 
     }
 
     public Banco() {
         this.stockSangre  = new ArrayList<>();
+        this.campanas  = new ArrayList<>();
         this.puntos = 0;
     }
 
@@ -186,5 +191,6 @@ public class Banco {
 
 
     public void agregarCampania(Campana nuevaCampana) {
+        this.campanas.add(nuevaCampana);
     }
 }

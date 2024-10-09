@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 
 @Controller
@@ -37,7 +38,7 @@ public class ControladorCampanias {
         modelo.put("error", error);
         return new ModelAndView("crearCampania", modelo);
     }
-
+    @Transactional
     @PostMapping("/crearcamp")
     public String crearCampania(HttpSession session,
                                 @RequestParam("nombre") String nombre,
@@ -66,7 +67,7 @@ public class ControladorCampanias {
         servicioBanco.guardarCampania(nuevaCampana,banco);
 
         redirectAttributes.addFlashAttribute("success", "Campaña creada con éxito");
-        return "redirect:/crearCampania";
+        return "redirect:/bancoHome";
     }
 
 }
