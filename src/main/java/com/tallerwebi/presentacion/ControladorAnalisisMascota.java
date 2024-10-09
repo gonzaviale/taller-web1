@@ -38,13 +38,13 @@ public class ControladorAnalisisMascota {
     @RequestMapping(path = "/aprobar", method = RequestMethod.POST)
     public ModelAndView aprobar(@RequestParam(name="mascotaId") Long id) {
         servicioMascota.aprobarMascota(id);
-        return new ModelAndView("redirect:/ver-solicitudes-donantes");
+        return new ModelAndView("redirect:/ver-solicitudes");
     }
 
     @RequestMapping(path = "/rechazar", method = RequestMethod.POST)
     public ModelAndView rechazar(@RequestParam(name="mascotaId") Long id) {
         servicioMascota.rechazarMascota(id);
-        return new ModelAndView("ver-solicitudes");
+        return new ModelAndView("redirect:/ver-solicitudes");
     }
 
     public Map<Mascota, List<String>> obtenerMascotasConImagenes(List<Mascota> mascotas) {

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <title>Mis mascotas</title>
+</head>
+<body>
+<h1>Mis mascotas</h1>
+<div class="container mt-4">
+  <div th:each="mascota : ${misMascotas}" class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title" th:text="${mascota.nombre}"></h5>
+          <p class="card-text">
+            <span th:if="${!mascota.receptor}"><strong>Mascota donante</strong></span><br>
+            <span th:if="${mascota.receptor}"><strong>Mascota receptora</strong></span><br>
+            <span th:text="${mascota.tipo}"></span><br>
+            <strong>Años:</strong> <span th:text="${mascota.anios}"></span><br>
+            <strong>Peso:</strong> <span th:text="${mascota.peso}"></span> kg<br>
+            <span th:if="${mascota.enRevision}" class="text-bg-warning"><strong>En revisión</strong></span><br>
+            <span th:if="${mascota.aprobado}"  class="text-bg-success"><strong>Aprobado</strong></span><br>
+            <span th:if="${mascota.rechazado}"  class="text-bg-danger"><strong>Rechazado</strong></span><br>
+          </p>
+          <div class="" th:if="${mascota.enRevision}">
+            <h5>Completá tu solicitud subiendo imágenes de los estudios necesarios</h5>
+            <span th:text="${mascota.id}"></span>
+            <form action="#" th:action="@{/enviar-estudios}" method="POST" enctype="multipart/form-data">
+              <input type="hidden" name="id" th:value="${mascota.id}">
+
+              <label for="imagenes">Subir imágenes de los estudios:</label><br>
+              <input type="file" id="imagenes" name="imagenes" multiple accept="image/*"><br><br>
+              <input type="submit" value="Enviar">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

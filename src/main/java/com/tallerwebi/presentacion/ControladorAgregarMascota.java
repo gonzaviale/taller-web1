@@ -70,10 +70,10 @@ public class ControladorAgregarMascota {
 
     @PostMapping("/agregar-receptora")
     public ModelAndView agregarReceptora(@RequestParam("nombre") String nombre,
-                                       @RequestParam("anios") int anios,
-                                       @RequestParam("peso") float peso,
-                                       @RequestParam("tipo") String tipo,
-                                       HttpServletRequest request) {
+                                         @RequestParam("anios") int anios,
+                                         @RequestParam("peso") float peso,
+                                         @RequestParam("tipo") String tipo,
+                                         HttpServletRequest request) {
 
         Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
 
@@ -85,6 +85,19 @@ public class ControladorAgregarMascota {
         servicioMascota.registrarMascota(mascota);
 
         return new ModelAndView("redirect:/home");
+    }
+
+    @PostMapping("/enviar-estudios")
+    public ModelAndView enviarEstudios(@RequestParam(required = false) Long id, @RequestParam("imagenes") MultipartFile[] imagenes) {
+
+        if (id == null) {
+            throw new RuntimeException("El ID de la mascota es nulo");
+        }try {
+            servicioImagenes.guardarImagenes(imagenes, id);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new ModelAndView("ver-mis-mascotas");
     }
 
     private Mascota crearMascotaSegunTipo(String tipo) {
