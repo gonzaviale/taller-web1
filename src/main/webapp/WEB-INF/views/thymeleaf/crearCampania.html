@@ -14,29 +14,30 @@
 <main>
 <div class="container mt-5">
     <h2>Crear Campaña de Donación</h2>
-    <form th:action="@{/campanas/crear}" method="post" th:object="${campana}">
+    <form th:action="@{'/crearcamp'}" method="post">
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre de la Campaña</label>
-            <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required/>
+            <input type="text" class="form-control" id="nombre" name="nombre" required/>
         </div>
         <div class="mb-3">
             <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
-            <input type="date" class="form-control" id="fechaInicio" th:field="*{fechaInicio}" required/>
+            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required/>
         </div>
         <div class="mb-3">
             <label for="fechaFin" class="form-label">Fecha de Fin</label>
-            <input type="date" class="form-control" id="fechaFin" th:field="*{fechaFin}" required/>
+            <input type="date" class="form-control" id="fechaFin" name="fechaFin" required/>
         </div>
         <div class="mb-3">
             <label for="ubicacion" class="form-label">Ubicación</label>
-            <input type="text" class="form-control" id="ubicacion" th:field="*{ubicacion}" required/>
+            <input type="text" class="form-control" id="ubicacion" name="ubicacion" required/>
         </div>
         <div class="mb-3">
             <label for="descripcion" class="form-label">Descripción</label>
-            <textarea class="form-control" id="descripcion" th:field="*{descripcion}" rows="4" required></textarea>
+            <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Crear Campaña</button>
     </form>
+
 </div>
 
 

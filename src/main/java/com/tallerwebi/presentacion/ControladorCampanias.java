@@ -5,15 +5,15 @@ import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.servicio.ServicioBanco;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 
 @Controller
 public class ControladorCampanias {
@@ -35,30 +35,39 @@ public class ControladorCampanias {
             return new ModelAndView("redirect:/login");
         }
         modelo.put("error", error);
-        modelo.put("campana", new CampanaDTO());
         return new ModelAndView("crearCampania", modelo);
     }
 
-    @RequestMapping(value = "/crear", method = RequestMethod.POST)
-    public ModelAndView crearCampania(@ModelAttribute("campana") Campana campanaDTO,
-                                      HttpSession session) {
+    @PostMapping("/crearcamp")
+    public String crearCampania(HttpSession session,
+                                @RequestParam("nombre") String nombre,
+                                @RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+                                @RequestParam("fechaFin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+                                @RequestParam("ubicacion") String ubicacion,
+                                @RequestParam("descripcion") String descripcion,
+                                RedirectAttributes redirectAttributes) {
+
+
         Long idBanco = (Long) session.getAttribute("idBanco");
-        if (idBanco == null) {
-            return new ModelAndView("redirect:/login");
-        }
         Banco banco = servicioBanco.BuscarBancoId(idBanco);
-       CampanaDTO campanaEntidad = new CampanaDTO();
-        campanaEntidad.setNombre(campanaDTO.getNombre());
-        campanaEntidad.setFechaInicio(campanaDTO.getFechaInicio());
-        campanaEntidad.setFechaFin(campanaDTO.getFechaFin());
-        campanaEntidad.setUbicacion(campanaDTO.getUbicacion());
-        campanaEntidad.setDescripcion(campanaDTO.getDescripcion());
-        campanaEntidad.setBanco(banco);
 
-        servicioBanco.guardarCampania(campanaEntidad);
+        if (banco == null) {
+            redirectAttributes.addFlashAttribute("error", "Banco no encontrado");
+            return "redirect:/crearCampania";
+        }
+        Campana nuevaCampana = new Campana();
+        nuevaCampana.setNombre(nombre);
+        nuevaCampana.setFechaInicio(fechaInicio);
+        nuevaCampana.setFechaFin(fechaFin);
+        nuevaCampana.setUbicacion(ubicacion);
+        nuevaCampana.setDescripcion(descripcion);
+        nuevaCampana.setBanco(banco);
+        servicioBanco.guardarCampania(nuevaCampana);
 
-        return new ModelAndView("redirect:/bancoHome");
+        redirectAttributes.addFlashAttribute("success", "Campaña creada con éxito");
+        return "redirect:/crearCampania";
     }
+
 }
 
 
