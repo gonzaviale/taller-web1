@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.RepositorioBanco;
 import com.tallerwebi.dominio.entidad.Solicitud;
@@ -62,6 +63,25 @@ public class RepositorioBancoTest {
         Banco bancoEncontrado = repositorioBanco.buscarPorId(savedBanco.getId());
 
         assertEquals(savedBanco.getId(), bancoEncontrado.getId());
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testActualizarBanco() {
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+
+        Banco bancoGuardado = repositorioBanco.guardar(banco);
+
+        bancoGuardado.setCiudad("Nueva Ciudad");
+        bancoGuardado.setHorario("Nuevo Horario");
+
+        repositorioBanco.actualizarBanco(bancoGuardado);
+
+        Banco bancoActualizado = repositorioBanco.buscarPorId(bancoGuardado.getId());
+        assertEquals("Nueva Ciudad", bancoActualizado.getCiudad());
+        assertEquals("Nuevo Horario", bancoActualizado.getHorario());
     }
 
     @Transactional
@@ -242,6 +262,8 @@ public class RepositorioBancoTest {
         Solicitud solicitudRechazada = repositorioBanco.buscarSolicitudPorId(solicitudGuardada.getId());
         assertThat(solicitudRechazada.getEstado(), is("Rechazada"));
     }
+
+
 
 
 
@@ -520,5 +542,21 @@ public class RepositorioBancoTest {
         ));
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void testGuardarCampania() {
 
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco bancoGuardado = repositorioBanco.guardar(banco);
+        Campana campana = new Campana();
+        campana.setBanco(bancoGuardado);
+        repositorioBanco.guardarCampania(campana, bancoGuardado);
+        Campana campanaGuardada = repositorioBanco.buscarCampaniaPorId(campana.getId());
+
+        assertThat(campanaGuardada, notNullValue());
+        assertThat(campanaGuardada.getId(), is(campana.getId()));
+
+    }
 }

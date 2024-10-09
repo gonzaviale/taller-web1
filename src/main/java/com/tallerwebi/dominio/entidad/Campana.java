@@ -22,7 +22,7 @@ public class Campana {
     public Campana() {
     }
 
-    // Constructor con parámetros
+
     public Campana(String nombre, LocalDate fechaInicio, LocalDate fechaFin, String ubicacion, String descripcion, Banco banco) {
         this.nombre = nombre;
         this.fechaInicio = fechaInicio;
@@ -32,7 +32,7 @@ public class Campana {
         this.banco = banco;
     }
 
-    // Getters y Setters
+
 
     public Long getId() {
         return id;

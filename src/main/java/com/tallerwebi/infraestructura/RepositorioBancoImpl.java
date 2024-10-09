@@ -71,6 +71,18 @@ public class RepositorioBancoImpl implements RepositorioBanco {
     }
 
     @Override
+    public Campana buscarCampaniaPorId(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Campana> query = builder.createQuery(Campana.class);
+        Root<Campana> root = query.from(Campana.class);
+
+        query.select(root)
+                .where(builder.equal(root.get("id"), id));
+        return session.createQuery(query).uniqueResult();
+    }
+
+    @Override
     public Banco buscarBanco(String email, String password) {
         final Session session = sessionFactory.getCurrentSession();
         return (Banco) session.createCriteria(Usuario.class)
