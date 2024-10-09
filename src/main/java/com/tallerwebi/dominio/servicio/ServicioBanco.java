@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 
@@ -18,4 +19,6 @@ public interface ServicioBanco {
     void rechazarSolicitud(int solicitudId);
     void asignarPaqueteASolicitud(int solicitudId, int paqueteId);
     PaqueteDeSangre BuscarPaqueteSangreXId(int paqueteId);
+
+    void guardarCampania(Campana campana, Banco banco);
 }
