@@ -35,7 +35,13 @@ public class ServicioFiltroTest {
     @Autowired
     RepositorioBanco repositorioBanco;
     @Autowired
-    ServicioFiltro servicioFiltro = new ServicioFiltroImpl(repositorioMascota,repositorioPublicacion, repositorioBanco);
+    RepositorioUsuario repositorioUsuario;
+    @Autowired
+    ServicioFiltro servicioFiltro = new ServicioFiltroImpl(
+                    repositorioMascota,
+                    repositorioPublicacion,
+                    repositorioBanco,
+                    repositorioUsuario);
 
     @Test
     @Transactional
@@ -433,6 +439,7 @@ public class ServicioFiltroTest {
         return new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
                 "123456789", "test@example.com", "testpassword", "Horario Test");
     }
+
 
 
 }

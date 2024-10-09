@@ -1,8 +1,10 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
+import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.presentacion.BancoConTiposDeSangre;
 
 import java.util.ArrayList;
@@ -28,4 +30,6 @@ public interface RepositorioBanco {
     ArrayList<Banco>searchBankByScore();
     ArrayList<Banco> searchBankByScoreAndBlood(String sangre);
     void actualizarBanco(Banco banco);
+    void guardarCampania(Campana campana, Banco banco);
+    Campana buscarCampaniaPorId(Long id);
 }

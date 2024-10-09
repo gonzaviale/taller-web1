@@ -1,7 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.entidad.Mascota;
-import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -26,6 +26,114 @@ public class ControladorBusquedaTest {
         servicioFiltro= mock(ServicioFiltro.class);
         controladorBusqueda= new ControladorBusqueda(servicioFiltro);
     }
+
+    @Test
+    public void siElTipoDeBusquedaEsIgualAMascotasTendreEnMiModeloUnaClaveDeListaDeMascotas(){
+        givenMockeoElServicioParaQueMeDevuelvaUnaCiertaCantidadDeMascotas(2);
+
+        ModelAndView modelAndView = controladorBusqueda.buscar("mascotas");
+
+        assertThat(modelAndView.getModel().get("listaMascotas"), not(IsEmptyCollection.class));
+        assertThat(modelAndView.getModel().get("listaMascotas"), equalTo(servicioFiltro.consultarMascota("","","")));
+
+    }
+
+    @Test
+    public void siElTipoDeBusquedaEsIgualAPublicacionTendreEnMiModeloUnaClaveDePublicaciones(){
+
+        givenMockeoElServicioParaQueMeDevuelvaUnaListaDePublicaciones();
+
+        ModelAndView modelAndView = controladorBusqueda.buscar("publicacion");
+
+        List<Publicacion> publicacionList= (List<Publicacion>) modelAndView.getModel().get("publicaciones");
+
+        assertThat(publicacionList, not(IsEmptyCollection.class));
+        assertThat(publicacionList.size(), equalTo(2));
+
+    }
+
+    @Test
+    public void siElTipoDeBusquedaEsIgualABancoDeSangreTendreEnMiModeloUnaClaveDeBancoDeSangre(){
+
+        givenMockeoElServicioParaQueMeDevuelvaUnaListaDeBancoConTiposDeSangre();
+
+        ModelAndView modelAndView = controladorBusqueda.buscar("banco de sangre");
+
+        List<BancoConTiposDeSangre> bancoConTiposDeSangres= (List<BancoConTiposDeSangre>) modelAndView.getModel().get("listaBancos");
+
+        assertThat(bancoConTiposDeSangres, not(IsEmptyCollection.class));
+        assertThat(bancoConTiposDeSangres.size(), equalTo(2));
+
+    }
+
+    @Test
+    public void siElTipoDeBusquedaEsIgualusuariosTendreEnMiModeloUnaClaveDeUsuarios(){
+
+        givenMockeoElServicioParaQueMeDevuelvaUnaListaDeDueñosDeMascotas();
+
+        ModelAndView modelAndView = controladorBusqueda.buscar("usuarios");
+
+        List<Usuario> usuarios= (List<Usuario>) modelAndView.getModel().get("listaUsuarios");
+
+        assertThat(usuarios, not(IsEmptyCollection.class));
+        assertThat(usuarios.size(), equalTo(2));
+
+    }
+
+    @Test
+    public void siElTipoDeBusquedaEsIgualVeterinarioTendreEnMiModeloUnaClaveDelistaVeterinario(){
+
+        givenMockeoElServicioParaQueMeDevuelvaUnaListaDeVeterinario();
+
+        ModelAndView modelAndView = controladorBusqueda.buscar("veterinarios");
+
+        List<Usuario> usuarios= (List<Usuario>) modelAndView.getModel().get("listaVeterinario");
+
+        assertThat(usuarios, not(IsEmptyCollection.class));
+        assertThat(usuarios.size(), equalTo(2));
+
+    }
+
+    private void givenMockeoElServicioParaQueMeDevuelvaUnaListaDeVeterinario() {
+        ArrayList<Usuario> usuarios= new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            usuarios.add(new Veterinario());
+        }
+
+        when(servicioFiltro.obtenerTodosLosVeterinariosVerificados()).thenReturn(usuarios);
+
+    }
+
+
+    private void givenMockeoElServicioParaQueMeDevuelvaUnaListaDeDueñosDeMascotas() {
+        ArrayList<Usuario> usuarios= new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            usuarios.add(new DuenoMascota());
+        }
+
+        when(servicioFiltro.obtenerTodosLosUsuariosConPublicacionesOMascotasDadasDeAlta()).thenReturn(usuarios);
+
+    }
+
+    private void givenMockeoElServicioParaQueMeDevuelvaUnaListaDeBancoConTiposDeSangre() {
+        ArrayList<BancoConTiposDeSangre> bancoConTiposDeSangres= new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            bancoConTiposDeSangres.add(new BancoConTiposDeSangre());
+        }
+
+        when(servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("","")).thenReturn(bancoConTiposDeSangres);
+    }
+
+    private void givenMockeoElServicioParaQueMeDevuelvaUnaListaDePublicaciones() {
+
+        ArrayList<Publicacion> publicaciones= new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            publicaciones.add(new Publicacion());
+        }
+
+        when(servicioFiltro.consultarPublicaciones("","","","")).thenReturn(publicaciones);
+    }
+
 
     @Test
     public void siNoIngresaNadaAFiltrarDevuelveTodasLasMascotas() {

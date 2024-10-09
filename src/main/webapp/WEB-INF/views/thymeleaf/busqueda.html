@@ -28,7 +28,17 @@
 
 </section>
 
+<section th:if="${listaUsuarios}">
 
+    <article th:replace="fragments/listadeusuarios"></article>
+
+</section>
+
+<section th:if="${listaVeterinario}">
+
+    <article th:replace="fragments/listaveterinarios"></article>
+
+</section>
 
 </body>
 </html>

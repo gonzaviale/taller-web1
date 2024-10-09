@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,14 @@ public class ControladorBusqueda {
         if(tipoDeBusqueda.equals("banco de sangre")){
             List<BancoConTiposDeSangre> bancoConTiposDeSangres= this.servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("","");
             model.put("listaBancos",bancoConTiposDeSangres);
+        }
+        if(tipoDeBusqueda.equals("usuarios")){
+            List<Usuario> usuarios= this.servicioFiltro.obtenerTodosLosUsuariosConPublicacionesOMascotasDadasDeAlta();
+            model.put("listaUsuarios",usuarios);
+        }
+        if(tipoDeBusqueda.equals("veterinarios")){
+            List<Usuario> usuarios= this.servicioFiltro.obtenerTodosLosVeterinariosVerificados();
+            model.put("listaVeterinario",usuarios);
         }
 
         return new ModelAndView("busqueda", model);
@@ -91,5 +100,16 @@ public class ControladorBusqueda {
         return new ModelAndView("busqueda", model);
     }
 
+    @RequestMapping(path = "/filtradodeusuarios", method = RequestMethod.GET)
+    public ModelAndView filtradoDeUsuarios(
+            @RequestParam(required = false) String sangreBuscada,
+            @RequestParam(required = false) String tipoDeBusqueda) {
+        ModelMap model = new ModelMap();
+
+        List<Usuario> usuarios= this.servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangreBuscada,tipoDeBusqueda);
+        model.put("listaUsuarios",usuarios);
+
+        return new ModelAndView("busqueda", model);
+    }
 
 }

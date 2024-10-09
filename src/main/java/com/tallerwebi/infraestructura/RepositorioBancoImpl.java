@@ -2,10 +2,7 @@ package com.tallerwebi.infraestructura;
 
 
 import com.tallerwebi.dominio.*;
-import com.tallerwebi.dominio.entidad.Banco;
-import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
-import com.tallerwebi.dominio.entidad.Solicitud;
-import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.presentacion.BancoConTiposDeSangre;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -64,6 +61,25 @@ public class RepositorioBancoImpl implements RepositorioBanco {
     @Override
     public void actualizarBanco(Banco banco){
         sessionFactory.getCurrentSession().update(banco);
+    }
+
+    @Override
+    public void guardarCampania(Campana campana, Banco banco) {
+        this.actualizarBanco(banco);
+        sessionFactory.getCurrentSession().save(campana);
+
+    }
+
+    @Override
+    public Campana buscarCampaniaPorId(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Campana> query = builder.createQuery(Campana.class);
+        Root<Campana> root = query.from(Campana.class);
+
+        query.select(root)
+                .where(builder.equal(root.get("id"), id));
+        return session.createQuery(query).uniqueResult();
     }
 
     @Override

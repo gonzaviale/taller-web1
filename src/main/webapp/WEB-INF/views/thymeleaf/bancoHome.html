@@ -10,6 +10,7 @@
 
 <body>
 <div th:insert="~{fragments/headerbanco :: headerBanco}"></div>
+<div th:replace="fragments/navbanco :: sidebar"></div>
 <main role="main" class="container mt-4">
 
   <div th:if="${param.success}" class="alert alert-success" role="alert">
@@ -19,7 +20,7 @@
     <span th:text="${param.error}">Mensaje de error</span>
   </div>
   <div class="row">
-    <div th:replace="fragments/navbanco :: sidebar"></div>
+
     <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <h1>agregar sangre</h1>
       <form action="#" th:action="@{/agregarPaquete}" method="post">
