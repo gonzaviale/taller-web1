@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidad.Felino;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.servicio.ServicioImagenes;
 import com.tallerwebi.dominio.servicio.ServicioMascota;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,8 @@ import static org.mockito.Mockito.when;
 public class ControladorAgregarMascotaTest {
 
     ServicioMascota servicioMascotaMock = mock(ServicioMascota.class);
-    ControladorAgregarMascota agregarMascota = new ControladorAgregarMascota(servicioMascotaMock);
+    ServicioImagenes servicioImagenesMock =  mock(ServicioImagenes.class);
+    ControladorAgregarMascota agregarMascota = new ControladorAgregarMascota(servicioMascotaMock, servicioImagenesMock);
     Mascota mascotaMock = mock(Felino.class);
     Usuario usuarioMock = mock(Usuario.class);
     private HttpServletRequest requestMock;
@@ -79,7 +81,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "Si", requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorTransfusion", "Un animal ya transfundido no puede ser donante");
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorTransfusion", "Un animal que ya recibió una transfusión no puede ser donante");
     }
 
     private void thenRegistroExitoso(ModelAndView mav, String vista) {

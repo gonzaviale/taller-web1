@@ -27,24 +27,24 @@ public class ControladorAnalisisMascota {
         this.servicioImagenes = servicioImagenes;
     }
 
-    @RequestMapping(path = "/ver-solicitudes-donantes")
-    public ModelAndView verSolicitudesDonantes() {
+    @RequestMapping(path = "/ver-solicitudes")
+    public ModelAndView verSolicitudes() {
         List<Mascota> mascotasEnRevision = servicioMascota.obtenerMascotasEnRevision();
         Map<Mascota, List<String>> mascotasConImagenes = obtenerMascotasConImagenes(mascotasEnRevision);
         modelo.put("mascotasConImagenes", mascotasConImagenes);
-        return new ModelAndView("ver-solicitudes-donantes", modelo);
+        return new ModelAndView("ver-solicitudes", modelo);
     }
 
     @RequestMapping(path = "/aprobar", method = RequestMethod.POST)
     public ModelAndView aprobar(@RequestParam(name="mascotaId") Long id) {
-        servicioMascota.aprobarMascotaDonante(id);
+        servicioMascota.aprobarMascota(id);
         return new ModelAndView("redirect:/ver-solicitudes-donantes");
     }
 
     @RequestMapping(path = "/rechazar", method = RequestMethod.POST)
     public ModelAndView rechazar(@RequestParam(name="mascotaId") Long id) {
-        servicioMascota.rechazarMascotaDonante(id);
-        return new ModelAndView("ver-solicitudes-donantes");
+        servicioMascota.rechazarMascota(id);
+        return new ModelAndView("ver-solicitudes");
     }
 
     public Map<Mascota, List<String>> obtenerMascotasConImagenes(List<Mascota> mascotas) {

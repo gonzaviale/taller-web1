@@ -2,11 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Solicitudes de Donantes</title>
+    <title>Solicitudes</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
 </head>
 <body>
-<h1>Solicitudes de donantes</h1>
+<h1>Solicitudes</h1>
 <div class="container mt-4">
     <div th:each="entry : ${mascotasConImagenes}" class="row">
         <div class="col-md-6 offset-md-3">
@@ -14,6 +14,7 @@
                 <div class="card-body">
                     <h5 class="card-title" th:text="${entry.key.nombre}"></h5>
                     <p class="card-text">
+                        <span th:if="${entry.key.receptor}" class="text-danger"><strong>Mascota receptora</strong></span><br>
                         <span th:text="${entry.key.tipo}"></span><br>
                         <strong>Años:</strong> <span th:text="${entry.key.anios}"></span><br>
                         <strong>Peso:</strong> <span th:text="${entry.key.peso}"></span> kg<br>
