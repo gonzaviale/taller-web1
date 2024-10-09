@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.presentacion.BancoConTiposDeSangre;
@@ -28,4 +29,5 @@ public interface RepositorioBanco {
     ArrayList<Banco>searchBankByScore();
     ArrayList<Banco> searchBankByScoreAndBlood(String sangre);
     void actualizarBanco(Banco banco);
+    void guardarCampania(Campana campana, Banco banco);
 }
