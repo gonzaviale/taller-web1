@@ -8,7 +8,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -20,7 +19,7 @@ import java.util.List;
 @Repository("RepositorioBanco")
 public class RepositorioBancoImpl implements RepositorioBanco {
 
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     public RepositorioBancoImpl(org.hibernate.SessionFactory sessionFactory) {
 
@@ -142,12 +141,9 @@ public class RepositorioBancoImpl implements RepositorioBanco {
 
     @Override
     public Solicitud buscarSolicitudPorId(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<Solicitud> cq = cb.createQuery(Solicitud.class);
-        Root<Solicitud> root = cq.from(Solicitud.class);
-        cq.select(root).where(cb.equal(root.get("id"), id));
-        return session.createQuery(cq).uniqueResult();
+        return (Solicitud) sessionFactory.getCurrentSession()
+                .createCriteria(Solicitud.class)
+                .add(Restrictions.eq("id", id)).uniqueResult();
     }
 
     @Override
@@ -210,9 +206,7 @@ public class RepositorioBancoImpl implements RepositorioBanco {
 
 
     public List<Banco> getAllBanco() {
-        String hql = "FROM Banco"; // Traer todos los registros de la entidad Publicacion
-        Query<Banco> query = sessionFactory.getCurrentSession().createQuery(hql, Banco.class);
-        return query.getResultList();
+        return sessionFactory.getCurrentSession().createCriteria(Banco.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 
     @Override
