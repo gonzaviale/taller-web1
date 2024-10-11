@@ -7,7 +7,6 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -41,9 +40,8 @@ public class RepositorioPublicacionImpl implements RepositorioPublicacion {
 
     @Override
     public List<Publicacion> obtenerTodasLasPublicaciones() {
-        String hql = "FROM Publicacion"; // Traer todos los registros de la entidad Publicacion
-        Query<Publicacion> query = sessionFactory.getCurrentSession().createQuery(hql, Publicacion.class);
-        return query.getResultList();
+        return sessionFactory.getCurrentSession().createCriteria(Publicacion.class)
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 
     @Override
