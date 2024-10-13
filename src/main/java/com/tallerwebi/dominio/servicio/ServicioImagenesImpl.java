@@ -35,9 +35,16 @@ public class ServicioImagenesImpl implements ServicioImagenes {
     }
 
     @Override
-    public void guardarImagenes(MultipartFile[] imagenes, Long id) throws IOException {
-        String basePath = System.getProperty("user.dir");
+    public void guardarImagen(MultipartFile imagen, String nuevoNombre, Path uploadDirectory) throws IOException {
+        if (!imagen.isEmpty()) {
+            Path path = uploadDirectory.resolve(nuevoNombre); // Crear la ruta completa
+            Files.write(path, imagen.getBytes()); // Guardar la imagen en el directorio
+        }
+    }
 
+@Override
+    public void guardarExamen(MultipartFile[] imagenes, Long id) throws IOException {
+        String basePath = System.getProperty("user.dir");
         Path uploadDirectory = Paths.get(basePath, "src", "main", "webapp", "resources", "images", "subidas");
 
         if (Files.notExists(uploadDirectory)) {
@@ -47,15 +54,14 @@ public class ServicioImagenesImpl implements ServicioImagenes {
         for (MultipartFile imagen : imagenes) {
             if (!imagen.isEmpty()) {
                 String nombreOriginal = imagen.getOriginalFilename();
-
                 if (nombreOriginal != null) {
+
                     String nuevoNombre = id + "_" + nombreOriginal;
 
-                    Path path = uploadDirectory.resolve(nuevoNombre);
-
-                    Files.write(path, imagen.getBytes());
+                    guardarImagen(imagen, nuevoNombre, uploadDirectory);
                 }
             }
         }
     }
+
 }
