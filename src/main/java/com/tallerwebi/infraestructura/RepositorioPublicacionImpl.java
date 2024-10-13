@@ -10,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class RepositorioPublicacionImpl implements RepositorioPublicacion {
 
     @Override
     public void guardarPublicacion(Publicacion publicacion) {
+        publicacion.setLocalDateTime(LocalDateTime.now());
         sessionFactory.getCurrentSession().save(publicacion);
     }
 

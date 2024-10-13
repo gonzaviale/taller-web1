@@ -1,6 +1,8 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioUsuario;
+import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.entidad.Veterinario;
 import org.hibernate.Criteria;
@@ -90,6 +92,25 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .createAlias("usuario.publicaciones", "publicacion")
                 .add(Restrictions.like("publicacion.tipoDeSangre", "%" + sangreBuscada + "%"))
                 .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+    }
+
+    @Override
+    public void actualizarUsuario(Usuario usuarioEnSesion) {
+        sessionFactory.getCurrentSession().update(usuarioEnSesion);
+    }
+
+    @Override
+    public List<Mascota> obtenerMascotaDelUsuario(Long id) {
+        return sessionFactory.getCurrentSession().createCriteria(Mascota.class,"mascota")
+                .add(Restrictions.eq("mascota.duenio.id",id))
+                .list();
+    }
+
+    @Override
+    public List<Publicacion> obtenerPublicacionesDelUsuario(Long id) {
+        return sessionFactory.getCurrentSession().createCriteria(Publicacion.class,"publicacion")
+                .add(Restrictions.eq("publicacion.duenioPublicacion.id",id))
+                .list();
     }
 
 }

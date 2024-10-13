@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
@@ -12,12 +12,14 @@
 
 <section th:if="${listaMascotas}">
 
+    <article th:replace="fragments/busquedaMascotas"></article>
     <article th:replace="fragments/listarMascotas"></article>
 
 </section>
 
 <section th:if="${publicaciones}">
 
+    <article th:replace="fragments/busquedaPublicaciones"></article>
     <article th:replace="fragments/listarPublicaciones"></article>
 
 </section>

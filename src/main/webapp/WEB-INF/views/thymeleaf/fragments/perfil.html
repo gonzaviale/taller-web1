@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <!-- Imagen del perfil -->
+        <div class="col-md-2 text-center">
+            <picture>
+                <source media="(max-width: 768px)" th:srcset="@{/images/LogoMobile.PNG}">
+                <img th:src="@{/images/Shingen.PNG}" alt="HEROES" id="logo" class="rounded-circle" style="height: 100px; width: 100px;">
+            </picture>
+        </div>
+
+        <!-- Nombre, apellido y email al lado de la imagen -->
+        <div class="col-md-7">
+            <h2>
+                <span th:text="${user.nombre}">Nombre</span>
+                <span th:text="${user.apellido}">Apellido</span>
+            </h2>
+            <p th:text="${user.email}">email@ejemplo.com</p>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" th:unless="${miperfil}">
+    <!-- Botones adicionales -->
+    <div class="d-flex justify-content-between">
+        <form action="#" th:action="@{/{nombre}.{id}/(nombre=${user.nombre}, id=${user.id})}" method="get" class="d-inline">
+            <div class="col-md-4 d-inline">
+                <button type="submit" name="listar" value="mascotas" class="btn btn-primary">Ver mascotas</button>
+            </div>
+
+            <div class="col-md-4 d-inline">
+                <button type="submit" name="listar" value="publicaciones" class="btn btn-primary">Ver publicaciones</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>
