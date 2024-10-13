@@ -58,7 +58,7 @@
     <h1 class="mb-4">Lista de Perfiles de USUARIOS</h1>
     <article th:each="usuario : ${listaUsuarios}" class="card mb-3">
         <section class="card-body">
-            <a th:href="@{/perfil{id}(id=${usuario.id})}">
+            <a th:href="@{/{nombre}.{id}/(nombre=${usuario.nombre}, id=${usuario.id})}">
                 <h5 class="text-muted" th:text="${usuario.nombre + ' ' + usuario.apellido}"></h5>
             </a>
             <p class="card-text">

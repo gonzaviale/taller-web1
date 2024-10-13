@@ -1,8 +1,9 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidad.Mascota;
+import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface RepositorioUsuario {
@@ -22,5 +23,11 @@ public interface RepositorioUsuario {
     List<Usuario> obtenerTodosLosUsuariosQueContenganMascotasConLaSangreBuscada(String sangreBuscada);
 
     List<Usuario> obtenerTodosLosUsuariosQueContenganPublicacionesConLaSangreBuscada(String sangreBuscada);
+
+    void actualizarUsuario(Usuario usuarioEnSesion);
+
+    List<Mascota> obtenerMascotaDelUsuario(Long id);
+
+    List<Publicacion> obtenerPublicacionesDelUsuario(Long id);
 }
 

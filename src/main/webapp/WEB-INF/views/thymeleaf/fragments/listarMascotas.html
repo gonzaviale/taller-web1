@@ -2,55 +2,35 @@
 <html lang="es">
 <body>
 <article class="container mt-2 pt-2">
-    <!-- Contenedor principal con márgenes para el formulario -->
-    <div class="container mt-5 pt-5">
-        <!-- Título del buscador -->
-        <h2 class="text-center mb-4">busqueda avanzada</h2>
 
-        <!-- Formulario con método GET para buscar mascotas -->
-        <form class="row g-3" action="/spring/busquedaFiltradaMascotas" method="get">
-            <!-- Campo de búsqueda por nombre -->
-            <div class="col-md-4">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre de la mascota">
+    <h1 class="mb-4">Mis mascotas</h1>
+    <div class="row">
+        <div th:each="mascota : ${listaMascotas}" class="col-md-4 mb-4"> <!-- Cambié a col-md-4 para mostrar 3 tarjetas por fila -->
+            <div class="card h-100"> <!-- h-100 asegura que todas las tarjetas tengan la misma altura -->
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${mascota.nombre}"></h5>
+                    <p class="card-text">
+                        <span th:if="${!mascota.receptor}"><strong>Mascota donante</strong></span>
+                        <br>
+                        <span th:if="${mascota.receptor}"><strong>Mascota receptora</strong></span>
+                        <br>
+                        <span th:text="${mascota.tipo}"></span>
+                        <br>
+                        <strong>Años:</strong> <span th:text="${mascota.anios}"></span>
+                        <br>
+                        <strong>Peso:</strong> <span th:text="${mascota.peso}"></span> kg
+                        <br>
+                        <br>
+                        <span th:if="${mascota.enRevision}" class="text-bg-warning"><strong>En revisión</strong></span>
+                        <span th:if="${mascota.aprobado}" class="text-bg-success"><strong>Aprobado</strong></span>
+                        <span th:if="${mascota.rechazado}" class="text-bg-danger"><strong>Rechazado</strong></span>
+                        <br>
+                    </p>
+                </div>
             </div>
-
-            <!-- Campo de búsqueda por tipo -->
-            <div class="col-md-4">
-                <label for="tipo" class="form-label">Tipo</label>
-                <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Tipo de mascota">
-            </div>
-
-            <!-- Campo de búsqueda por tipo de sangre -->
-            <div class="col-md-4">
-                <label for="sangre" class="form-label">Sangre</label>
-                <input type="text" class="form-control" id="sangre" name="sangre" placeholder="Tipo de sangre">
-            </div>
-
-            <!-- Botón para buscar -->
-            <div class="col-12 text-center mt-4">
-                <button type="submit" class="btn btn-primary">Buscar</button>
-            </div>
-        </form>
+        </div>
     </div>
 
-    <h2 class="text-center ">Lista de Mascotas</h2>
-    <table class="table table-striped table-hover table-bordered" >
-        <thead class="table-dark">
-        <tr>
-            <th>Nombre</th>
-            <th>Tipo</th>
-            <th>Sangre</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="mascota : ${listaMascotas}">
-            <td th:text="${mascota.nombre}"></td>
-            <td th:text="${mascota.tipo}"></td>
-            <td th:text="${mascota.sangre}"></td>
-        </tr>
-        </tbody>
-    </table>
 </article>
 </body>
 </html>

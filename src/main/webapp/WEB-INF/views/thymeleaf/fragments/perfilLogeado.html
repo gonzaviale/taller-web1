@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" >
+<body>
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <!-- Imagen del perfil -->
+        <div class="col-md-2 text-center">
+            <picture>
+                <source media="(max-width: 768px)" th:srcset="@{/images/LogoMobile.PNG}">
+                <img th:src="@{/images/Shingen.PNG}" alt="HEROES" id="logoLogeado" class="rounded-circle" style="height: 100px; width: 100px;">
+            </picture>
+        </div>
+
+        <!-- Nombre, apellido y email al lado de la imagen -->
+        <div class="col-md-7">
+            <h2>
+                <span th:text="${usuarioBuscado.nombre}">Nombre</span>
+                <span th:text="${usuarioBuscado.apellido}">Apellido</span>
+            </h2>
+            <p th:text="${usuarioBuscado.email}">email@ejemplo.com</p>
+        </div>
+
+        <!-- Botón de editar perfil alineado a la derecha -->
+        <div class="col-md-3 text-end">
+            <form action="#" th:action="@{/editarperfil}" method="post" class="d-inline">
+                <input type="submit" class="btn btn-primary" value="Editar perfil">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:if="${mensaje}" class="alert alert-success text-center mx-auto" style="width: fit-content;">
+    <p th:text="${mensaje}"></p>
+</div>
+
+<div class="container mt-5" th:if="${miperfil}">
+    <!-- Botones adicionales -->
+    <div class="row mt-4">
+        <form action="#" th:action="@{/miPerfil}" method="get" class="d-inline">
+            <div class="col-md-4 d-inline">
+                <button type="submit" name="listar" value="mascotas" class="btn btn-primary">Ver mascotas</button>
+            </div>
+
+            <div class="col-md-4 d-inline">
+                <button type="submit" name="listar" value="publicaciones" class="btn btn-primary">Ver publicaciones</button>
+            </div>
+            <div class="col-md-4 d-inline">
+                <!-- Botón "Crear publicación" -->
+                <a href="crear-publicacion.html" class="btn btn-primary">Crear publicación</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+</body>
+</html>

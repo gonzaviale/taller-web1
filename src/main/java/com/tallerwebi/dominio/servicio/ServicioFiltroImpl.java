@@ -91,7 +91,6 @@ public class ServicioFiltroImpl implements ServicioFiltro {
         return repositorioUsuario.obtenerTodosLosVeterinariosVerificados();
     }
 
-
     private String validadorCampo(String campo) {
         return (campo == null || campo.isEmpty()) ? "" : campo;
     }

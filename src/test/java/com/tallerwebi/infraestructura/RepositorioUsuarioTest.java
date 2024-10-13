@@ -14,10 +14,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
@@ -28,7 +30,6 @@ public class RepositorioUsuarioTest {
     SessionFactory sessionFactory;
     @Autowired
     RepositorioUsuario repositorio;
-
     @Test
     @Transactional
     @Rollback
@@ -314,4 +315,106 @@ public class RepositorioUsuarioTest {
         return usuario;
     }
 
+    @Test @Transactional @Rollback
+    void actualizarUsuario_deberiaActualizarUsuarioCorrectamente() {
+        // Preparar los datos: Crear un usuario y guardarlo en la base de datos
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Juan");
+        repositorio.guardar(usuario);
+
+        // Modificar los datos del usuario
+        usuario.setNombre("Juan Actualizado");
+
+        // Ejecutar el método a probar
+        repositorio.actualizarUsuario(usuario);
+
+        // Verificar: Recuperar el usuario actualizado y verificar los cambios
+        Usuario usuarioActualizado = repositorio.buscarPorId(usuario.getId());
+        assertEquals("Juan Actualizado", usuarioActualizado.getNombre());
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void obtenerMascotaDelUsuario_deberiaRetornarMascotasDelUsuario() {
+        // Preparar: Crear un usuario y guardarlo en la base de datos
+        Usuario duenio = new Usuario();
+        duenio.setNombre("Juan");
+
+        // Crear algunas mascotas para el usuario
+        Mascota mascota1 = new Mascota();
+        mascota1.setNombre("Fido");
+        mascota1.setDuenio(duenio);
+        duenio.agregarMascota(mascota1);
+
+        Mascota mascota2 = new Mascota();
+        mascota2.setNombre("Rex");
+        mascota2.setDuenio(duenio);
+        duenio.agregarMascota(mascota2);
+
+        repositorio.guardar(duenio);
+
+        // Ejecutar el método a probar
+        List<Mascota> mascotas = repositorio.obtenerMascotaDelUsuario(duenio.getId());
+
+        // Verificar: La lista debe contener las mascotas que hemos guardado
+        assertThat(mascotas, notNullValue());
+        assertEquals(2, mascotas.size());
+        assertThat(mascotas, hasItem(hasProperty("nombre",is("Rex"))));
+        assertThat(mascotas, hasItem(hasProperty("nombre",is("Fido"))));
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void obtenerMascotaDelUsuario_noDeberiaRetornarMascotasParaIdInexistente() {
+        // Ejecutar el método con un ID de usuario que no existe
+        List<Mascota> mascotas = repositorio.obtenerMascotaDelUsuario(999L); // ID inexistente
+
+        // Verificar: La lista debe estar vacía
+        assertThat(mascotas, notNullValue());
+        assertThat(mascotas, is(Collections.emptyList()));
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void obtenerPublicacionesDelUsuario_noDeberiaRetornarPublicacionesParaIdInexistente() {
+        // Ejecutar el método con un ID de usuario que no existe
+        List<Publicacion> publicaciones = repositorio.obtenerPublicacionesDelUsuario(999L); // ID inexistente
+
+        // Verificar: La lista debe estar vacía
+        assertThat(publicaciones, notNullValue());
+        assertThat(publicaciones, is(Collections.emptyList()));
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void obtenerPublicacionesDelUsuario_deberiaRetornarPublicacionesDelUsuario() {
+
+        Usuario duenio = new Usuario();
+        duenio.setNombre("Juan");
+
+        // Crear algunas publicaciones para el usuario
+        Publicacion publicacion1 = new Publicacion();
+        publicacion1.setTitulo("Publicación 1");
+        publicacion1.setDuenioPublicacion(duenio);
+        duenio.agregarPublicaciones(publicacion1);
+
+        Publicacion publicacion2 = new Publicacion();
+        publicacion2.setTitulo("Publicación 2");
+        publicacion2.setDuenioPublicacion(duenio);
+        duenio.agregarPublicaciones(publicacion2);
+
+        repositorio.guardar(duenio);
+
+        List<Publicacion> publicaciones = repositorio.obtenerPublicacionesDelUsuario(duenio.getId());
+
+        assertThat(publicaciones, notNullValue());
+        assertEquals(2, publicaciones.size());
+        assertThat(publicaciones, hasItem(hasProperty("titulo", is("Publicación 1"))));
+        assertThat(publicaciones, hasItem(hasProperty("titulo", is("Publicación 2"))));
+    }
 }
