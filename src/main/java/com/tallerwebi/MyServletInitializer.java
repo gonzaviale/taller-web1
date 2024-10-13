@@ -4,6 +4,9 @@ import com.tallerwebi.config.SpringWebConfig;
 import com.tallerwebi.config.WebSocketConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletRegistration;
+
 public class MyServletInitializer
         extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -22,5 +25,15 @@ public class MyServletInitializer
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
+    }
+
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+        String location = System.getProperty("user.dir");
+
+        MultipartConfigElement configElement =
+                new MultipartConfigElement(location,2*1024*1024,8*1024*1024,0);
+
+        registration.setMultipartConfig(configElement);
     }
 }

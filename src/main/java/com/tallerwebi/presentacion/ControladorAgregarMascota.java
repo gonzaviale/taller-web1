@@ -93,11 +93,11 @@ public class ControladorAgregarMascota {
         if (id == null) {
             throw new RuntimeException("El ID de la mascota es nulo");
         }try {
-            servicioImagenes.guardarImagenes(imagenes, id);
+            servicioImagenes.guardarExamen(imagenes, id);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new ModelAndView("ver-mis-mascotas");
+        return new ModelAndView("redirect:/ver-mis-mascotas");
     }
 
     private Mascota crearMascotaSegunTipo(String tipo) {
