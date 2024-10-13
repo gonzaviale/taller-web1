@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio.entidad;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Publicacion {
@@ -15,6 +17,11 @@ public class Publicacion {
     private String zonaDeResidencia;
     private Boolean estaActiva;
     private String tipoDePublicacion;
+    private LocalDateTime localDateTime;
+
+    public void setEstaActiva(Boolean estaActiva) {
+        this.estaActiva = estaActiva;
+    }
 
     @ManyToOne
     Usuario duenioPublicacion;
@@ -89,5 +96,13 @@ public class Publicacion {
 
     public void setPuedeMovilizarse(Boolean puedeMovilizarse) {
         this.puedeMovilizarse = puedeMovilizarse;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
     }
 }
