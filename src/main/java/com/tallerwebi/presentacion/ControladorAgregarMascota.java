@@ -97,7 +97,7 @@ public class ControladorAgregarMascota {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new ModelAndView("ver-mis-mascotas");
+        return new ModelAndView("redirect:/ver-mis-mascotas");
     }
 
     private Mascota crearMascotaSegunTipo(String tipo) {
