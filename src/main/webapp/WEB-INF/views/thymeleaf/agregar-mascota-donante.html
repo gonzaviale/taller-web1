@@ -10,8 +10,11 @@
 </head>
 <body>
 <h1>Formulario de Mascota Donante</h1>
-<p th:if="${errorTransfusion != null}" class="alert alert-danger" th:text="'Error: ' + ${errorTransfusion}">
-</p>
+<p th:if="${errorTransfusion != null}" class="alert alert-danger" th:text="'Error: ' + ${errorTransfusion}"></p>
+<p th:if="${errorNombre != null}" class="alert alert-danger" th:text="'Error: ' + ${errorNombre}"></p>
+<p th:if="${errorImagenes != null}" class="alert alert-danger" th:text="'Error: ' + ${errorImagenes}"></p>
+<p th:if="${errorEdad != null}" class="alert alert-danger" th:text="'Error: ' + ${errorEdad}"></p>
+<p th:if="${errorPeso != null}" class="alert alert-danger" th:text="'Error: ' + ${errorPeso}"></p>
 
 <form action="#" th:action="@{/agregar-donante}" method="POST" enctype="multipart/form-data">
     <label>¿Tu mascota alguna vez recibió una transfusión?</label><br>

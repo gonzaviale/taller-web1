@@ -8,6 +8,10 @@
 </head>
 <body>
 <h1>Formulario de Mascota Receptora</h1>
+<p th:if="${errorNombre != null}" class="alert alert-danger" th:text="'Error: ' + ${errorNombre}"></p>
+<p th:if="${errorImagenes != null}" class="alert alert-danger" th:text="'Error: ' + ${errorImagenes}"></p>
+<p th:if="${errorEdad != null}" class="alert alert-danger" th:text="'Error: ' + ${errorEdad}"></p>
+<p th:if="${errorPeso != null}" class="alert alert-danger" th:text="'Error: ' + ${errorPeso}"></p>
 
 <form action="#" th:action="@{/agregar-receptora}" method="POST" enctype="multipart/form-data">
     <label for="nombre">Nombre:</label>
