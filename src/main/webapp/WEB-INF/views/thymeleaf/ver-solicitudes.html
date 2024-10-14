@@ -25,7 +25,7 @@
                             <h6>Imágenes:</h6>
                         </div>
                         <div class="col-12" th:each="imagen : ${entry.value}">
-                            <img th:src="@{/src/main/webapp/resources/images/subidas/{imagen}(imagen=${imagen})}"
+                            <img th:src="@{/images/subidas/{imagen}(imagen=${imagen})}"
                                  class="img-fluid mb-2" alt="Imagen de mascota">
                         </div>
                     </div>

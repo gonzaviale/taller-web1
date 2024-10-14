@@ -8,6 +8,7 @@ import com.tallerwebi.dominio.servicio.ServicioImagenes;
 import com.tallerwebi.dominio.servicio.ServicioMascota;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.when;
 public class ControladorAgregarMascotaTest {
 
     ServicioMascota servicioMascotaMock = mock(ServicioMascota.class);
-    ServicioImagenes servicioImagenesMock =  mock(ServicioImagenes.class);
+    ServicioImagenes servicioImagenesMock = mock(ServicioImagenes.class);
     ControladorAgregarMascota agregarMascota = new ControladorAgregarMascota(servicioMascotaMock, servicioImagenesMock);
     Mascota mascotaMock = mock(Felino.class);
     Usuario usuarioMock = mock(Usuario.class);
@@ -63,12 +64,13 @@ public class ControladorAgregarMascotaTest {
         imagenesMock = new MultipartFile[]{imagen1, imagen2};
     }
 
+    @Rollback
     @Test
     public void queUnDuenoPuedaAgregarUnaMascotaDonante() {
         when(usuarioMock.getId()).thenReturn(1L);
         when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
 
-        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "No", requestMock);
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "No", imagenesMock, requestMock);
 
         thenRegistroExitoso(mav, "redirect:/home");
         assertThat(mascotaMock.getDuenio().getId(), equalTo(usuarioMock.getId()));
@@ -79,9 +81,62 @@ public class ControladorAgregarMascotaTest {
         when(usuarioMock.getId()).thenReturn(1L);
         when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
 
-        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "Si", requestMock);
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "Si", imagenesMock, requestMock);
 
         thenRegistroFalla(mav, "agregar-mascota-donante", "errorTransfusion", "Un animal que ya recibió una transfusión no puede ser donante");
+    }
+
+    @Rollback
+    @Test
+    public void queUnDuenoPuedaAgregarUnaMascotaReceptora() {
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarReceptora(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), imagenesMock, requestMock);
+
+        thenRegistroExitoso(mav, "redirect:/home");
+        assertThat(mascotaMock.getDuenio().getId(), equalTo(usuarioMock.getId()));
+    }
+
+    @Test
+    public void queNoSePuedaRegistrarMascotaSiNoSeEnvianLasImagenesDeLosEstudios(){
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+        MultipartFile[] imagenesVacias = new MultipartFile[0];
+
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "No", imagenesVacias, requestMock);
+
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorImagenes", "Una mascota no se puede registrar sin imágenes de sus estudios");
+    }
+
+    @Test
+    public void queNoSePuedaRegistrarMascotaSiElNombreEstaVacio(){
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarDonante("", mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "No", imagenesMock, requestMock);
+
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorNombre", "El nombre de la mascota es obligatorio");
+    }
+
+    @Test
+    public void queNoSePuedaRegistrarMascotaSiLaEdadEstaVacia(){
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), 0, mascotaMock.getPeso(), mascotaMock.getTipo(), "No", imagenesMock, requestMock);
+
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorEdad", "La edad de la mascota es obligatoria");
+    }
+
+    @Test
+    public void queNoSePuedaRegistrarMascotaSiElPesoEstaVacio(){
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), 0f, mascotaMock.getTipo(), "No", imagenesMock, requestMock);
+
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorPeso", "El peso de la mascota es obligatorio");
     }
 
     private void thenRegistroExitoso(ModelAndView mav, String vista) {

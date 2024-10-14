@@ -19,7 +19,9 @@ import javax.transaction.Transactional;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -92,56 +94,50 @@ public class RepositorioMascotaTest {
 
         assertEquals(tipoRecibida, "Canino");
     }
-
+//el test entra en un bucle del que no puede salir
 //    @Test
 //    @Transactional
 //    @Rollback
 //    public void queMeTraigaMascotasEnRevision(){
 //        Mascota mascota = new Mascota();
 //        mascota.setRevision(true);
-//
-//        Mascota mascota2 = new Mascota();
-//        mascota2.setRevision(true);
-//
-//        Mascota mascota3 = new Mascota();
-//        mascota3.setRevision(false);
+//        mascota.setNombre("firu");
 //
 //        repositorioMascota.agregarMascota(mascota);
-//        repositorioMascota.agregarMascota(mascota2);
-//        repositorioMascota.agregarMascota(mascota3);
+//
 //        List<Mascota> mascotasEnRevision = repositorioMascota.buscarMascotaEnRevision();
 //
-//        assertEquals(mascotasEnRevision.size(), 2);
+//       assertThat(mascotasEnRevision.get(0).getNombre(), equalToIgnoringCase(mascota.getNombre()));
 //    }
-//
-//    @Test
-//    @Transactional
-//    @Rollback
-//    public void queSePuedaAprobarMascotaDonante() {
-//
-//        Mascota mascota = new Mascota();
-//        mascota.setRevision(true);
-//        mascota.setId(1l);
-//        repositorioMascota.agregarMascota(mascota);
-//
-//        repositorioMascota.aprobarMascotaDonante(mascota.getId());
-//
-//
-//        assertFalse(mascota.isEnRevision());
-//        assertTrue(mascota.isAprobado());
-//    }
-//
-//    @Test
-//    @Transactional
-//    @Rollback
-//    public void quePuedaRechazarMascotaDonante() {
-//
-//        Mascota mascota = new Mascota();
-//        mascota.setRevision(true);
-//        repositorioMascota.agregarMascota(mascota);
-//        repositorioMascota.rechazarMascotaDonante(mascota.getId());
-//
-//        assertFalse(mascota.isEnRevision());
-//        assertTrue(mascota.isRechazado());
-//    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queSePuedaAprobarMascotaDonante() {
+
+        Mascota mascota = new Mascota();
+        mascota.setRevision(true);
+        mascota.setId(1l);
+        repositorioMascota.agregarMascota(mascota);
+
+        repositorioMascota.aprobarMascota(mascota.getId());
+
+
+        assertFalse(mascota.isEnRevision());
+        assertTrue(mascota.isAprobado());
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void quePuedaRechazarMascotaDonante() {
+
+        Mascota mascota = new Mascota();
+        mascota.setRevision(true);
+        repositorioMascota.agregarMascota(mascota);
+        repositorioMascota.rechazarMascota(mascota.getId());
+
+        assertFalse(mascota.isEnRevision());
+        assertTrue(mascota.isRechazado());
+    }
 }

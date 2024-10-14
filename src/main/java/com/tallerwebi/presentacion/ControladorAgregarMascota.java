@@ -49,13 +49,34 @@ public class ControladorAgregarMascota {
                                        @RequestParam("peso") float peso,
                                        @RequestParam("tipo") String tipo,
                                        @RequestParam("transfusion") String transfusion,
+                                       @RequestParam("imagenes") MultipartFile[] imagenes,
                                        HttpServletRequest request) {
 
+        modelo.clear();
         if (transfusion.equals("Si")) {
             modelo.put("errorTransfusion", "Un animal que ya recibió una transfusión no puede ser donante");
             return new ModelAndView("agregar-mascota-donante", modelo);
         }
 
+        if (imagenes.length == 0) {
+            modelo.put("errorImagenes", "Una mascota no se puede registrar sin imágenes de sus estudios");
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        }
+
+        if (nombre.isEmpty()) {
+            modelo.put("errorNombre", "El nombre de la mascota es obligatorio");
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        }
+
+        if (anios == 0) {
+            modelo.put("errorEdad", "La edad de la mascota es obligatoria");
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        }
+
+        if (peso == 0f) {
+            modelo.put("errorPeso", "El peso de la mascota es obligatorio");
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        }
         Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
 
         Mascota mascota = crearMascotaSegunTipo(tipo);
@@ -65,6 +86,12 @@ public class ControladorAgregarMascota {
 
         servicioMascota.registrarMascota(mascota);
 
+        try {
+            servicioImagenes.guardarExamen(imagenes, mascota.getId());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return new ModelAndView("redirect:/home");
     }
 
@@ -73,8 +100,29 @@ public class ControladorAgregarMascota {
                                          @RequestParam("anios") int anios,
                                          @RequestParam("peso") float peso,
                                          @RequestParam("tipo") String tipo,
+                                         @RequestParam("imagenes") MultipartFile[] imagenes,
                                          HttpServletRequest request) {
+        modelo.clear();
 
+        if (imagenes.length == 0){
+            modelo.put("errorImagenes", "Una mascota no se puede registrar sin imágenes de sus estudios");
+            return new ModelAndView("agregar-mascota-receptora", modelo);
+        }
+
+        if (nombre.isEmpty()){
+            modelo.put("errorNombre", "El nombre de la mascota es obligatorio");
+            return new ModelAndView("agregar-mascota-receptora", modelo);
+        }
+
+        if (anios == 0){
+            modelo.put("errorEdad", "La edad de la mascota es obligatoria");
+            return new ModelAndView("agregar-mascota-receptora", modelo);
+        }
+
+        if (peso == 0f){
+            modelo.put("errorPeso", "El peso de la mascota es obligatorio");
+            return new ModelAndView("agregar-mascota-receptora", modelo);
+        }
         Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
 
         Mascota mascota = crearMascotaSegunTipo(tipo);
@@ -84,20 +132,13 @@ public class ControladorAgregarMascota {
 
         servicioMascota.registrarMascota(mascota);
 
-        return new ModelAndView("redirect:/home");
-    }
-
-    @PostMapping("/enviar-estudios")
-    public ModelAndView enviarEstudios(@RequestParam(required = false) Long id, @RequestParam("imagenes") MultipartFile[] imagenes) {
-
-        if (id == null) {
-            throw new RuntimeException("El ID de la mascota es nulo");
-        }try {
-            servicioImagenes.guardarExamen(imagenes, id);
+        try {
+            servicioImagenes.guardarExamen(imagenes, mascota.getId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new ModelAndView("redirect:/ver-mis-mascotas");
+
+        return new ModelAndView("redirect:/home");
     }
 
     private Mascota crearMascotaSegunTipo(String tipo) {
