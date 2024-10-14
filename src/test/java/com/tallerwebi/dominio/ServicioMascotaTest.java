@@ -49,4 +49,24 @@ public class ServicioMascotaTest {
 
         assertThat(miMascota.get(0).getNombre(), equalToIgnoringCase("Firulais"));
     }
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedanObtenerLasMascotasEnRevision() {
+        Mascota mascota = mock(Mascota.class);
+        Usuario dueno = mock(Usuario.class);
+
+        when(dueno.getNombre()).thenReturn("Lucia");
+
+        when(mascota.getDuenio()).thenReturn(dueno);
+        when(mascota.getNombre()).thenReturn("Firulais");
+
+        List<Mascota> mascotasMock = Arrays.asList(mascota);
+        when(repositorioMascotaMock.buscarMascotaEnRevision()).thenReturn(mascotasMock);
+
+        List<Mascota> miMascota = servicioMascota.obtenerMascotasEnRevision();
+
+        assertThat(miMascota.get(0).getNombre(), equalToIgnoringCase("Firulais"));
+    }
 }
