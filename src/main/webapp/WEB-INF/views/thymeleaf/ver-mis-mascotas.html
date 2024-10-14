@@ -25,17 +25,6 @@
             <span th:if="${mascota.aprobado}"  class="text-bg-success"><strong>Aprobado</strong></span><br>
             <span th:if="${mascota.rechazado}"  class="text-bg-danger"><strong>Rechazado</strong></span><br>
           </p>
-          <div class="" th:if="${mascota.enRevision}">
-            <h5>Completá tu solicitud subiendo imágenes de los estudios necesarios</h5>
-            <span th:text="${mascota.id}"></span>
-            <form action="#" th:action="@{/enviar-estudios}" method="POST" enctype="multipart/form-data">
-              <input type="hidden" name="id" th:value="${mascota.id}">
-
-              <label for="imagenes">Subir imágenes de los estudios:</label><br>
-              <input type="file" id="imagenes" name="imagenes" multiple accept="image/*"><br><br>
-              <input type="submit" value="Enviar">
-            </form>
-          </div>
         </div>
       </div>
     </div>

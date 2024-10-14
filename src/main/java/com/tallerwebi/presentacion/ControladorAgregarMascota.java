@@ -49,6 +49,7 @@ public class ControladorAgregarMascota {
                                        @RequestParam("peso") float peso,
                                        @RequestParam("tipo") String tipo,
                                        @RequestParam("transfusion") String transfusion,
+                                       @RequestParam("imagenes") MultipartFile[] imagenes,
                                        HttpServletRequest request) {
 
         if (transfusion.equals("Si")) {
@@ -65,6 +66,12 @@ public class ControladorAgregarMascota {
 
         servicioMascota.registrarMascota(mascota);
 
+    try {
+        servicioImagenes.guardarExamen(imagenes, mascota.getId());
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+
         return new ModelAndView("redirect:/home");
     }
 
@@ -73,6 +80,7 @@ public class ControladorAgregarMascota {
                                          @RequestParam("anios") int anios,
                                          @RequestParam("peso") float peso,
                                          @RequestParam("tipo") String tipo,
+                                         @RequestParam("imagenes") MultipartFile[] imagenes,
                                          HttpServletRequest request) {
 
         Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
@@ -84,20 +92,13 @@ public class ControladorAgregarMascota {
 
         servicioMascota.registrarMascota(mascota);
 
-        return new ModelAndView("redirect:/home");
-    }
-
-    @PostMapping("/enviar-estudios")
-    public ModelAndView enviarEstudios(@RequestParam(required = false) Long id, @RequestParam("imagenes") MultipartFile[] imagenes) {
-
-        if (id == null) {
-            throw new RuntimeException("El ID de la mascota es nulo");
-        }try {
-            servicioImagenes.guardarExamen(imagenes, id);
+        try {
+            servicioImagenes.guardarExamen(imagenes, mascota.getId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new ModelAndView("redirect:/ver-mis-mascotas");
+
+        return new ModelAndView("redirect:/home");
     }
 
     private Mascota crearMascotaSegunTipo(String tipo) {

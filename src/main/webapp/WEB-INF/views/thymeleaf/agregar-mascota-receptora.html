@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Formulario de Mascota Receptora</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
 <h1>Formulario de Mascota Receptora</h1>
 
-<form action="#" th:action="@{/agregar-receptora}" method="POST">
+<form action="#" th:action="@{/agregar-receptora}" method="POST" enctype="multipart/form-data">
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre" placeholder="Nombre"><br><br>
 
@@ -23,6 +25,7 @@
     <input type="radio" id="canino" name="tipo" value="Canino">
     <label for="canino">Canino</label><br><br>
 
+    <h3>Suba las imágenes de los exámenes que diagnostican lo que tiene su mascota</h3>
     <label for="imagenes">Subir imágenes de los estudios:</label><br>
     <input type="file" id="imagenes" name="imagenes" multiple accept="image/*"><br><br>
 
