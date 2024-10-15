@@ -5,47 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
   <link rel="stylesheet" th:href="@{/css/main.css}"/>
-  <title>Taller Web I</title>
+  <title>Home</title>
 
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .content-wrapper {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .btn-custom {
+      background-color: #007bff;
+      border-color: #007bff;
+      color: white;
+    }
+    .btn-custom:hover {
+      background-color: #0056b3;
+      border-color: #004085;
+      color: #ffffff;
+    }
+    .hero-section {
+      text-align: center;
+      color: white;
+    }
+    .hero-section h1 {
+      font-size: 3rem;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
 
+<!-- Header -->
 <header th:replace="fragments/header :: header"></header>
 
-<main role="main" class="container">
-  <div class = "container">
-    <h1 th:text="${mensajeBienvenida}"></h1>
-    <article th:if="${mensajeBienvenida}">
-      <a href="crear-publicacion.html" class="btn btn-lg btn-primary btn-block w-100 m-2">crear publicacion</a>
-    </article>
-    <a href="login.html" class="btn btn-lg btn-primary btn-block">Volver</a>
-    <a href="/spring/chat" class="btn btn-lg btn-primary btn-block">ChatBot</a>
-    <a href="/spring/buscar" class="btn btn-lg btn-primary btn-block">Buscar</a>
-    <a href="/spring/scoring" class="btn btn-lg btn-primary btn-block">Scoring</a>
-    <a th:if="${rol == 'dueño mascota'}" href="/spring/agregar-mascota-donante" class="btn btn-lg btn-primary btn-block">Agregar mascota donante</a>
-    <a th:if="${rol == 'dueño mascota'}" href="/spring/agregar-mascota-receptora" class="btn btn-lg btn-primary btn-block">Agregar mascota receptora</a>
-    <a th:if="${rol == 'dueño mascota'}" href="/spring/ver-mis-mascotas" class="btn btn-lg btn-primary btn-block">Ver mis mascotas</a>
-    <a th:if="${rol == 'veterinario'}" href="/spring/ver-solicitudes" class="btn btn-lg btn-primary btn-block">Ver solicitudes de donantes</a>
+<!-- Hero Section -->
+<section class="hero-section">
+  <h1 th:text="${mensajeBienvenida}">Bienvenido a nuestra aplicación</h1>
+  <a href="/spring/logout">Cerrar Sesion</a>
+</section>
+
+<main role="main" class="container my-5">
+  <div class="content-wrapper mx-auto col-md-8">
+
+    <!-- Botones principales -->
+    <div class="d-grid gap-2 mb-4">
+      <a href="crear-publicacion.html" class="btn btn-custom btn-lg w-100">Crear Publicación</a>
+      <a href="/spring/chat" class="btn btn-outline-primary btn-lg w-100">ChatBot</a>
+      <a href="/spring/buscar" class="btn btn-outline-primary btn-lg w-100">Buscar</a>
+      <a href="/spring/scoring" class="btn btn-outline-primary btn-lg w-100">Scoring</a>
+    </div>
+
+    <!-- Opciones específicas según el rol -->
+    <div th:if="${rol == 'dueño mascota'}" class="d-grid gap-2 mb-4">
+      <a href="/spring/agregar-mascota-donante" class="btn btn-success btn-lg w-100">Agregar Mascota Donante</a>
+      <a href="/spring/agregar-mascota-receptora" class="btn btn-success btn-lg w-100">Agregar Mascota Receptora</a>
+      <a href="/spring/ver-mis-mascotas" class="btn btn-success btn-lg w-100">Ver Mis Mascotas</a>
+    </div>
+
+    <div th:if="${rol == 'veterinario'}" class="d-grid gap-2">
+      <a href="/spring/ver-solicitudes" class="btn btn-info btn-lg w-100">Ver Solicitudes de Donantes</a>
+    </div>
+
   </div>
 </main>
 
-<div th:if="${mensaje}" class="alert alert-success text-center mx-auto" style="width: fit-content;">
+<!-- Mensajes de feedback -->
+<div th:if="${mensaje}" class="alert alert-success text-center mx-auto col-md-6">
   <p th:text="${mensaje}"></p>
 </div>
 
-<div th:if="${mensajeUsuarioBanco != null and mensajeUsuarioBanco != ''}" class="alert alert-success text-center mx-auto" style="width: fit-content;">
+<div th:if="${mensajeUsuarioBanco != null and mensajeUsuarioBanco != ''}" class="alert alert-success text-center mx-auto col-md-6">
   <p th:text="${mensajeUsuarioBanco}"></p>
 </div>
 
-<div th:if="${errorAlEnviarMensaje != null and errorAlEnviarMensaje != ''}" class="alert alert-danger text-center mx-auto" style="width: fit-content;">
+<div th:if="${errorAlEnviarMensaje != null and errorAlEnviarMensaje != ''}" class="alert alert-danger text-center mx-auto col-md-6">
   <p th:text="${errorAlEnviarMensaje}"></p>
 </div>
 
+<!-- Listado de Publicaciones -->
 <section th:if="${!publicaciones.isEmpty()}" class="container mt-4">
   <article th:replace="fragments/listarPublicaciones"></article>
 </section>
 
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script th:src="@{../../../resources/core/js/main.js}"></script>
+
 </body>
 </html>

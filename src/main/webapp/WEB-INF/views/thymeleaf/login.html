@@ -12,43 +12,85 @@
     <!-- custom style -->
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
 
+    <style>
+        .login-container {
+            margin-top: 20px;
+            width: 500px;
+            padding: 30px;
+            background-color: #f7f7f7;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f0f0f0;
+        }
+    </style>
+
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" th:href="@{/login.html}">UNLAM</a>
-</nav>
+<main role="main" class="d-flex justify-content-center align-items-center vh-100">
 
-<main role="main" class="container">
+    <div class="login-container">
+        <h3 class="text-center mb-4">Iniciar Sesión</h3>
+        <form action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}" class="needs-validation" novalidate>
 
-    <div class = "container">
-        <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-            <form action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}">
-                <h3 class="form-signin-heading">Taller Web I</h3>
-                <hr class="colorgraph"><br>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input th:field="*{email}" id="email" type="email" class="form-control" placeholder="Introduzca su email" required>
+                <div class="invalid-feedback">Por favor, ingrese un email válido.</div>
+            </div>
 
-                <label for = "email">Introduzca su email</label>
-                <input th:field="*{email}" id="email" type="email" class="form-control" required/>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input th:field="*{password}" type="password" id="password" class="form-control" placeholder="Introduzca su contraseña" required>
+                <div class="invalid-feedback">Por favor, ingrese su contraseña.</div>
+            </div>
 
-                <label for="password">Introduzca su contraseña</label>
-                <input th:field="*{password}" type="password" id="password" class="form-control" required/>
+            <button id="btn-login" class="btn btn-lg btn-primary w-100 mb-3" type="submit">Login</button>
 
-                <button id="btn-login" class="btn btn-lg btn-primary btn-block" Type="Submit">Login</button>
+            <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}"></p>
+        </form>
 
-                <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
-                </p>
-            </form>
+        <div class="text-center mt-3">
             <a id="ir-a-registrarme" href="nuevo-usuario">Registrarme</a>
         </div>
+
+        <!-- Botón de logearse como banco -->
+        <div class="text-center mt-4">
+            <form th:action="@{/loginsimulado}" method="get">
+                <button type="submit" class="btn btn-secondary w-100">Logearse como Banco</button>
+            </form>
+        </div>
     </div>
-    <form th:action="@{/loginsimulado}" method="get">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">LogearseComoBanco</button>
-    </form>
+
 </main>
-<!-- /.container -->
 
 <!-- Boostrap core js -->
-<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Script para validación de Bootstrap -->
+<script>
+    (function () {
+        'use strict'
+
+        var forms = document.querySelectorAll('.needs-validation')
+
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
 </body>
 </html>
