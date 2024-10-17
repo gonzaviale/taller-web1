@@ -1,6 +1,6 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.RepositorioHome;
+import com.tallerwebi.dominio.RepositorioCampania;
 import com.tallerwebi.dominio.entidad.Campana;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,12 +13,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 
-@Repository("RepositorioHome")
-public class RepositorioHomeImpl implements RepositorioHome {
+@Repository("RepositorioCampania")
+public class RepositorioCampaniaImpl implements RepositorioCampania {
 
     private SessionFactory sessionFactory;
 
-    public RepositorioHomeImpl(org.hibernate.SessionFactory sessionFactory) {
+    public RepositorioCampaniaImpl(org.hibernate.SessionFactory sessionFactory) {
 
         this.sessionFactory = sessionFactory;
     }

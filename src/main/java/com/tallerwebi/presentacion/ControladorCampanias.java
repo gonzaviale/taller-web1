@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class ControladorCampanias {
@@ -69,6 +70,23 @@ public class ControladorCampanias {
         redirectAttributes.addFlashAttribute("success", "Campaña creada con éxito");
         return "redirect:/bancoHome";
     }
+
+    @Transactional
+    @RequestMapping(value = "/misCampanias", method = RequestMethod.GET)
+    public ModelAndView mostrarMisCampanias(HttpSession session) {
+        Long idBanco = (Long) session.getAttribute("idBanco");
+        if (idBanco == null) {
+            return new ModelAndView("redirect:/login");
+        }
+        Banco banco = servicioBanco.BuscarBancoId(idBanco);
+
+        ModelMap modelo = new ModelMap();
+        List<Campana> campanias = servicioBanco.obtenerCampaniasPorBanco(idBanco);
+        modelo.put("campanias", campanias);
+
+        return new ModelAndView("bancoMisCampanias", modelo);
+    }
+
 
 }
 

@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioBanco;
-import com.tallerwebi.dominio.RepositorioHome;
+import com.tallerwebi.dominio.RepositorioCampania;
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
@@ -25,12 +25,12 @@ import static org.hamcrest.Matchers.*;
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class})
-public class RepositorioHomeTest {
+public class RepositorioCampaniaTest {
 
     @Autowired
     SessionFactory sessionFactory;
     @Autowired
-    RepositorioHome repositorioHome;
+    RepositorioCampania repositorioHome;
 
     @Autowired
     RepositorioBanco repositorioBanco;

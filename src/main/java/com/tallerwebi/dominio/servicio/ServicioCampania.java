@@ -4,6 +4,6 @@ import com.tallerwebi.dominio.entidad.Campana;
 
 import java.util.List;
 
-public interface ServicioHome {
+public interface ServicioCampania {
     List<Campana> obtenerCampanasActualesYproximas();
 }
