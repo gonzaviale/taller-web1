@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-@Repository("repositorioMascota")
+@Repository("repositorioSolicitudAUnaPublicacion")
 public class RepositorioSolicitudAUnaPublicacionImpl implements RepositorioSolicitudAUnaPublicacion {
     private final SessionFactory sessionFactory;
 
