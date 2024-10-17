@@ -12,4 +12,6 @@ public interface ServicioMascota {
     void rechazarMascota(Long mascotaId);
 
     List<Mascota> obtenerMascotasPorDueno(Usuario dueno);
+
+    Mascota buscarMascotaPorId(Long mascotaId);
 }

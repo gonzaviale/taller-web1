@@ -63,6 +63,7 @@ public class Mascota {
         this.duenio = duenio;
     }
 
+    public boolean isDonante(){return this.donante;}
 
     public void setDonante(boolean donante) {
         this.donante = donante;

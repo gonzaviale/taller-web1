@@ -1,7 +1,9 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.servicio.ServicioMascota;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,14 +14,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ControladorHome {
 
     final private ServicioPublicacion servicioPublicacion;
+    final private ServicioMascota servicioMascota;
 
-    public ControladorHome(ServicioPublicacion servicioPublicacion) {
+    public ControladorHome(ServicioPublicacion servicioPublicacion, ServicioMascota servicioMascota) {
         this.servicioPublicacion = servicioPublicacion;
+        this.servicioMascota = servicioMascota;
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -39,12 +44,14 @@ public class ControladorHome {
         }
 
         List<Publicacion> publicaciones = servicioPublicacion.obtenerTodasLasPublicaciones();
+        List<Mascota> misMascotas = servicioMascota.obtenerMascotasPorDueno(usuarioEnSesion);
+        List<Mascota> mascotasNecesitadas = misMascotas.stream()
+                .filter(Mascota::isReceptor)
+                .collect(Collectors.toList());
         model.addAttribute("publicaciones", publicaciones);
         model.addAttribute("mensaje", mensaje);
+        model.addAttribute("mascotasNecesitadas", mascotasNecesitadas);
 
         return new ModelAndView("home", model);
     }
-
-
-
 }

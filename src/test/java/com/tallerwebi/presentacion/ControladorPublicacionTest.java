@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
+import com.tallerwebi.dominio.servicio.ServicioMascota;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
 
 import org.mockito.*;
@@ -21,6 +22,7 @@ public class ControladorPublicacionTest {
 
     private ControladorPublicacion controladorPublicacion;
     private ServicioPublicacion servicioPublicacion;
+    private ServicioMascota servicioMascota;
     private HttpServletRequest request;
     private HttpSession session;
 
@@ -28,11 +30,12 @@ public class ControladorPublicacionTest {
     public void init() {
         // Crear los mocks manualmente
         servicioPublicacion = mock(ServicioPublicacion.class);
+        servicioMascota = mock(ServicioMascota.class);
         request = mock(HttpServletRequest.class);
         session = mock(HttpSession.class);
 
         // Injectar el mock manualmente en el controlador
-        controladorPublicacion = new ControladorPublicacion(servicioPublicacion);
+        controladorPublicacion = new ControladorPublicacion(servicioPublicacion, servicioMascota);
 
         // Configurar el comportamiento de los mocks
         when(request.getSession()).thenReturn(session);
@@ -60,7 +63,7 @@ public class ControladorPublicacionTest {
     }
 
     private ModelAndView whenRealizoUnaPublicacion(Publicacion nuevaPublicacion) {
-        return controladorPublicacion.publicarPublicacion(nuevaPublicacion,request);
+        return controladorPublicacion.publicarPublicacion(nuevaPublicacion, 1l, request);
     }
 
     private void thenLaPubliacionNoEsRegistradaCuandoElCampoSangreEsVacio(ModelAndView ventanaError) {
@@ -234,7 +237,7 @@ public class ControladorPublicacionTest {
         Publicacion publicacionSinTitulo= givenCreoUnaPublicacionSinTitutlo();
         doThrow(new PublicacionSinTitulo()).when(servicioPublicacion).guardarPublicacion(ArgumentMatchers.any(Publicacion.class));
         //when
-        ModelAndView mav= controladorPublicacion.publicarPublicacion(publicacionSinTitulo,request);
+        ModelAndView mav= controladorPublicacion.publicarPublicacion(publicacionSinTitulo, 1l, request);
         //
         thenLaPublicacionSinTituloNoEsPublicada(mav);
     }
