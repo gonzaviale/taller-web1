@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio.servicio;
 
-import com.tallerwebi.dominio.RepositorioHome;
+import com.tallerwebi.dominio.RepositorioCampania;
 import com.tallerwebi.dominio.entidad.Campana;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,13 +9,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class ServicioHomeImpl implements ServicioHome{
+public class ServicioCampaniaImpl implements ServicioCampania {
 
 
-    private final RepositorioHome repositorio;
+    private final RepositorioCampania repositorio;
 
     @Autowired
-    public ServicioHomeImpl( RepositorioHome repositorio) {
+    public ServicioCampaniaImpl(RepositorioCampania repositorio) {
         this.repositorio = repositorio;
     }
 
