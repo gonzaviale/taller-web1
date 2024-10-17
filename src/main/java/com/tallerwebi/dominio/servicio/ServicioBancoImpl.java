@@ -80,6 +80,11 @@ public class ServicioBancoImpl implements ServicioBanco {
     }
 
     @Override
+    public List<Campana> obtenerCampaniasPorBanco(Long idBanco) {
+       return this.repositorio.buscarCampaniasPorBanco(idBanco);
+    }
+
+    @Override
     public void agregarBanco(Banco banco) {
 
         this.repositorio.guardar(banco);

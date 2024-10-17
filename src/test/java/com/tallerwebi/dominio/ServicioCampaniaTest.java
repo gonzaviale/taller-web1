@@ -1,8 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Campana;
-import com.tallerwebi.dominio.servicio.ServicioBancoImpl;
-import com.tallerwebi.dominio.servicio.ServicioHomeImpl;
+import com.tallerwebi.dominio.servicio.ServicioCampaniaImpl;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -12,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class ServicioHomeTest {
+public class ServicioCampaniaTest {
 
-    private final RepositorioHome repositorioHomeMock = mock(RepositorioHome.class);
-    private final ServicioHomeImpl servicioHome = new ServicioHomeImpl(repositorioHomeMock);
+    private final RepositorioCampania repositorioHomeMock = mock(RepositorioCampania.class);
+    private final ServicioCampaniaImpl servicioHome = new ServicioCampaniaImpl(repositorioHomeMock);
 
     @Test
     public void testObtenerCampanasActualesYProximas() {

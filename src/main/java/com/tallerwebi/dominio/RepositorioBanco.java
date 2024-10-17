@@ -32,4 +32,5 @@ public interface RepositorioBanco {
     void actualizarBanco(Banco banco);
     void guardarCampania(Campana campana, Banco banco);
     Campana buscarCampaniaPorId(Long id);
+    List<Campana> buscarCampaniasPorBanco(Long idBanco);
 }

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Mis Campañas</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:insert="~{fragments/headerbanco :: headerBanco}"></div>
+<div th:replace="fragments/navbanco :: sidebar"></div>
+
+<main role="main" class="container mt-4">
+    <div class="row">
+
+        <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <h1>Mis Campañas</h1>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Nombre de la Campaña</th>
+                    <th scope="col">Fecha Inicio</th>
+                    <th scope="col">Fecha Fin</th>
+                    <th scope="col">Ubicación</th>
+                    <th scope="col">Descripción</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(campanias)}">
+                    <td colspan="5">No tienes campañas creadas.</td>
+                </tr>
+                <tr th:each="campania : ${campanias}">
+                    <td th:text="${campania.nombre}">Nombre de la Campaña</td>
+                    <td th:text="${campania.fechaInicio}">Fecha de Inicio</td>
+                    <td th:text="${campania.fechaFin}">Fecha de Fin</td>
+                    <td th:text="${campania.ubicacion}">Ubicación</td>
+                    <td th:text="${campania.descripcion}">Descripción</td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <div th:replace="fragments/footer :: footer"></div>
+</main>
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

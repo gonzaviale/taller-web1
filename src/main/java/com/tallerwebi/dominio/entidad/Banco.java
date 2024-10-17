@@ -159,7 +159,7 @@ public class Banco {
 
 
 
-    // Método para mostrar información del banco (opcional)
+
     @Override
     public String toString() {
         return "Banco{" +
@@ -170,7 +170,7 @@ public class Banco {
                 ", pais='" + pais + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +  // Incluye la contraseña en toString si es necesario
+                ", password='" + password + '\'' +
                 ", horario='" + horario + '\'' +
                 '}';
     }
@@ -192,5 +192,9 @@ public class Banco {
 
     public void agregarCampania(Campana nuevaCampana) {
         this.campanas.add(nuevaCampana);
+    }
+
+    public List<Campana> getCampanias() {
+        return this.campanas;
     }
 }

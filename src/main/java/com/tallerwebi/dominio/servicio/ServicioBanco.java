@@ -19,6 +19,6 @@ public interface ServicioBanco {
     void rechazarSolicitud(int solicitudId);
     void asignarPaqueteASolicitud(int solicitudId, int paqueteId);
     PaqueteDeSangre BuscarPaqueteSangreXId(int paqueteId);
-
     void guardarCampania(Campana campana, Banco banco);
+    List<Campana> obtenerCampaniasPorBanco(Long idBanco);
 }
