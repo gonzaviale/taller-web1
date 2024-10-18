@@ -12,6 +12,7 @@
 <p th:if="${errorImagenes != null}" class="alert alert-danger" th:text="'Error: ' + ${errorImagenes}"></p>
 <p th:if="${errorEdad != null}" class="alert alert-danger" th:text="'Error: ' + ${errorEdad}"></p>
 <p th:if="${errorPeso != null}" class="alert alert-danger" th:text="'Error: ' + ${errorPeso}"></p>
+<p th:if="${errorTipo != null}" class="alert alert-danger" th:text="'Error: ' + ${errorTipo}"></p>
 
 <form action="#" th:action="@{/agregar-receptora}" method="POST" enctype="multipart/form-data">
     <label for="nombre">Nombre:</label>

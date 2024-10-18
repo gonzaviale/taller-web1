@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.RepositorioPublicacion;
 import com.tallerwebi.dominio.excepcion.PublicacionNoExistente;
@@ -20,7 +21,7 @@ public class RepositorioPublicacionImpl implements RepositorioPublicacion {
     final private SessionFactory sessionFactory;
 
     @Autowired
-    public RepositorioPublicacionImpl(SessionFactory sessionFactory){
+    public RepositorioPublicacionImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
@@ -33,8 +34,8 @@ public class RepositorioPublicacionImpl implements RepositorioPublicacion {
 
     @Override
     public Publicacion obtenerPorId(Long id) throws PublicacionNoExistente {
-        Publicacion buscada= sessionFactory.getCurrentSession().get(Publicacion.class,id);
-        if(buscada==null){
+        Publicacion buscada = sessionFactory.getCurrentSession().get(Publicacion.class, id);
+        if (buscada == null) {
             throw new PublicacionNoExistente();
         }
         return buscada;
@@ -53,21 +54,41 @@ public class RepositorioPublicacionImpl implements RepositorioPublicacion {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Publicacion.class);
 
         if (titulo != null && !titulo.isEmpty()) {
-            criteria.add(Restrictions.like("titulo","%" +titulo + "%", MatchMode.ANYWHERE));
+            criteria.add(Restrictions.like("titulo", "%" + titulo + "%", MatchMode.ANYWHERE));
         }
 
         if (tipoDeSangre != null && !tipoDeSangre.isEmpty()) {
-            criteria.add(Restrictions.like("tipoDeSangre", "%" +tipoDeSangre + "%", MatchMode.ANYWHERE));
+            criteria.add(Restrictions.like("tipoDeSangre", "%" + tipoDeSangre + "%", MatchMode.ANYWHERE));
         }
 
         if (zonaDeResidencia != null && !zonaDeResidencia.isEmpty()) {
-            criteria.add(Restrictions.like("zonaDeResidencia", "%" +zonaDeResidencia + "%",MatchMode.ANYWHERE));
+            criteria.add(Restrictions.like("zonaDeResidencia", "%" + zonaDeResidencia + "%", MatchMode.ANYWHERE));
         }
         if (tipoDePublicacion != null && !tipoDePublicacion.isEmpty()) {
-            criteria.add(Restrictions.like("tipoDePublicacion", "%" +tipoDePublicacion + "%",MatchMode.ANYWHERE));
+            criteria.add(Restrictions.like("tipoDePublicacion", "%" + tipoDePublicacion + "%", MatchMode.ANYWHERE));
         }
 
         List<Publicacion> publicaciones = criteria.list();
         return new ArrayList<>(publicaciones);
+    }
+
+    @Override
+    public void desactivarPublicacion(Long publicacionId) {
+        Publicacion publicacion = (Publicacion) sessionFactory.getCurrentSession()
+                .createCriteria(Publicacion.class)
+                .add(Restrictions.eq("id", publicacionId))
+                .uniqueResult();
+        publicacion.setEstaActiva(false);
+        sessionFactory.getCurrentSession().saveOrUpdate(publicacion);
+    }
+
+    @Override
+    public void activarPublicacion(Long publicacionId) {
+        Publicacion publicacion = (Publicacion) sessionFactory.getCurrentSession()
+                .createCriteria(Publicacion.class)
+                .add(Restrictions.eq("id", publicacionId))
+                .uniqueResult();
+        publicacion.setEstaActiva(true);
+        sessionFactory.getCurrentSession().saveOrUpdate(publicacion);
     }
 }

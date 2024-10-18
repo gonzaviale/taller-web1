@@ -11,4 +11,6 @@ public interface ServicioPublicacion {
     Publicacion busquedaDeUna(Publicacion publicacion) throws PublicacionNoExistente;
     List<Publicacion> obtenerTodasLasPublicaciones();
     Publicacion busquedaPorId(Long publicacionId) throws PublicacionNoExistente;
+    void desactivarPublicacion(Long publicacionId);
+    void activarPublicacion(Long publicacionId);
 }

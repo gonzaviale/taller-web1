@@ -44,42 +44,64 @@ public class ControladorAgregarMascota {
     }
 
     @PostMapping("/agregar-donante")
-    public ModelAndView agregarDonante(@RequestParam("nombre") String nombre,
-                                       @RequestParam("anios") int anios,
-                                       @RequestParam("peso") float peso,
-                                       @RequestParam("tipo") String tipo,
-                                       @RequestParam("transfusion") String transfusion,
-                                       @RequestParam("imagenes") MultipartFile[] imagenes,
+    public ModelAndView agregarDonante(@RequestParam(value = "nombre", required = false) String nombre,
+                                       @RequestParam(value = "anios", required = false) Integer anios,
+                                       @RequestParam(value = "peso", required = false) Float peso,
+                                       @RequestParam(value = "tipo", required = false) String tipo,
+                                       @RequestParam(value = "transfusion", required = false) String transfusion,
+                                       @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes,
                                        HttpServletRequest request) {
 
         modelo.clear();
+        if (transfusion == null || transfusion.isEmpty()){
+            modelo.put("errorTransfusion", "Es obligatorio ingresar si el animal recibió o no una transfusión");
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        }
         if (transfusion.equals("Si")) {
             modelo.put("errorTransfusion", "Un animal que ya recibió una transfusión no puede ser donante");
             return new ModelAndView("agregar-mascota-donante", modelo);
         }
 
-        if (imagenes.length == 0) {
+        if (imagenes == null || imagenes.length == 0) {
             modelo.put("errorImagenes", "Una mascota no se puede registrar sin imágenes de sus estudios");
             return new ModelAndView("agregar-mascota-donante", modelo);
         }
 
-        if (nombre.isEmpty()) {
+        if (nombre == null || nombre.isEmpty()) {
             modelo.put("errorNombre", "El nombre de la mascota es obligatorio");
             return new ModelAndView("agregar-mascota-donante", modelo);
         }
 
-        if (anios == 0) {
+        if (anios == null|| anios == 0 ) {
             modelo.put("errorEdad", "La edad de la mascota es obligatoria");
             return new ModelAndView("agregar-mascota-donante", modelo);
         }
 
-        if (peso == 0f) {
+        if (peso == null || peso == 0f) {
             modelo.put("errorPeso", "El peso de la mascota es obligatorio");
             return new ModelAndView("agregar-mascota-donante", modelo);
         }
+
+        if(tipo == null || tipo.isEmpty()){
+            modelo.put("errorTipo", "Es obligatorio ingresar el tipo de mascota");
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        }
+
+        if (tipo.equals("Canino") && (peso < 25f || anios <= 1 || anios >= 8)) {
+            modelo.put("errorPesoYEdad", "Para que un perro sea donante debe pesar más de 25 kilos y tener entre 1 y 8 años");
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        } else if (tipo.equals("Felino") && (peso < 3.5f || anios <= 1 || anios >= 8)) {
+            modelo.put("errorPesoYEdad", "Para que un gato sea donante debe pesar más de 3,5 kilos y tener entre 1 y 8 años");
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        }
+
         Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
 
         Mascota mascota = crearMascotaSegunTipo(tipo);
+        if (mascota == null) {
+            modelo.put("errorTipo", "El tipo de mascota no es válido");
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        }
 
         asignarAtributosComunes(mascota, nombre, anios, peso, tipo, duenoMascota);
         mascota.setDonante(true);
@@ -96,36 +118,45 @@ public class ControladorAgregarMascota {
     }
 
     @PostMapping("/agregar-receptora")
-    public ModelAndView agregarReceptora(@RequestParam("nombre") String nombre,
-                                         @RequestParam("anios") int anios,
-                                         @RequestParam("peso") float peso,
-                                         @RequestParam("tipo") String tipo,
-                                         @RequestParam("imagenes") MultipartFile[] imagenes,
+    public ModelAndView agregarReceptora(@RequestParam(value = "nombre", required = false) String nombre,
+                                         @RequestParam(value = "anios", required = false) Integer anios,
+                                         @RequestParam(value = "peso", required = false) Float peso,
+                                         @RequestParam(value = "tipo", required = false) String tipo,
+                                         @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes,
                                          HttpServletRequest request) {
         modelo.clear();
 
-        if (imagenes.length == 0){
+        if (imagenes == null || imagenes.length == 0) {
             modelo.put("errorImagenes", "Una mascota no se puede registrar sin imágenes de sus estudios");
-            return new ModelAndView("agregar-mascota-receptora", modelo);
+            return new ModelAndView("agregar-mascota-donante", modelo);
         }
 
-        if (nombre.isEmpty()){
+        if (nombre == null || nombre.isEmpty()) {
             modelo.put("errorNombre", "El nombre de la mascota es obligatorio");
-            return new ModelAndView("agregar-mascota-receptora", modelo);
+            return new ModelAndView("agregar-mascota-donante", modelo);
         }
 
-        if (anios == 0){
+        if (anios == null|| anios == 0 ) {
             modelo.put("errorEdad", "La edad de la mascota es obligatoria");
-            return new ModelAndView("agregar-mascota-receptora", modelo);
+            return new ModelAndView("agregar-mascota-donante", modelo);
         }
 
-        if (peso == 0f){
+        if (peso == null || peso == 0f) {
             modelo.put("errorPeso", "El peso de la mascota es obligatorio");
-            return new ModelAndView("agregar-mascota-receptora", modelo);
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        }
+
+        if(tipo == null || tipo.isEmpty()){
+            modelo.put("errorTipo", "Es obligatorio ingresar el tipo de mascota");
+            return new ModelAndView("agregar-mascota-donante", modelo);
         }
         Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
 
         Mascota mascota = crearMascotaSegunTipo(tipo);
+        if (mascota == null) {
+            modelo.put("errorTipo", "El tipo de mascota no es válido");
+            return new ModelAndView("agregar-mascota-donante", modelo);
+        }
 
         asignarAtributosComunes(mascota, nombre, anios, peso, tipo, duenoMascota);
         mascota.setReceptor(true);

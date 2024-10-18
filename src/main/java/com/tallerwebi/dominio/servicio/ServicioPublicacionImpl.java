@@ -59,4 +59,15 @@ public class ServicioPublicacionImpl implements ServicioPublicacion {
         return publicacionBuscada;
     }
 
+    @Override
+    public void desactivarPublicacion(Long publicacionId) {
+        repositorioPublicacion.desactivarPublicacion(publicacionId);
+    }
+
+    @Override
+    public void activarPublicacion(Long publicacionId) {
+        repositorioPublicacion.activarPublicacion(publicacionId);
+
+    }
+
 }

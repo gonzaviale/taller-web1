@@ -36,6 +36,8 @@ public class ControladorSolicitudAUnaPublicacion {
         solicitud.setAprobada(false);
 
         servicioSolicitud.guardarSolicitud(solicitud);
+
+        servicioPublicacion.desactivarPublicacion(publicacionId);
         modelo.put("solicitudPubliExitosa", "Tu solicitud ya fue enviada");
         return new ModelAndView("redirect:/home", modelo);
     }
