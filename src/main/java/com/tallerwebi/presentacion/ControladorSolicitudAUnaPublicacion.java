@@ -39,6 +39,6 @@ public class ControladorSolicitudAUnaPublicacion {
 
         servicioPublicacion.desactivarPublicacion(publicacionId);
         modelo.put("solicitudPubliExitosa", "Tu solicitud ya fue enviada");
-        return new ModelAndView("redirect:/home", modelo);
+        return new ModelAndView("home", modelo);
     }
 }

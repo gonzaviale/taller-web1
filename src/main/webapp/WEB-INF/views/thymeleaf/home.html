@@ -64,7 +64,6 @@
     <div th:if="${rol == 'dueño mascota'}" class="d-grid gap-2 mb-4">
       <a href="/spring/agregar-mascota-donante" class="btn btn-success btn-lg w-100">Agregar Mascota Donante</a>
       <a href="/spring/agregar-mascota-receptora" class="btn btn-success btn-lg w-100">Agregar Mascota Receptora</a>
-      <a href="/spring/ver-mis-mascotas" class="btn btn-success btn-lg w-100">Ver Mis Mascotas</a>
     </div>
 
     <div th:if="${rol == 'veterinario'}" class="d-grid gap-2">
@@ -81,6 +80,10 @@
 
 <div th:if="${mensajeUsuarioBanco != null and mensajeUsuarioBanco != ''}" class="alert alert-success text-center mx-auto col-md-6">
   <p th:text="${mensajeUsuarioBanco}"></p>
+</div>
+
+<div th:if="${solicitudPubliExitosa != null and solicitudPubliExitosa != ''}" class="alert alert-success text-center mx-auto col-md-6">
+  <p th:text="${solicitudPubliExitosa}"></p>
 </div>
 
 <div th:if="${errorAlEnviarMensaje != null and errorAlEnviarMensaje != ''}" class="alert alert-danger text-center mx-auto col-md-6">

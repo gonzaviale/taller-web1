@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioPerfil;
+import com.tallerwebi.dominio.servicio.ServicioSolicitudAUnaPublicacionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,10 +20,12 @@ import java.util.List;
 public class ControladorPerfil {
 
     private final ServicioPerfil servicioPerfil;
+    private final ServicioSolicitudAUnaPublicacionImpl solicitudAUnaPublicacion;
 
     @Autowired
-    public ControladorPerfil(ServicioPerfil servicioPerfil) {
+    public ControladorPerfil(ServicioPerfil servicioPerfil, ServicioSolicitudAUnaPublicacionImpl solicitudAUnaPublicacion) {
         this.servicioPerfil = servicioPerfil;
+        this.solicitudAUnaPublicacion = solicitudAUnaPublicacion;
     }
 
     @RequestMapping("/miPerfil")

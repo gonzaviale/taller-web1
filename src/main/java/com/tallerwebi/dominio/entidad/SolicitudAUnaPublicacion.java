@@ -8,6 +8,8 @@ public class SolicitudAUnaPublicacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Boolean aprobada;
+    private Boolean pendiente;
+    private Boolean rechazada;
 
     @ManyToOne
     private Mascota mascotaDonante;
@@ -45,5 +47,21 @@ public class SolicitudAUnaPublicacion {
 
     public void setAprobada(Boolean aprobada) {
         this.aprobada = aprobada;
+    }
+
+    public Boolean getPendiente() {
+        return pendiente;
+    }
+
+    public void setPendiente(Boolean pendiente) {
+        this.pendiente = pendiente;
+    }
+
+    public Boolean getRechazada() {
+        return rechazada;
+    }
+
+    public void setRechazada(Boolean rechazada) {
+        this.rechazada = rechazada;
     }
 }
