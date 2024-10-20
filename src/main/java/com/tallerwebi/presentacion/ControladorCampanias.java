@@ -4,6 +4,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.servicio.ServicioBanco;
+import com.tallerwebi.dominio.servicio.ServicioCampania;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -20,10 +21,12 @@ import java.util.List;
 @Controller
 public class ControladorCampanias {
 
+    private final ServicioCampania servicioCampania;
     private final ServicioBanco servicioBanco;
 
     @Autowired
-    public ControladorCampanias(ServicioBanco servicioBanco) {
+    public ControladorCampanias(ServicioCampania servicioCampania ,ServicioBanco servicioBanco) {
+        this.servicioCampania = servicioCampania;
         this.servicioBanco = servicioBanco;
     }
 
@@ -65,7 +68,7 @@ public class ControladorCampanias {
         nuevaCampana.setDescripcion(descripcion);
         nuevaCampana.setBanco(banco);
         banco.agregarCampania(nuevaCampana);
-        servicioBanco.guardarCampania(nuevaCampana,banco);
+        servicioCampania.guardarCampania(nuevaCampana,banco);
 
         redirectAttributes.addFlashAttribute("success", "Campaña creada con éxito");
         return "redirect:/bancoHome";
@@ -81,7 +84,7 @@ public class ControladorCampanias {
         Banco banco = servicioBanco.BuscarBancoId(idBanco);
 
         ModelMap modelo = new ModelMap();
-        List<Campana> campanias = servicioBanco.obtenerCampaniasPorBanco(idBanco);
+        List<Campana> campanias = servicioCampania.obtenerCampaniasPorBanco(idBanco);
         modelo.put("campanias", campanias);
 
         return new ModelAndView("bancoMisCampanias", modelo);
