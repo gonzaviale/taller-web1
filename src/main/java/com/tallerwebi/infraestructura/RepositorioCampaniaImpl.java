@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioCampania;
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Campana;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,6 +24,48 @@ public class RepositorioCampaniaImpl implements RepositorioCampania {
         this.sessionFactory = sessionFactory;
     }
 
+
+    @Override
+    public void actualizarBanco(Banco banco){
+        sessionFactory.getCurrentSession().update(banco);
+    }
+
+    @Override
+    public void guardarCampania(Campana campana, Banco banco) {
+        this.actualizarBanco(banco);
+        sessionFactory.getCurrentSession().save(campana);
+
+    }
+
+    @Override
+    public Campana buscarCampaniaPorId(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Campana> query = builder.createQuery(Campana.class);
+        Root<Campana> root = query.from(Campana.class);
+
+        query.select(root)
+                .where(builder.equal(root.get("id"), id));
+        return session.createQuery(query).uniqueResult();
+    }
+
+    @Override
+    public List<Campana> buscarCampaniasPorBanco(Long idBanco) {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Campana> query = builder.createQuery(Campana.class);
+        Root<Campana> root = query.from(Campana.class);
+
+
+        query.select(root)
+                .where(builder.equal(root.get("banco"), idBanco));
+
+
+        return session.createQuery(query).getResultList();
+    }
+
+
+
     @Override
     public List<Campana> obtenerCampanasActualesYproximas(LocalDate fechaActual) {
 
@@ -38,4 +81,7 @@ public class RepositorioCampaniaImpl implements RepositorioCampania {
 
         return session.createQuery(query).getResultList();
     }
+
+
+
 }

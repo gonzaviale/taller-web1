@@ -147,18 +147,5 @@ public class ServicioBancoTest {
     }
 
 
-    @Rollback
-    @Transactional
-    @Test
-    public void guardarCampaniaDeberiaGuardarCampania() {
-        Banco bancoMock = mock(Banco.class);
-        Campana campanaMock = mock(Campana.class);
-
-
-        servicioBanco.guardarCampania(campanaMock, bancoMock);
-
-        // Assert
-        verify(repositorioBancoMock).guardarCampania(campanaMock, bancoMock);
-    }
 
 }

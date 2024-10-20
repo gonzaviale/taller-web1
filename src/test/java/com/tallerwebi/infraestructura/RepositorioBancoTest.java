@@ -542,21 +542,4 @@ public class RepositorioBancoTest {
         ));
     }
 
-    @Test
-    @Transactional
-    @Rollback
-    public void testGuardarCampania() {
-
-        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
-                "123456789", "test@example.com", "testpassword", "Horario Test");
-        Banco bancoGuardado = repositorioBanco.guardar(banco);
-        Campana campana = new Campana();
-        campana.setBanco(bancoGuardado);
-        repositorioBanco.guardarCampania(campana, bancoGuardado);
-        Campana campanaGuardada = repositorioBanco.buscarCampaniaPorId(campana.getId());
-
-        assertThat(campanaGuardada, notNullValue());
-        assertThat(campanaGuardada.getId(), is(campana.getId()));
-
-    }
 }

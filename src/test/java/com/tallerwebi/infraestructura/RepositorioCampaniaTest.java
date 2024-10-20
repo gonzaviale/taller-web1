@@ -30,7 +30,7 @@ public class RepositorioCampaniaTest {
     @Autowired
     SessionFactory sessionFactory;
     @Autowired
-    RepositorioCampania repositorioHome;
+    RepositorioCampania repositorioCampania;
 
     @Autowired
     RepositorioBanco repositorioBanco;
@@ -50,10 +50,10 @@ public class RepositorioCampaniaTest {
         banco.agregarCampania(campanaActual);
         banco.agregarCampania(campanaFutura);
 
-        repositorioBanco.guardarCampania(campanaActual,banco);
-        repositorioBanco.guardarCampania(campanaFutura,banco);
+        repositorioCampania.guardarCampania(campanaActual,banco);
+        repositorioCampania.guardarCampania(campanaFutura,banco);
 
-        List<Campana> campañas = repositorioHome.obtenerCampanasActualesYproximas(LocalDate.now());
+        List<Campana> campañas = repositorioCampania.obtenerCampanasActualesYproximas(LocalDate.now());
 
 
         assertThat(campañas, hasSize(2));
@@ -77,17 +77,35 @@ public class RepositorioCampaniaTest {
         banco.agregarCampania(campanaFutura);
         banco.agregarCampania( campanaPasada);
 
-        repositorioBanco.guardarCampania(campanaActual,banco);
-        repositorioBanco.guardarCampania(campanaFutura,banco);
-        repositorioBanco.guardarCampania(campanaPasada,banco);
+        repositorioCampania.guardarCampania(campanaActual,banco);
+        repositorioCampania.guardarCampania(campanaFutura,banco);
+        repositorioCampania.guardarCampania(campanaPasada,banco);
 
-        List<Campana> campañas = repositorioHome.obtenerCampanasActualesYproximas(LocalDate.now());
+        List<Campana> campañas = repositorioCampania.obtenerCampanasActualesYproximas(LocalDate.now());
 
         assertThat(campañas, hasSize(2));
         assertThat(campañas, containsInAnyOrder(campanaActual, campanaFutura));
         assertThat(campañas, not(hasItem(campanaPasada)));
     }
 
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testGuardarCampania() {
+
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+        Banco bancoGuardado = repositorioBanco.guardar(banco);
+        Campana campana = new Campana();
+        campana.setBanco(bancoGuardado);
+        repositorioCampania.guardarCampania(campana, bancoGuardado);
+        Campana campanaGuardada = repositorioCampania.buscarCampaniaPorId(campana.getId());
+
+        assertThat(campanaGuardada, notNullValue());
+        assertThat(campanaGuardada.getId(), is(campana.getId()));
+
+    }
 
 
 }
