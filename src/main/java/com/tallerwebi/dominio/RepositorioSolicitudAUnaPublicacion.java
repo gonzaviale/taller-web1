@@ -9,5 +9,9 @@ public interface RepositorioSolicitudAUnaPublicacion {
     public void guardarSolicitud(SolicitudAUnaPublicacion solicitud);
 
     List<SolicitudAUnaPublicacion> solicitudesPendientes();
+
+    void aceptarSolicitud(Long solictud);
+
+    void rechzarSolicitud(Long solicitud);
 }
 

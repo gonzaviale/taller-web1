@@ -1,7 +1,6 @@
 package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.RepositorioSolicitudAUnaPublicacion;
-import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Service("ServicioSolicitudAUnaPublicacion")
 @Transactional
 public class ServicioSolicitudAUnaPublicacionImpl implements ServicioSolicitudAUnaPublicacion {
     final private RepositorioSolicitudAUnaPublicacion repositorioSolicitud;
@@ -27,13 +26,23 @@ public class ServicioSolicitudAUnaPublicacionImpl implements ServicioSolicitudAU
     }
 
     @Override
-    public List<SolicitudAUnaPublicacion> traerSolicitudesPendientesDelUsuario(Mascota mascotaDonante, Usuario dueno) {
+    public List<SolicitudAUnaPublicacion> traerSolicitudesPendientesDelUsuario(Usuario dueno) {
         List<SolicitudAUnaPublicacion> solicitudes = repositorioSolicitud.solicitudesPendientes();
 
         List<SolicitudAUnaPublicacion> solicitudesPorUsuario = solicitudes.stream()
-                .filter(solicitud -> solicitud.getMascotaDonante().getDuenio().equals(dueno))
+                .filter(solicitud -> solicitud.getMascotaDonante().getDuenio().getId() == dueno.getId())
                 .collect(Collectors.toList());
 
         return solicitudesPorUsuario;
+    }
+
+    @Override
+    public void aceptarSolicitud(Long solicitud) {
+        repositorioSolicitud.aceptarSolicitud(solicitud);
+    }
+
+    @Override
+    public void rechazarSolicitud(Long solictud) {
+        repositorioSolicitud.rechzarSolicitud(solictud);
     }
 }

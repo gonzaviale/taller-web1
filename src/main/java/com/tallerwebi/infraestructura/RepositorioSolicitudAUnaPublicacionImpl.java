@@ -35,4 +35,26 @@ public class RepositorioSolicitudAUnaPublicacionImpl implements RepositorioSolic
                 .list();
         return solicitudes;
     }
+
+    @Override
+    public void aceptarSolicitud(Long solictud) {
+        SolicitudAUnaPublicacion solicitudAUnaPublicacion = (SolicitudAUnaPublicacion) sessionFactory.getCurrentSession()
+                .createCriteria(SolicitudAUnaPublicacion.class)
+                .add(Restrictions.eq("id", solictud))
+                .uniqueResult();
+        solicitudAUnaPublicacion.setPendiente(false);
+        solicitudAUnaPublicacion.setAprobada(true);
+        sessionFactory.getCurrentSession().saveOrUpdate(solicitudAUnaPublicacion);
+    }
+
+    @Override
+    public void rechzarSolicitud(Long solicitud) {
+        SolicitudAUnaPublicacion solicitudAUnaPublicacion = (SolicitudAUnaPublicacion) sessionFactory.getCurrentSession()
+                .createCriteria(SolicitudAUnaPublicacion.class)
+                .add(Restrictions.eq("id", solicitud))
+                .uniqueResult();
+        solicitudAUnaPublicacion.setPendiente(false);
+        solicitudAUnaPublicacion.setRechazada(true);
+        sessionFactory.getCurrentSession().saveOrUpdate(solicitudAUnaPublicacion);
+    }
 }

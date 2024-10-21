@@ -24,8 +24,24 @@
 
 </section>
 
-<section th:each="entry : ${solicitudes}">
-    
+<section th:if="${solicitudesRecibidas}">
+    <article th:each="solicitud : ${solicitudesRecibidas}">
+        <span th:text="'Recibiste una solicitud para que ' + ${solicitud.getMascotaDonante().getNombre()} + ' le done sangre a ' + ${solicitud.getMascotaReceptora().getNombre()} + ' (' + ${solicitud.getMascotaReceptora().getDuenio().getNombre()} + ' ' + ${solicitud.getMascotaReceptora().getDuenio().getApellido()} + ')'"></span>
+        <span>¿Qué querés hacer?</span>
+        <div class="d-flex justify-content-between mt-3">
+            <!-- Formulario de Aprobación -->
+            <form th:action="@{/aceptar-solicitud-publicacion}" method="POST" class="d-inline-block">
+                <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
+                <button type="submit" class="btn btn-success">Aceptar</button>
+            </form>
+
+            <!-- Formulario de Rechazo -->
+            <form th:action="@{/rechazar-solicitud-publicacion}" method="POST" class="d-inline-block">
+                <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
+                <button type="submit" class="btn btn-danger">Rechazar</button>
+            </form>
+        </div>
+    </article>
 </section>
 
 <section class="container mb-4" th:if="${listaMascotas}">

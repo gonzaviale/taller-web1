@@ -2,9 +2,10 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioPerfil;
-import com.tallerwebi.dominio.servicio.ServicioSolicitudAUnaPublicacionImpl;
+import com.tallerwebi.dominio.servicio.ServicioSolicitudAUnaPublicacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,12 +21,12 @@ import java.util.List;
 public class ControladorPerfil {
 
     private final ServicioPerfil servicioPerfil;
-    private final ServicioSolicitudAUnaPublicacionImpl solicitudAUnaPublicacion;
+    private final ServicioSolicitudAUnaPublicacion servicioSolicitudAUnaPublicacion;
 
     @Autowired
-    public ControladorPerfil(ServicioPerfil servicioPerfil, ServicioSolicitudAUnaPublicacionImpl solicitudAUnaPublicacion) {
+    public ControladorPerfil(ServicioPerfil servicioPerfil, ServicioSolicitudAUnaPublicacion servicioSolicitudAUnaPublicacion) {
         this.servicioPerfil = servicioPerfil;
-        this.solicitudAUnaPublicacion = solicitudAUnaPublicacion;
+        this.servicioSolicitudAUnaPublicacion = servicioSolicitudAUnaPublicacion;
     }
 
     @RequestMapping("/miPerfil")
@@ -47,6 +48,9 @@ public class ControladorPerfil {
             model.addAttribute("mensaje",mensaje);
 
             aniadirListado(usuarioBuscado, model,listar);
+
+            List<SolicitudAUnaPublicacion> solicitudesRecibidas = servicioSolicitudAUnaPublicacion.traerSolicitudesPendientesDelUsuario(usuarioBuscado);
+            model.addAttribute("solicitudesRecibidas", solicitudesRecibidas);
 
             return new ModelAndView("perfil", model);
         }

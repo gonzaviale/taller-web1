@@ -34,11 +34,26 @@ public class ControladorSolicitudAUnaPublicacion {
         solicitud.setMascotaDonante(servicioMascota.buscarMascotaPorId(mascotaDonanteId));
         solicitud.setMascotaReceptora(servicioMascota.buscarMascotaPorId(mascotaReceptoraId));
         solicitud.setAprobada(false);
+        solicitud.setPendiente(true);
 
         servicioSolicitud.guardarSolicitud(solicitud);
 
         servicioPublicacion.desactivarPublicacion(publicacionId);
         modelo.put("solicitudPubliExitosa", "Tu solicitud ya fue enviada");
-        return new ModelAndView("home", modelo);
+        return new ModelAndView("redirect:/home", modelo);
+    }
+
+    @RequestMapping(path = "/aceptar-solicitud-publicacion", method = RequestMethod.POST)
+    public ModelAndView aceptarSolicitud(@RequestParam("solicitudId") Long solicitud){
+        servicioSolicitud.aceptarSolicitud(solicitud);
+
+        return new ModelAndView("redirect:/miPerfil");
+    }
+
+    @RequestMapping(path = "/rechazar-solicitud-publicacion", method = RequestMethod.POST)
+    public ModelAndView rechazarSolicitud(@RequestParam("solicitudId") Long solicitud){
+        servicioSolicitud.rechazarSolicitud(solicitud);
+
+        return new ModelAndView("redirect:/miPerfil");
     }
 }
