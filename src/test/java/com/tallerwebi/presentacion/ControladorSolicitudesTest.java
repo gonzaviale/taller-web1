@@ -42,6 +42,21 @@ public class ControladorSolicitudesTest {
     }
 
     @Test
+    public void deberiaMostrarPeticionesSinSolicitudes() {
+        Long idBanco = 1L;
+        when(sessionMock.getAttribute("idBanco")).thenReturn(idBanco);
+
+        List<Solicitud> solicitudesVacias = new ArrayList<>();
+        when(servicioSolicitudesMock.obtenerSolicitudesXBanco(idBanco)).thenReturn(solicitudesVacias);
+
+        ModelAndView modelAndView = controladorSolicitudes.BancoVerPeticiones(sessionMock);
+
+        assertEquals(solicitudesVacias, modelAndView.getModel().get("solicitudes"));
+        assertNotNull(modelAndView.getModel().get("datosBanco"));
+    }
+
+
+    @Test
     public void deberiaMostrarSolicitudConPaquetesCompatibles() {
         Long idBanco = 1L;
         int solicitudId = 1;
