@@ -63,62 +63,6 @@ public class ControladorBanco {
         return new ModelAndView("bancoVerStock", modelo);
     }
 
-    @RequestMapping("/verPeticiones")
-    public ModelAndView BancoVerPeticiones(HttpSession session) {
-        if (!verificarSesion(session)) {
-            return new ModelAndView("redirect:/login");
-        }
-        Long idBanco = (Long) session.getAttribute("idBanco");
-
-        ModelMap modelo = new ModelMap();
-
-        List<Solicitud> solicitudes = servicioBanco.obtenerSolicitudesXBanco(idBanco);
-        modelo.addAttribute("solicitudes", solicitudes);
-        modelo.put("datosBanco", new Banco());
-        return new ModelAndView("bancoVerPeticiones", modelo);
-    }
-
-    @RequestMapping("/revisarSolicitud")
-    public ModelAndView BancoVerPeticion(@RequestParam("solicitudId") int solicitudId, HttpSession session) {
-        if (!verificarSesion(session)) {
-            return new ModelAndView("redirect:/login");
-        }
-        Long idBanco = (Long) session.getAttribute("idBanco");
-        ModelMap modelo = new ModelMap();
-        Solicitud solicitud = servicioBanco.buscarSolicitud(solicitudId);
-        List<PaqueteDeSangre> paquetes = servicioBanco.obtenerPaquetesDeSangreCompatibles(solicitud);
-
-        modelo.addAttribute("solicitud", solicitud);
-        modelo.addAttribute("paquetes", paquetes);
-        modelo.put("datosBanco", new Banco());
-        return new ModelAndView("bancoVerSolicitud", modelo);
-    }
-
-
-    @RequestMapping(value = "/rechazarSolicitud", method = RequestMethod.POST)
-    public String rechazarSolicitud(@RequestParam("solicitudId") int solicitudId, HttpSession session) {
-        if (!verificarSesion(session)) {
-            return "redirect:/login";
-        }
-
-        servicioBanco.rechazarSolicitud(solicitudId);
-
-        return "redirect:/verPeticiones";
-
-    }
-
-    @RequestMapping(value = "/asignarPaquete", method = RequestMethod.POST)
-    public String asignarPaquete(@RequestParam("solicitudId") int solicitudId,
-                                 @RequestParam("paqueteId") int paqueteId,
-                                 HttpSession session) {
-        if (!verificarSesion(session)) {
-            return "redirect:/login";
-        }
-        servicioBanco.asignarPaqueteASolicitud(solicitudId, paqueteId);
-
-        return "redirect:/verPeticiones";
-    }
-
 
     @RequestMapping("/agregarPaquete")
     public String agregarPaqueteDeSangre(HttpSession session,
@@ -159,10 +103,6 @@ public class ControladorBanco {
         Solicitud solicitud2 = new Solicitud(banco.getId(), 2L, "Globulos rojos empaquetados", "DEA 1.1-", 200);
         Solicitud solicitud3 = new Solicitud(banco.getId(), 3L, "Sangre total", "DEA 1.2+", 500);
         Solicitud solicitud4 = new Solicitud(banco.getId(), 4L, "Plaquetas", "DEA 4-", 400);
-        servicioBanco.agregarSolicitud(solicitud1);
-        servicioBanco.agregarSolicitud(solicitud2);
-        servicioBanco.agregarSolicitud(solicitud3);
-        servicioBanco.agregarSolicitud(solicitud4);
         return "redirect:/bancoHome";
     }
 
