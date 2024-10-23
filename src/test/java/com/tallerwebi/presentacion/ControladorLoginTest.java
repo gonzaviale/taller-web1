@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.servicio.ServicioLogin;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
@@ -70,6 +71,26 @@ public class ControladorLoginTest {
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/home"));
 		verify(sessionMock, times(1)).setAttribute("ROL", usuarioEncontradoMock.getRol());
 	}
+
+	@Test
+	public void loginConBancoYPasswordCorrectosDeberiaLlevarABancoHome() {
+		// preparación
+		Banco bancoEncontradoMock = mock(Banco.class);
+		when(requestMock.getSession()).thenReturn(sessionMock);
+
+		when(requestMock.getSession()).thenReturn(sessionMock);
+		when(servicioLoginMock.ConsultarBanco(anyString(), anyString())).thenReturn(bancoEncontradoMock);
+
+		// ejecución
+		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
+
+		// validación
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/bancohome"));
+		verify(sessionMock, times(1)).setAttribute(eq("ROL"), eq("banco"));
+	}
+
+
+
 
 	@Test
 	public void registrameSiUsuarioNoExisteDeberiaCrearUsuarioYVolverAlLogin() throws UsuarioExistente {
