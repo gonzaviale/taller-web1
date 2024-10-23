@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.RepositorioUsuario;
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,10 @@ public class ServicioLoginImpl implements ServicioLogin {
             throw new UsuarioExistente();
         }
         repositorioUsuario.guardar(usuario);
+    }
+
+    @Override
+    public Banco ConsultarBanco(String email, String password) {
+        return repositorioUsuario.buscarBanco(email, password);
     }
 }
