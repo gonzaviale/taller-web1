@@ -47,10 +47,16 @@ public class ControladorPerfil {
             model.addAttribute("usuarioBuscado", usuarioBuscado);
             model.addAttribute("mensaje",mensaje);
 
-            aniadirListado(usuarioBuscado, model,listar);
-
             List<SolicitudAUnaPublicacion> solicitudesRecibidas = servicioSolicitudAUnaPublicacion.traerSolicitudesPendientesDelUsuario(usuarioBuscado);
             model.addAttribute("solicitudesRecibidas", solicitudesRecibidas);
+
+            List<SolicitudAUnaPublicacion> solicitudesAceptadas = servicioSolicitudAUnaPublicacion.traerSolicitudesAceptadasDelUsuario(usuarioBuscado);
+            model.addAttribute("solicitudesAceptadas", solicitudesAceptadas);
+
+            List<SolicitudAUnaPublicacion> solicitudesRechazadas = servicioSolicitudAUnaPublicacion.traerSolicitudesRechazadasDelUsuario(usuarioBuscado);
+            model.addAttribute("solicitudesRechazadas", solicitudesRechazadas);
+
+            aniadirListado(usuarioBuscado, model,listar);
 
             return new ModelAndView("perfil", model);
         }

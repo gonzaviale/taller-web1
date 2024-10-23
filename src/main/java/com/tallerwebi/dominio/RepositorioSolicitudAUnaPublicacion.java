@@ -8,10 +8,12 @@ import java.util.List;
 public interface RepositorioSolicitudAUnaPublicacion {
     public void guardarSolicitud(SolicitudAUnaPublicacion solicitud);
 
-    List<SolicitudAUnaPublicacion> solicitudesPendientes();
-
     void aceptarSolicitud(Long solictud);
 
     void rechzarSolicitud(Long solicitud);
+
+    List<SolicitudAUnaPublicacion> traerTodasLasSolicitudes();
+
+    SolicitudAUnaPublicacion traerSolicitudPorId(Long solicitudId);
 }
 

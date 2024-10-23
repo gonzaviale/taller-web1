@@ -27,13 +27,21 @@ public class RepositorioSolicitudAUnaPublicacionImpl implements RepositorioSolic
     }
 
     @Override
-    public List<SolicitudAUnaPublicacion> solicitudesPendientes() {
+    public List<SolicitudAUnaPublicacion> traerTodasLasSolicitudes() {
         List<SolicitudAUnaPublicacion> solicitudes;
         solicitudes = sessionFactory.getCurrentSession()
                 .createCriteria(SolicitudAUnaPublicacion.class)
-                .add(Restrictions.eq("pendiente", true))
                 .list();
         return solicitudes;
+    }
+
+    @Override
+    public SolicitudAUnaPublicacion traerSolicitudPorId(Long solicitudId) {
+        SolicitudAUnaPublicacion solicitudAUnaPublicacion = (SolicitudAUnaPublicacion) sessionFactory.getCurrentSession()
+                .createCriteria(SolicitudAUnaPublicacion.class)
+                .add(Restrictions.eq("id", solicitudId))
+                .uniqueResult();
+        return solicitudAUnaPublicacion;
     }
 
     @Override

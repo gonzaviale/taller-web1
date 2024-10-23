@@ -17,6 +17,9 @@ public class SolicitudAUnaPublicacion {
     @ManyToOne
     private Mascota mascotaReceptora;
 
+    @ManyToOne
+    private Publicacion publicacion;
+
     public Mascota getMascotaReceptora() {
         return mascotaReceptora;
     }
@@ -63,5 +66,13 @@ public class SolicitudAUnaPublicacion {
 
     public void setRechazada(Boolean rechazada) {
         this.rechazada = rechazada;
+    }
+
+    public Publicacion getPublicacion() {
+        return publicacion;
+    }
+
+    public void setPublicacion(Publicacion publicacion) {
+        this.publicacion = publicacion;
     }
 }

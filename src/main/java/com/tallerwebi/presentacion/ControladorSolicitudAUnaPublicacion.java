@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
+import com.tallerwebi.dominio.excepcion.PublicacionNoExistente;
 import com.tallerwebi.dominio.servicio.ServicioMascota;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
 import com.tallerwebi.dominio.servicio.ServicioSolicitudAUnaPublicacion;
@@ -29,12 +30,15 @@ public class ControladorSolicitudAUnaPublicacion {
     @RequestMapping(path = "/realizar-solicitud", method = RequestMethod.POST)
     public ModelAndView realizarSolicitud(@RequestParam("mascotaDonante") Long mascotaDonanteId,
                                           @RequestParam("mascotaReceptora") Long mascotaReceptoraId,
-                                          @RequestParam("publicacion") Long publicacionId) {
+                                          @RequestParam("publicacion") Long publicacionId) throws PublicacionNoExistente {
+
         SolicitudAUnaPublicacion solicitud = new SolicitudAUnaPublicacion();
         solicitud.setMascotaDonante(servicioMascota.buscarMascotaPorId(mascotaDonanteId));
         solicitud.setMascotaReceptora(servicioMascota.buscarMascotaPorId(mascotaReceptoraId));
+        solicitud.setPublicacion(servicioPublicacion.busquedaPorId(publicacionId));
         solicitud.setAprobada(false);
         solicitud.setPendiente(true);
+        solicitud.setRechazada(true);
 
         servicioSolicitud.guardarSolicitud(solicitud);
 
@@ -53,7 +57,7 @@ public class ControladorSolicitudAUnaPublicacion {
     @RequestMapping(path = "/rechazar-solicitud-publicacion", method = RequestMethod.POST)
     public ModelAndView rechazarSolicitud(@RequestParam("solicitudId") Long solicitud){
         servicioSolicitud.rechazarSolicitud(solicitud);
-
+        servicioPublicacion.activarPublicacion(servicioSolicitud.traerSolicitudPorId(solicitud).getPublicacion().getId());
         return new ModelAndView("redirect:/miPerfil");
     }
 }

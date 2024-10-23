@@ -22,26 +22,82 @@
 
     <article th:replace="fragments/perfil"></article>
 
+</section>section th:if="${solicitudesRecibidas}">
+<div class="container">
+    <div class="row">
+    <<article th:each="solicitud : ${solicitudesRecibidas}" class="col-12 mb-3">
+                <div class="card" style="background-color: #d4edda;">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <span th:text="'Recibiste una solicitud para que '"></span>
+                            <strong th:text="${solicitud.getMascotaDonante().getNombre()}"></strong>
+                            <span th:text="' le done sangre a '"></span>
+                            <strong th:text="${solicitud.getMascotaReceptora().getNombre()}"></strong>
+                            <span th:text="' ('"></span>
+                            <a href="#"
+                               th:text="${solicitud.getMascotaReceptora().getDuenio().getNombre() + ' ' + solicitud.getMascotaReceptora().getDuenio().getApellido()}"></a>
+                            <span th:text="')'"></span>
+                        </p>
+                        <div class="d-flex justify-content-between mt-3">
+                            <!-- Formulario de Aprobación -->
+                            <form th:action="@{/aceptar-solicitud-publicacion}" method="POST" class="d-inline-block">
+                                <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
+                                <button type="submit" class="btn btn-success">Aceptar</button>
+                            </form>
+
+                            <!-- Formulario de Rechazo -->
+                            <form th:action="@{/rechazar-solicitud-publicacion}" method="POST" class="d-inline-block">
+                                <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
+                                <button type="submit" class="btn btn-danger">Rechazar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
 </section>
 
-<section th:if="${solicitudesRecibidas}">
-    <article th:each="solicitud : ${solicitudesRecibidas}">
-        <span th:text="'Recibiste una solicitud para que ' + ${solicitud.getMascotaDonante().getNombre()} + ' le done sangre a ' + ${solicitud.getMascotaReceptora().getNombre()} + ' (' + ${solicitud.getMascotaReceptora().getDuenio().getNombre()} + ' ' + ${solicitud.getMascotaReceptora().getDuenio().getApellido()} + ')'"></span>
-        <span>¿Qué querés hacer?</span>
-        <div class="d-flex justify-content-between mt-3">
-            <!-- Formulario de Aprobación -->
-            <form th:action="@{/aceptar-solicitud-publicacion}" method="POST" class="d-inline-block">
-                <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
-                <button type="submit" class="btn btn-success">Aceptar</button>
-            </form>
-
-            <!-- Formulario de Rechazo -->
-            <form th:action="@{/rechazar-solicitud-publicacion}" method="POST" class="d-inline-block">
-                <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
-                <button type="submit" class="btn btn-danger">Rechazar</button>
-            </form>
+<section th:if="${solicitudesAceptadas}">
+    <div class="container">
+        <div class="row">
+            <article th:each="solicitud : ${solicitudesAceptadas}" class="col-12 mb-3">
+                <div class="card" style="background-color: #d4edda;">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <span th:text="'Nos alegra informarte que la solicitud que le hiciste a '"></span>
+                            <strong th:text="${solicitud.getMascotaDonante().getNombre()}"></strong>
+                            <span th:text="' ('"></span>
+                            <a href="#"
+                               th:text="${solicitud.getMascotaDonante().getDuenio().getNombre() + ' ' + solicitud.getMascotaDonante().getDuenio().getApellido()}"></a>
+                            <span th:text="') fue aceptada'"></span>
+                        </p>
+                    </div>
+                </div>
+            </article>
         </div>
-    </article>
+    </div>
+</section>
+
+<section th:if="${solicitudesRechazadas}">
+    <div class="container">
+        <div class="row">
+            <article th:each="solicitud : ${solicitudesRechazadas}" class="col-12 mb-3">
+                <div class="card" style="background-color: #f8d7da;">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <span th:text="'Lamentamos informarte que la solicitud que le hiciste a '"></span>
+                            <strong th:text="${solicitud.getMascotaDonante().getNombre()}"></strong>
+                            <span th:text="' ('"></span>
+                            <a href="#"
+                               th:text="${solicitud.getMascotaDonante().getDuenio().getNombre() + ' ' + solicitud.getMascotaDonante().getDuenio().getApellido()}"></a>
+                            <span th:text="') fue rechazada'"></span>
+                        </p>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
 </section>
 
 <section class="container mb-4" th:if="${listaMascotas}">
