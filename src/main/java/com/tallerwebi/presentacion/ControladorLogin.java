@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.DuenoMascota;
 import com.tallerwebi.dominio.entidad.Veterinario;
 import com.tallerwebi.dominio.servicio.ServicioLogin;
@@ -43,7 +44,15 @@ public class ControladorLogin {
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
             request.getSession().setAttribute("usuarioEnSesion", usuarioBuscado);
             return new ModelAndView("redirect:/home");
-        } else {
+        }
+       Banco banco = servicioLogin.ConsultarBanco(datosLogin.getEmail(), datosLogin.getPassword());
+
+        if(banco!= null) {
+            request.getSession().setAttribute("idBanco",banco.getId());
+            request.getSession().setAttribute("ROL","banco");
+            return new ModelAndView("redirect:/bancoHome");
+        }
+        else {
             modelo.put("error", "Usuario o clave incorrecta");
         }
         return new ModelAndView("login", modelo);

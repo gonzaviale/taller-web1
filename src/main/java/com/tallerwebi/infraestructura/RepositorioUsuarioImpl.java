@@ -1,10 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioUsuario;
-import com.tallerwebi.dominio.entidad.Mascota;
-import com.tallerwebi.dominio.entidad.Publicacion;
-import com.tallerwebi.dominio.entidad.Usuario;
-import com.tallerwebi.dominio.entidad.Veterinario;
+import com.tallerwebi.dominio.entidad.*;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,6 +30,9 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .add(Restrictions.eq("password", password))
                 .uniqueResult();
     }
+
+
+
 
     @Override
     public void guardar(Usuario usuario) {
@@ -111,6 +111,15 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         return sessionFactory.getCurrentSession().createCriteria(Publicacion.class,"publicacion")
                 .add(Restrictions.eq("publicacion.duenioPublicacion.id",id))
                 .list();
+    }
+
+    @Override
+    public Banco buscarBanco(String email, String password) {
+        final Session session = sessionFactory.getCurrentSession();
+        return (Banco) session.createCriteria(Banco.class)
+                .add(Restrictions.eq("email", email))
+                .add(Restrictions.eq("password", password))
+                .uniqueResult();
     }
 
 }
