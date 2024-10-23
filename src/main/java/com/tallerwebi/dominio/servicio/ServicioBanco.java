@@ -12,13 +12,6 @@ public interface ServicioBanco {
     void agregarBanco(Banco banco);
     Banco BuscarBancoId(Long idBanco);
     List<PaqueteDeSangre> obtenerPaquetesDeSangrePorBanco(Long idBanco);
-    List<Solicitud> obtenerSolicitudesXBanco(Long idBanco);
-    Solicitud agregarSolicitud(Solicitud solicitud1);
-    Solicitud buscarSolicitud(int id);
-    List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatibles(Solicitud solicitud);
-    void rechazarSolicitud(int solicitudId);
-    void asignarPaqueteASolicitud(int solicitudId, int paqueteId);
     PaqueteDeSangre BuscarPaqueteSangreXId(int paqueteId);
-    void guardarCampania(Campana campana, Banco banco);
-    List<Campana> obtenerCampaniasPorBanco(Long idBanco);
+
 }

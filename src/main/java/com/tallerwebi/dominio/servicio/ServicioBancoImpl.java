@@ -35,53 +35,9 @@ public class ServicioBancoImpl implements ServicioBanco {
     }
 
     @Override
-    public List<Solicitud> obtenerSolicitudesXBanco(Long idBanco) {
-        return repositorio.solicitudesPorBanco(idBanco);
-    }
-
-    @Override
-    public Solicitud agregarSolicitud(Solicitud solicitud1) {
-        return repositorio.guardarSolicitud(solicitud1);
-    }
-
-    @Override
-    public Solicitud buscarSolicitud(int id) {
-        return this.repositorio.buscarSolicitudPorId(id);
-    }
-
-    @Override
-    public List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatibles(Solicitud solicitud) {
-        return repositorio.obtenerPaquetesDeSangreCompatible(solicitud);
-    }
-
-    @Override
-    public void rechazarSolicitud(int solicitudId) {
-       this.repositorio.rechazarSolicitud( solicitudId);
-    }
-
-    @Override
-    public void asignarPaqueteASolicitud(int solicitudId, int paqueteId) {
-        //TODO
-       // Entrega entrega = new Entrega(solicitudId,paqueteId);
-       // this.guardarEntrega(entrega) ;
-        this.repositorio.solicitudAprobar(solicitudId);
-    }
-
-    @Override
     public PaqueteDeSangre BuscarPaqueteSangreXId(int paqueteId) {
+
         return this.repositorio.buscarSangreXId(paqueteId);
-    }
-
-
-
-    @Override
-    public void guardarCampania(Campana campana, Banco banco) {
-       this.repositorio.guardarCampania(campana,banco);
-    }
-
-    @Override
-    public List<Campana> obtenerCampaniasPorBanco(Long idBanco) {
-       return this.repositorio.buscarCampaniasPorBanco(idBanco);
     }
 
     @Override

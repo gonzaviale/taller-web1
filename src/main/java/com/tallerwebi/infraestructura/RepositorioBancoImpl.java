@@ -21,7 +21,7 @@ public class RepositorioBancoImpl implements RepositorioBanco {
 
     private final SessionFactory sessionFactory;
 
-    public RepositorioBancoImpl(org.hibernate.SessionFactory sessionFactory) {
+    public RepositorioBancoImpl(SessionFactory sessionFactory) {
 
         this.sessionFactory = sessionFactory;
     }
@@ -62,39 +62,6 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         sessionFactory.getCurrentSession().update(banco);
     }
 
-    @Override
-    public void guardarCampania(Campana campana, Banco banco) {
-        this.actualizarBanco(banco);
-        sessionFactory.getCurrentSession().save(campana);
-
-    }
-
-    @Override
-    public Campana buscarCampaniaPorId(Long id) {
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Campana> query = builder.createQuery(Campana.class);
-        Root<Campana> root = query.from(Campana.class);
-
-        query.select(root)
-                .where(builder.equal(root.get("id"), id));
-        return session.createQuery(query).uniqueResult();
-    }
-
-    @Override
-    public List<Campana> buscarCampaniasPorBanco(Long idBanco) {
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Campana> query = builder.createQuery(Campana.class);
-        Root<Campana> root = query.from(Campana.class);
-
-
-        query.select(root)
-                .where(builder.equal(root.get("banco"), idBanco));
-
-
-        return session.createQuery(query).getResultList();
-    }
 
     @Override
     public Banco buscarBanco(String email, String password) {
@@ -141,58 +108,6 @@ public class RepositorioBancoImpl implements RepositorioBanco {
     }
 
     @Override
-    public List<Solicitud> solicitudesPorBanco(Long idBanco) {
-        final Session session = sessionFactory.getCurrentSession();
-        return session.createCriteria(Solicitud.class)
-                .add(Restrictions.eq("bancoId", idBanco))
-                .list();
-    }
-
-    @Override
-    public Solicitud guardarSolicitud(Solicitud solicitud1) {
-        sessionFactory.getCurrentSession().save(solicitud1);
-        return solicitud1;
-    }
-
-    @Override
-    public Solicitud buscarSolicitudPorId(int id) {
-        return (Solicitud) sessionFactory.getCurrentSession()
-                .createCriteria(Solicitud.class)
-                .add(Restrictions.eq("id", id)).uniqueResult();
-    }
-
-    @Override
-    public List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatible(Solicitud solicitud) {
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<PaqueteDeSangre> cq = cb.createQuery(PaqueteDeSangre.class);
-        Root<PaqueteDeSangre> root = cq.from(PaqueteDeSangre.class);
-
-        Predicate tipoProductoPredicate = cb.equal(root.get("tipoProducto"), solicitud.getTipoProducto());
-        Predicate tipoSangrePredicate = cb.equal(root.get("tipoSangre"), solicitud.getTipoSangre());
-        Predicate cantidadPredicate = cb.greaterThanOrEqualTo(root.get("cantidad"), solicitud.getCantidad());
-        Predicate bancoIdPredicate = cb.equal(root.get("banco").get("id"), solicitud.getBancoId()); // Modificado aquí
-
-        cq.select(root).where(cb.and(tipoProductoPredicate, tipoSangrePredicate, cantidadPredicate, bancoIdPredicate));
-
-        return session.createQuery(cq).getResultList();
-    }
-
-    @Override
-    public void rechazarSolicitud(int solicitudId) {
-        Session session = sessionFactory.getCurrentSession();
-
-
-        Solicitud solicitud = this.buscarSolicitudPorId(solicitudId);
-        if (solicitud != null) {
-
-            solicitud.setEstado("Rechazada");
-
-            session.update(solicitud);
-        }
-    }
-
-    @Override
     public PaqueteDeSangre buscarSangreXId(int paqueteId) {
         Session session = this.sessionFactory.getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -205,20 +120,6 @@ public class RepositorioBancoImpl implements RepositorioBanco {
 
         return session.createQuery(cq).getSingleResult();
     }
-
-    @Override
-    public void solicitudAprobar(int solicitudId) {
-
-        Session session = sessionFactory.getCurrentSession();
-        Solicitud solicitud = this.buscarSolicitudPorId(solicitudId);
-        if (solicitud != null) {
-            solicitud.setEstado("aprobada");
-            session.update(solicitud);
-        }
-
-
-    }
-
 
     public List<Banco> getAllBanco() {
         return sessionFactory.getCurrentSession().createCriteria(Banco.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();

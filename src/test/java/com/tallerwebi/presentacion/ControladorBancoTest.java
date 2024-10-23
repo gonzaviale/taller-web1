@@ -46,112 +46,44 @@ public class ControladorBancoTest {
 
     @Test
     public void deberiaMostrarBancoHomeConBancoEncontrado() {
-        // Preparación
         Long idBanco = 1L;
         Banco bancoMock = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
                 "123456789", "test@example.com", "testpassword", "Horario Test");
         when(sessionMock.getAttribute("idBanco")).thenReturn(idBanco);
         when(servicioBancoMock.BuscarBancoId(idBanco)).thenReturn(bancoMock);
 
-        // Ejecución
         ModelAndView modelAndView = controladorBanco.BancoHome(sessionMock, null);
 
-        // Validación
         assertThat(modelAndView.getModel().get("nombreBanco"), is(equalTo("Banco Test")));
         assertThat(modelAndView.getModel().get("idBanco"), is(equalTo(idBanco)));
     }
 
     @Test
     public void deberiaAgregarPaqueteDeSangreYRedirigirAHome() {
-        // Preparación
+
         Long idBanco = 1L;
         when(sessionMock.getAttribute("idBanco")).thenReturn(idBanco);
         PaqueteDeSangre paqueteMock = new PaqueteDeSangre("Tipo A", 10, "plaquetas", new Banco());
         when(servicioBancoMock.BuscarBancoId(idBanco)).thenReturn(new Banco());
 
-        // Ejecución
         String result = controladorBanco.agregarPaqueteDeSangre(sessionMock, "Tipo A", 10, "plaquetas");
 
-        // Validación
         assertThat(result, is(equalTo("redirect:/bancoHome?success=Paquete de sangre agregado con exito")));
         verify(servicioBancoMock).agregarPaqueteDeSangre(paqueteMock, new Banco());
     }
 
     @Test
     public void deberiaVerStockConPaquetesDeSangre() {
-        // Preparación
+
         Long idBanco = 1L;
         when(sessionMock.getAttribute("idBanco")).thenReturn(idBanco);
         List<PaqueteDeSangre> paquetesMock = new ArrayList<>();
         when(servicioBancoMock.obtenerPaquetesDeSangrePorBanco(idBanco)).thenReturn(paquetesMock);
 
-        // Ejecución
         ModelAndView modelAndView = controladorBanco.VerStock(sessionMock);
 
-        // Validación
         assertEquals(paquetesMock, modelAndView.getModel().get("paquetes"));
     }
-    @Test
-    public void deberiaMostrarPeticionesConSolicitudes() {
 
-        Long idBanco = 1L;
-        when(sessionMock.getAttribute("idBanco")).thenReturn(idBanco);
-        List<Solicitud> solicitudesMock = new ArrayList<>();
-        solicitudesMock.add(new Solicitud(idBanco, 1L, "Plasma", "DEA 1.1+", 300));
-        when(servicioBancoMock.obtenerSolicitudesXBanco(idBanco)).thenReturn(solicitudesMock);
-
-        ModelAndView modelAndView = controladorBanco.BancoVerPeticiones(sessionMock);
-        assertEquals(solicitudesMock, modelAndView.getModel().get("solicitudes"));
-        assertNotNull(modelAndView.getModel().get("datosBanco"));
-    }
-    @Test
-    public void deberiaMostrarSolicitudConPaquetesCompatibles() {
-        // Preparación
-        Long idBanco = 1L;
-        int solicitudId = 1;
-        when(sessionMock.getAttribute("idBanco")).thenReturn(idBanco);
-
-        Solicitud solicitudMock = new Solicitud(idBanco, 1L, "Plasma", "DEA 1.1+", 300);
-        List<PaqueteDeSangre> paquetesMock = new ArrayList<>();
-        paquetesMock.add(new PaqueteDeSangre("Tipo A", 5, "plaquetas", new Banco()));
-
-        when(servicioBancoMock.buscarSolicitud(solicitudId)).thenReturn(solicitudMock);
-        when(servicioBancoMock.obtenerPaquetesDeSangreCompatibles(solicitudMock)).thenReturn(paquetesMock);
-
-        ModelAndView modelAndView = controladorBanco.BancoVerPeticion(solicitudId, sessionMock);
-
-        assertEquals(solicitudMock, modelAndView.getModel().get("solicitud"));
-        assertEquals(paquetesMock, modelAndView.getModel().get("paquetes"));
-        assertNotNull(modelAndView.getModel().get("datosBanco"));
-    }
-
-    @Test
-    public void deberiaRechazarSolicitudYRedirigirAPeticiones() {
-        // Preparación
-        int solicitudId = 1;
-        when(sessionMock.getAttribute("idBanco")).thenReturn(1L);
-
-        // Ejecución
-        String result = controladorBanco.rechazarSolicitud(solicitudId, sessionMock);
-
-        // Validación
-        assertThat(result, is(equalTo("redirect:/verPeticiones")));
-        verify(servicioBancoMock).rechazarSolicitud(solicitudId);
-    }
-
-    @Test
-    public void deberiaAsignarPaqueteYRedirigirAPeticiones() {
-        // Preparación
-        int solicitudId = 1;
-        int paqueteId = 1;
-        when(sessionMock.getAttribute("idBanco")).thenReturn(1L);
-
-        // Ejecución
-        String result = controladorBanco.asignarPaquete(solicitudId, paqueteId, sessionMock);
-
-        // Validación
-        assertThat(result, is(equalTo("redirect:/verPeticiones")));
-        verify(servicioBancoMock).asignarPaqueteASolicitud(solicitudId, paqueteId);
-    }
 
 }
