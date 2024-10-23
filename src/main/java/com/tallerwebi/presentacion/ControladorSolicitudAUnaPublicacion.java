@@ -38,7 +38,7 @@ public class ControladorSolicitudAUnaPublicacion {
         solicitud.setPublicacion(servicioPublicacion.busquedaPorId(publicacionId));
         solicitud.setAprobada(false);
         solicitud.setPendiente(true);
-        solicitud.setRechazada(true);
+        solicitud.setRechazada(false);
 
         servicioSolicitud.guardarSolicitud(solicitud);
 
