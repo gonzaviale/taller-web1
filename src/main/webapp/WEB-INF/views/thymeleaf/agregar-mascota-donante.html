@@ -15,6 +15,8 @@
 <p th:if="${errorImagenes != null}" class="alert alert-danger" th:text="'Error: ' + ${errorImagenes}"></p>
 <p th:if="${errorEdad != null}" class="alert alert-danger" th:text="'Error: ' + ${errorEdad}"></p>
 <p th:if="${errorPeso != null}" class="alert alert-danger" th:text="'Error: ' + ${errorPeso}"></p>
+<p th:if="${errorPesoYEdad != null}" class="alert alert-danger" th:text="'Error: ' + ${errorPesoYEdad}"></p>
+<p th:if="${errorTipo != null}" class="alert alert-danger" th:text="'Error: ' + ${errorTipo}"></p>
 
 <form action="#" th:action="@{/agregar-donante}" method="POST" enctype="multipart/form-data">
     <label>¿Tu mascota alguna vez recibió una transfusión?</label><br>

@@ -15,4 +15,6 @@ public interface RepositorioMascota {
     public void aprobarMascota(Long mascotaId);
     public void rechazarMascota(Long mascotaId);
     List<Mascota> obtenerMascotasPorDueno(Usuario dueno);
+
+    Mascota buscarMascotaPorId(Long mascotaId);
 }

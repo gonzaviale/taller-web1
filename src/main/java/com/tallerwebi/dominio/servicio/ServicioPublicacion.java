@@ -10,4 +10,7 @@ public interface ServicioPublicacion {
     void guardarPublicacion(Publicacion publicacion) throws PublicacionSinTipoDeSangre, PublicacionSinTipoDePublicacion, PublicacionNoValida, PublicacionSinTitulo;
     Publicacion busquedaDeUna(Publicacion publicacion) throws PublicacionNoExistente;
     List<Publicacion> obtenerTodasLasPublicaciones();
+    Publicacion busquedaPorId(Long publicacionId) throws PublicacionNoExistente;
+    void desactivarPublicacion(Long publicacionId);
+    void activarPublicacion(Long publicacionId);
 }

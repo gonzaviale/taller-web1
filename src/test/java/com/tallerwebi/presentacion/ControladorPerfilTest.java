@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.servicio.ServicioPerfil;
+import com.tallerwebi.dominio.servicio.ServicioSolicitudAUnaPublicacion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,6 +25,8 @@ public class ControladorPerfilTest {
     private ControladorPerfil controladorPerfil;
     @Mock
     private ServicioPerfil servicioPerfil;
+    @Mock
+    private ServicioSolicitudAUnaPublicacion servicioSolicitudAUnaPublicacion;
     @Mock
     private HttpServletRequest request;
     @Mock

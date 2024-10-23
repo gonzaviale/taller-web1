@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.servicio.ServicioMascota;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
 import com.tallerwebi.dominio.servicio.ServicioPublicacionImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,12 +19,13 @@ import static org.mockito.Mockito.when;
 public class ControladorHomeTest {
 
     ServicioPublicacion servicioPublicacion;
+    ServicioMascota servicioMascota;
     ControladorHome controladorHome;
 
     @BeforeEach
     public void init(){
         servicioPublicacion= mock(ServicioPublicacionImpl.class);
-        controladorHome= new ControladorHome(servicioPublicacion);
+        controladorHome= new ControladorHome(servicioPublicacion, servicioMascota);
     }
 
     /*@Test

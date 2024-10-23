@@ -13,4 +13,6 @@ public interface RepositorioPublicacion {
     List<Publicacion> obtenerTodasLasPublicaciones();
 
     ArrayList<Publicacion> buscarPublicaciones(String titulo, String tipoDeSangre, String zonaDeResidencia, String tipoDePublicacion);
+    void desactivarPublicacion(Long publicacionId);
+    void activarPublicacion(Long publicacionId);
 }

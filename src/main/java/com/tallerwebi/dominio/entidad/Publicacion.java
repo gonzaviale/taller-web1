@@ -24,7 +24,10 @@ public class Publicacion {
     }
 
     @ManyToOne
-    Usuario duenioPublicacion;
+    private Usuario duenioPublicacion;
+
+    @OneToOne
+    private Mascota mascotaDonante;
 
     public Usuario getDuenioPublicacion() {
         return duenioPublicacion;
@@ -32,6 +35,14 @@ public class Publicacion {
 
     public void setDuenioPublicacion(Usuario duenioPublicacion) {
         this.duenioPublicacion = duenioPublicacion;
+    }
+
+    public Mascota getMascotaDonante() {
+        return mascotaDonante;
+    }
+
+    public void setMascotaDonante(Mascota mascotaDonante) {
+        this.mascotaDonante = mascotaDonante;
     }
 
     public void setId(Long id) {

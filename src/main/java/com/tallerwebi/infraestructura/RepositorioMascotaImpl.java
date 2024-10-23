@@ -69,6 +69,15 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
     }
 
     @Override
+    public Mascota buscarMascotaPorId(Long mascotaId) {
+        Mascota mascota = (Mascota) sessionFactory.getCurrentSession()
+                .createCriteria(Mascota.class)
+                .add(Restrictions.eq("id", mascotaId))
+                .uniqueResult();
+        return mascota;
+    }
+
+    @Override
     public ArrayList<Mascota> buscarMascota(String nombre, String sangre, String tipo) {
         final Session session = sessionFactory.getCurrentSession();
 

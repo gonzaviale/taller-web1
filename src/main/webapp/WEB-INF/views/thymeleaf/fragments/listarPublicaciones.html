@@ -8,7 +8,8 @@
         <section class="card-body d-flex justify-content-between align-items-center">
             <h5 class="card-title" th:text="${publicacion.getTitulo()}"></h5>
             <a th:href="@{/{nombre}.{id}/(nombre=${publicacion.duenioPublicacion.nombre}, id=${publicacion.duenioPublicacion.id})}">
-            <span class="text-muted" th:text="${publicacion.duenioPublicacion.nombre + ' ' + publicacion.duenioPublicacion.apellido}"></span>
+                <span class="text-muted"
+                      th:text="${publicacion.duenioPublicacion.nombre + ' ' + publicacion.duenioPublicacion.apellido}"></span>
             </a>
         </section>
         <section class="card-body">
@@ -21,15 +22,25 @@
                     <strong>Tipo de Sangre: </strong><span th:text="${publicacion.getTipoDeSangre()}"></span>
                 </li>
                 <li class="list-group-item">
-                    <strong>Estado: </strong><span th:text="${publicacion.getEstaActiva()} ? 'Activa' : 'Inactiva'"></span>
+                    <strong>Estado: </strong><span
+                        th:text="${publicacion.getEstaActiva()} ? 'Activa' : 'Inactiva'"></span>
                 </li>
                 <li class="list-group-item">
-                    <strong>Movilidad: </strong><span th:text="${publicacion.getPuedeMovilizarse()} ? 'Puede movilizarse' : 'No puede movilizarse'"></span>
+                    <strong>Movilidad: </strong><span
+                        th:text="${publicacion.getPuedeMovilizarse()} ? 'Puede movilizarse' : 'No puede movilizarse'"></span>
                 </li>
                 <li class="list-group-item">
                     <strong>Zona de Residencia: </strong><span th:text="${publicacion.getZonaDeResidencia()}"></span>
                 </li>
+                <li class="list-group-item">
+                    <strong>Mascota donante: </strong><span
+                        th:text="${publicacion.getMascotaDonante().getNombre() + ' (' + publicacion.getMascotaDonante().getTipo() + ')'}"></span>
+                </li>
             </ul>
+
+        </section>
+        <section th:if="${mascotasNecesitadas}">
+            <div th:replace="fragments/realizar-solicitud-a-una-publicacion"></div>
         </section>
     </article>
 </article>

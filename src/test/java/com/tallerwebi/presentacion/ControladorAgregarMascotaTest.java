@@ -139,6 +139,66 @@ public class ControladorAgregarMascotaTest {
         thenRegistroFalla(mav, "agregar-mascota-donante", "errorPeso", "El peso de la mascota es obligatorio");
     }
 
+    @Test
+    public void queNoSePuedaRegistrarMascotaSinoSeIndicaSuTipo(){
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarReceptora(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), "", imagenesMock, requestMock);
+
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorTipo", "Es obligatorio ingresar el tipo de mascota");
+    }
+
+    @Test
+    public void queNoSePuedaRegistrarMascotaDonanteSiNoSeIngresaSiRecibioONoTransfusion(){
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "", imagenesMock, requestMock);
+
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorTransfusion", "Es obligatorio ingresar si el animal recibió o no una transfusión");
+    }
+
+    @Test
+    public void queNoSePuedaRegistrarMascotaDonanteCaninaSiNoCumpleConElPeso(){
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), 20f, "Canino", "No", imagenesMock, requestMock);
+
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorPesoYEdad", "Para que un perro sea donante debe pesar más de 25 kilos y tener entre 1 y 8 años");
+    }
+
+    @Test
+    public void queNoSePuedaRegistrarMascotaDonanteCaninaSiNoCumpleConLaEdad(){
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), 10, 25f, "Canino", "No", imagenesMock, requestMock);
+
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorPesoYEdad", "Para que un perro sea donante debe pesar más de 25 kilos y tener entre 1 y 8 años");
+    }
+
+    @Test
+    public void queNoSePuedaRegistrarMascotaDonanteFelinaSiNoCumpleConElPeso(){
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), 2.5f, "Felino", "No", imagenesMock, requestMock);
+
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorPesoYEdad", "Para que un gato sea donante debe pesar más de 3,5 kilos y tener entre 1 y 8 años");
+    }
+
+    @Test
+    public void queNoSePuedaRegistrarMascotaDonanteFelinaSiNoCumpleConLaEdad(){
+        when(usuarioMock.getId()).thenReturn(1L);
+        when(mascotaMock.getDuenio()).thenReturn(usuarioMock);
+
+        ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), 15, 3.5f, "Felino", "No", imagenesMock, requestMock);
+
+        thenRegistroFalla(mav, "agregar-mascota-donante", "errorPesoYEdad", "Para que un gato sea donante debe pesar más de 3,5 kilos y tener entre 1 y 8 años");
+    }
+
     private void thenRegistroExitoso(ModelAndView mav, String vista) {
         assertThat(mav.getViewName(), equalToIgnoringCase(vista));
     }
