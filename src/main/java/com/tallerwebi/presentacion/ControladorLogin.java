@@ -63,6 +63,14 @@ public class ControladorLogin {
                                     @RequestParam("confirmPassword") String confirmPassword) {
         modelo.clear();
 
+        Usuario nuevoUsuario;
+
+        if(usuario.getRol().equals("veterinario")){
+            nuevoUsuario = new Veterinario();
+        } else {
+            nuevoUsuario = new DuenoMascota();
+        }
+
         if (nombreEstaVacio(usuario.getNombre())) {
             modelo.put("usuario", usuario);
             return new ModelAndView("nuevo-usuario", modelo);
@@ -93,8 +101,10 @@ public class ControladorLogin {
             return new ModelAndView("nuevo-usuario", modelo);
         }
 
+        setearUsuario(nuevoUsuario,usuario);
+
         try {
-            servicioLogin.registrar(usuario);
+            servicioLogin.registrar(nuevoUsuario);
         } catch (UsuarioExistente e) {
             modelo.put("error", "El usuario ya existe");
             return new ModelAndView("nuevo-usuario", modelo);
@@ -103,13 +113,17 @@ public class ControladorLogin {
             return new ModelAndView("nuevo-usuario", modelo);
         }
 
-        if(usuario.getRol().equals("veterinario")){
-            usuario = new Veterinario();
-        } else {
-            usuario = new DuenoMascota();
-        }
-
         return new ModelAndView("redirect:/login");
+    }
+
+    private void setearUsuario(Usuario nuevoUsuario, Usuario usuario) {
+
+        nuevoUsuario.setNombre(usuario.getNombre());
+        nuevoUsuario.setApellido(usuario.getApellido());
+        nuevoUsuario.setEmail(usuario.getEmail());
+        nuevoUsuario.setRol(usuario.getRol());
+        nuevoUsuario.setPassword(usuario.getPassword());
+
     }
 
     @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
