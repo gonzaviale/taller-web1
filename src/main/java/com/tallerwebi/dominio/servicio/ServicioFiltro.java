@@ -20,4 +20,10 @@ public interface ServicioFiltro {
     List<Usuario> obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(String sangreBuscada, String tipoDeBusqueda);
 
     List<Usuario> obtenerTodosLosVeterinariosVerificados();
+
+    List<Usuario> obtenerTodosLosVeterinariosNoVerificados();
+
+    boolean activarUsuarioBuscadoPor(Long id);
+
+    boolean desactivarUsuarioBuscadoPor(Long id);
 }

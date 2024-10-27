@@ -30,6 +30,7 @@ public class RepositorioUsuarioTest {
     SessionFactory sessionFactory;
     @Autowired
     RepositorioUsuario repositorio;
+
     @Test
     @Transactional
     @Rollback
@@ -169,6 +170,8 @@ public class RepositorioUsuarioTest {
 
         repositorio.guardar(usuario);
 
+        usuario.setEstado("activo");
+
         List<Usuario> usuarioList= repositorio.obtenerTodosLosVeterinariosVerificados();
 
         assertThat(usuario,equalTo(repositorio.buscarPorId(usuario.getId())));
@@ -189,6 +192,9 @@ public class RepositorioUsuarioTest {
 
         repositorio.guardar(usuario);
         repositorio.guardar(usuario1);
+
+        usuario.setEstado("activo");
+        usuario1.setEstado("activo");
 
         List<Usuario> usuarioList= repositorio.obtenerTodosLosVeterinariosVerificados();
 
@@ -416,5 +422,105 @@ public class RepositorioUsuarioTest {
         assertEquals(2, publicaciones.size());
         assertThat(publicaciones, hasItem(hasProperty("titulo", is("Publicación 1"))));
         assertThat(publicaciones, hasItem(hasProperty("titulo", is("Publicación 2"))));
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void obtenerTodosLosVeterinariosNoVerificadosMeRetornaUnaListaConDosVeterinarios(){
+
+        Usuario vet= new Veterinario();
+        Usuario vet1= new Veterinario();
+
+        vet.setRol("veterinario");
+        vet1.setRol("veterinario");
+
+        repositorio.guardar(vet);
+        repositorio.guardar(vet1);
+
+        List<Usuario> veterinarios= repositorio.obtenerTodosLosVeterinariosNoVerificados();
+
+        assertThat(veterinarios.size(),is(2));
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void obtenerTodosLosVeterinariosNoVerificadosMeRetornaUnaListaVacia(){
+        List<Usuario> veterinarios= repositorio.obtenerTodosLosVeterinariosNoVerificados();
+
+        assertThat(veterinarios.size(),is(0));
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void obtenerTodosLosVeterinariosVerificadosMeRetornaUnaListaVacia(){
+        List<Usuario> veterinarios= repositorio.obtenerTodosLosVeterinariosVerificados();
+
+        assertThat(veterinarios.size(),is(0));
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void obtenerTodosLosVeterinariosVerificadosMeRetornaUnaListaConDosVeterinarios(){
+
+        Usuario vet= new Veterinario();
+        Usuario vet1= new Veterinario();
+
+        vet.setRol("veterinario");
+        vet1.setRol("veterinario");
+
+        repositorio.guardar(vet);
+        repositorio.guardar(vet1);
+
+        vet.setEstado("activo");
+        vet1.setEstado("activo");
+
+        List<Usuario> veterinarios= repositorio.obtenerTodosLosVeterinariosVerificados();
+
+        assertThat(veterinarios.size(),is(2));
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void activarUnUsuarioMeDevuelveTrue(){
+        Usuario usuario= new DuenoMascota();
+
+        repositorio.guardar(usuario);
+
+        repositorio.activarUsuarioBuscadoPor(usuario.getId());
+
+        assertThat(repositorio.activarUsuarioBuscadoPor(usuario.getId()),is(Boolean.TRUE));
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void desactivarUnUsuarioMeDevuelveTrue(){
+        Usuario usuario= new DuenoMascota();
+
+        repositorio.guardar(usuario);
+
+        assertThat(repositorio.desactivarUsuarioBuscadoPor(usuario.getId()),is(Boolean.TRUE));
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    void activarUnUsuarioMeDevuelveFalsePorQueNoEncuentraUnUsuario(){
+
+        assertThat(repositorio.activarUsuarioBuscadoPor(1L),is(Boolean.FALSE));
+    }
+
+
+    @Test
+    @Rollback
+    @Transactional
+    void desactivarUnUsuarioMeDevuelveFalsePorQueNoEncuentraUnUsuario(){
+
+        assertThat(repositorio.desactivarUsuarioBuscadoPor(1L),is(Boolean.FALSE));
     }
 }

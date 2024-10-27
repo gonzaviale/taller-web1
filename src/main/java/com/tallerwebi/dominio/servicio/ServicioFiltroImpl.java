@@ -91,6 +91,22 @@ public class ServicioFiltroImpl implements ServicioFiltro {
         return repositorioUsuario.obtenerTodosLosVeterinariosVerificados();
     }
 
+    @Override
+    public List<Usuario> obtenerTodosLosVeterinariosNoVerificados() {
+        return repositorioUsuario.obtenerTodosLosVeterinariosNoVerificados();
+    }
+
+    @Override
+    public boolean activarUsuarioBuscadoPor(Long id) {
+
+        return repositorioUsuario.activarUsuarioBuscadoPor(id);
+    }
+
+    @Override
+    public boolean desactivarUsuarioBuscadoPor(Long id) {
+        return repositorioUsuario.desactivarUsuarioBuscadoPor(id);
+    }
+
     private String validadorCampo(String campo) {
         return (campo == null || campo.isEmpty()) ? "" : campo;
     }

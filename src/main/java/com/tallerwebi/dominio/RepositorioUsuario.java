@@ -32,5 +32,11 @@ public interface RepositorioUsuario {
     List<Publicacion> obtenerPublicacionesDelUsuario(Long id);
 
     Banco buscarBanco(String email, String password);
+
+    List<Usuario> obtenerTodosLosVeterinariosNoVerificados();
+
+    boolean activarUsuarioBuscadoPor(Long id);
+
+    boolean desactivarUsuarioBuscadoPor(Long id);
 }
 
