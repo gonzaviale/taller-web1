@@ -18,13 +18,27 @@
         <!-- Campo de búsqueda por tipo -->
         <div class="col-md-4">
             <label for="tipo" class="form-label">Tipo</label>
-            <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Tipo de mascota">
+            <select class="form-select" id="tipo" name="tipo">
+                <option value="">Seleccione...</option>
+                <option value="canino">Canino</option>
+                <option value="felino">Felino</option>
+            </select>
         </div>
 
         <!-- Campo de búsqueda por tipo de sangre -->
         <div class="col-md-4">
-            <label for="sangre" class="form-label">Sangre</label>
-            <input type="text" class="form-control" id="sangre" name="sangre" placeholder="Tipo de sangre">
+            <label for="sangre" class="form-label">Tipo de Sangre</label>
+            <select class="form-select" id="sangre" name="sangre">
+                <option value="">Seleccione el tipo de sangre</option>
+                <option value="DEA-1.1.">DEA-1.1.</option>
+                <option value="DEA-1.2.">DEA-1.2.-</option>
+                <option value="DEA-3">DEA-3</option>
+                <option value="DEA-4">DEA-4-</option>
+                <option value="DEA-5">DEA-5</option>
+                <option value="DEA-6">DEA-6-</option>
+                <option value="DEA-7">DEA-7</option>
+                <option value="DEA-8 ">DEA-8-</option>
+            </select>
         </div>
 
         <!-- Botón para buscar -->
