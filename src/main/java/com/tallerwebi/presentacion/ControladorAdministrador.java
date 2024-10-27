@@ -25,7 +25,7 @@ public class ControladorAdministrador {
     @RequestMapping(path = "/administrador")
     public ModelAndView irAHomeAdministrador(@RequestParam(name = "mensaje", required = false) String mensaje,
                                              HttpServletRequest request){
-        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("administrador");
 
         if(usuarioEnSesion==null || !usuarioEnSesion.getRol().equals("administrador")){
 
@@ -46,7 +46,7 @@ public class ControladorAdministrador {
     public ModelAndView aceptarUsuario(@RequestParam("id") Long id,
                                        HttpServletRequest request) {
 
-        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("administrador");
 
         if (usuarioEnSesion == null || !usuarioEnSesion.getRol().equals("administrador")){
             return new ModelAndView("redirect:/home");
@@ -64,7 +64,7 @@ public class ControladorAdministrador {
     public ModelAndView rechazarUsuario(@RequestParam("id") Long id,
                                        HttpServletRequest request) {
 
-        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("administrador");
 
         if (usuarioEnSesion == null || !usuarioEnSesion.getRol().equals("administrador")){
             return new ModelAndView("redirect:/home");
