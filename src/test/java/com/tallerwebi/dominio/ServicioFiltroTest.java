@@ -462,6 +462,88 @@ public class ServicioFiltroTest {
         verify(repositorioUsuario).obtenerTodosLosUsuariosQueContenganPublicacionesConLaSangreBuscada(sangreBuscada);
     }
 
+    @Test
+    void obtenerTodosLosVeterinariosNoVerificadosMeDevuelveUnaListaDeVeterinarios() {
+        // Configuración de Mockito
+
+        Veterinario veterinario=new Veterinario();
+        Veterinario veterinario1=new Veterinario();
+
+        List<Usuario> veterinariosNoVerificados= new ArrayList<>();
+
+        veterinariosNoVerificados.add(veterinario);
+        veterinariosNoVerificados.add(veterinario1);
+
+        when(repositorioUsuario.obtenerTodosLosVeterinariosNoVerificados()).thenReturn(veterinariosNoVerificados);
+
+        // Ejecución
+        List<Usuario> resultado = servicioFiltro.obtenerTodosLosVeterinariosNoVerificados();
+
+        // Verificación
+        assertThat(resultado.size(),is(2));
+        verify(repositorioUsuario, times(1)).obtenerTodosLosVeterinariosNoVerificados();
+    }
+
+    @Test
+    void obtenerTodosLosVeterinariosNoVerificadosMeDevuelveUnaListaVaciaDeVeterinarios() {
+
+        when(repositorioUsuario.obtenerTodosLosVeterinariosNoVerificados()).thenReturn(new ArrayList<>());
+
+        // Ejecución
+        List<Usuario> resultado = servicioFiltro.obtenerTodosLosVeterinariosNoVerificados();
+
+        // Verificación
+        assertThat(resultado.size(),is(0));
+        verify(repositorioUsuario, times(1)).obtenerTodosLosVeterinariosNoVerificados();
+    }
+
+    @Test
+    void activarUsuarioMeDevuelveTrue() {
+        // Configuración de Mockito
+        Long idUsuario = 1L;
+        when(repositorioUsuario.activarUsuarioBuscadoPor(idUsuario)).thenReturn(true);
+
+        // Ejecución
+        Boolean resultado = servicioFiltro.activarUsuarioBuscadoPor(idUsuario);
+
+        // Verificación
+        assertThat(resultado, is(Boolean.TRUE));
+        verify(repositorioUsuario, times(1)).activarUsuarioBuscadoPor(idUsuario);
+    }
+
+    @Test
+    void activarUsuarioMeDevuelveFalseSiNoEncuentraAlUsuario() {
+        Long idUsuario = 1L;
+        when(repositorioUsuario.activarUsuarioBuscadoPor(idUsuario)).thenReturn(false);
+
+        boolean resultado = servicioFiltro.activarUsuarioBuscadoPor(idUsuario);
+
+        assertThat(resultado, is(Boolean.FALSE));
+        verify(repositorioUsuario, times(1)).activarUsuarioBuscadoPor(idUsuario);
+    }
+
+    @Test
+    void cuandoDesactivoUnUsuarioMeRetornaTrueSiElUsuarioSePudoDesactivar() {
+        Long idUsuario = 1L;
+        when(repositorioUsuario.desactivarUsuarioBuscadoPor(idUsuario)).thenReturn(true);
+
+        boolean resultado = servicioFiltro.desactivarUsuarioBuscadoPor(idUsuario);
+
+        assertThat(resultado, is(Boolean.TRUE));
+        verify(repositorioUsuario, times(1)).desactivarUsuarioBuscadoPor(idUsuario);
+    }
+
+    @Test
+    void desactivarUsuarioMeRetornaFalseSiNoEncuentraQueUsuarioDesactivar() {
+        Long idUsuario = 1L;
+        when(repositorioUsuario.desactivarUsuarioBuscadoPor(idUsuario)).thenReturn(false);
+
+        boolean resultado = servicioFiltro.desactivarUsuarioBuscadoPor(idUsuario);
+
+        assertThat(resultado,is(Boolean.FALSE));
+        verify(repositorioUsuario, times(1)).desactivarUsuarioBuscadoPor(idUsuario);
+    }
+
 
     private Usuario getUsuarioConPublicacion() {
         Usuario usuario= new DuenoMascota();

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <title>ADMINISTRADOR</title>
+</head>
+<body>
+
+<div class="container mt-5">
+    <!-- Título de la página -->
+    <h1 class="text-center mb-4">Solicitudes Pendientes</h1>
+
+    <div th:if="${mensaje}" class="alert alert-success text-center mx-auto col-md-6">
+        <p th:text="${mensaje}"></p>
+    </div>
+
+    <!-- Verifica si hay usuarios pendientes -->
+    <div th:if="${usuarios != null && !usuarios.isEmpty()}">
+        <div class="row">
+            <!-- Lista de tarjetas para cada usuario -->
+            <div th:each="usuario : ${usuarios}" class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Nombre y datos básicos del usuario -->
+                        <h5 class="card-title" th:text="${usuario.nombre} + ' ' + ${usuario.apellido}"></h5>
+                        <p class="card-text">Email: <span th:text="${usuario.email}"></span></p>
+                        <p class="card-text">Matrícula: <span th:text="${usuario.matricula}"></span></p>
+
+                        <form th:action="@{/aceptarUsuario}" method="post" style="display:inline;">
+                            <input type="hidden" name="id" th:value="${usuario.id}" />
+                            <button type="submit" class="btn btn-success">Aceptar</button>
+                        </form>
+
+                        <form th:action="@{/rechazarUsuario}" method="post" style="display:inline;">
+                            <input type="hidden" name="id" th:value="${usuario.id}" />
+                            <button type="submit" class="btn btn-danger">Rechazar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje en caso de no haber usuarios pendientes -->
+    <div th:if="${usuarios == null || usuarios.isEmpty()}" class="text-center">
+        <p>No hay solicitudes pendientes.</p>
+    </div>
+</div>
+
+<!-- Scripts de Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

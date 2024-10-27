@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Veterinario;
 import com.tallerwebi.dominio.servicio.ServicioLogin;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.collection.IsMapContaining.hasKey;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.mockito.Mockito.*;
 
@@ -34,6 +37,7 @@ public class ControladorLoginTest {
 		when(usuarioMock.getApellido()).thenReturn("Alarcón");
 		when(usuarioMock.getNombre()).thenReturn("Lucía");
 		when(usuarioMock.getRol()).thenReturn("a");
+		when(usuarioMock.getEstado()).thenReturn("activo");
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
 		servicioLoginMock = mock(ServicioLogin.class);
@@ -59,6 +63,7 @@ public class ControladorLoginTest {
 		// preparacion
 		Usuario usuarioEncontradoMock = mock(Usuario.class);
 		when(usuarioEncontradoMock.getRol()).thenReturn("ADMIN");
+		when(usuarioEncontradoMock.getEstado()).thenReturn("activo");
 
 		when(requestMock.getSession()).thenReturn(sessionMock);
 		when(servicioLoginMock.consultarUsuario(anyString(), anyString())).thenReturn(usuarioEncontradoMock);
@@ -95,7 +100,7 @@ public class ControladorLoginTest {
 	public void registrameSiUsuarioNoExisteDeberiaCrearUsuarioYVolverAlLogin() throws UsuarioExistente {
 
 		// ejecucion
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123","");
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
@@ -108,7 +113,7 @@ public class ControladorLoginTest {
 		doThrow(UsuarioExistente.class).when(servicioLoginMock).registrar(any());
 
 		// ejecucion
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123","");
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
@@ -122,7 +127,7 @@ public class ControladorLoginTest {
 
 
 		// ejecucion
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123","");
 
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("nuevo-usuario"));
@@ -133,7 +138,7 @@ public class ControladorLoginTest {
 	public void siNoSeIngresaMailElRegistroFalla(){
 		when(usuarioMock.getEmail()).thenReturn("");
 
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123","");
 
 		thenRegistroFalla(modelAndView, "errorEmail", "El campo email es obligatorio");
 	}
@@ -142,7 +147,7 @@ public class ControladorLoginTest {
 	public void siNoSeIngresaApellidoElRegistroFalla(){
 		when(usuarioMock.getApellido()).thenReturn("");
 
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123","");
 
 		thenRegistroFalla(modelAndView, "errorApellido", "El campo apellido es obligatorio");
 	}
@@ -151,7 +156,7 @@ public class ControladorLoginTest {
 	public void siNoSeIngresaNombreElRegistroFalla(){
 		when(usuarioMock.getNombre()).thenReturn("");
 
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123","");
 
 		thenRegistroFalla(modelAndView, "errorNombre", "El campo nombre es obligatorio");
 	}
@@ -159,7 +164,7 @@ public class ControladorLoginTest {
 	@Test
 	public void siNoSeIngresaUnaDeLasPasswordElRegistroFalla(){
 
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "");
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "","");
 
 		thenRegistroFalla(modelAndView, "errorPassword", "El campo contraseña es obligatorio");
 	}
@@ -168,7 +173,7 @@ public class ControladorLoginTest {
 	public void siLasPasswordsSonDistintasElRegistroFalla(){
 		when(usuarioMock.getPassword()).thenReturn("123");
 
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "abc");
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "abc","");
 
 		thenRegistroFalla(modelAndView, "errorPasswordsDistintas", "Las contraseñas deben ser iguales");
 	}
@@ -177,7 +182,7 @@ public class ControladorLoginTest {
 	public void siNoSeIngresaUnRolElRegistroFalla(){
 		when(usuarioMock.getRol()).thenReturn("");
 
-		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123");
+		ModelAndView modelAndView = controladorLogin.registrarme(usuarioMock, "123","");
 
 		thenRegistroFalla(modelAndView, "errorRol", "Debe ingresar un rol");
 	}
@@ -187,4 +192,72 @@ public class ControladorLoginTest {
 
 		assertThat(mav.getModel().get(errorKey).toString(), equalToIgnoringCase(mensajeError));
 	}
+
+	@Test
+	public void intentoLogearmeConUnUsuarioVeterinarioPeroEstaPendientePorLoCualMeRedirigueAlLogin(){
+		when(usuarioMock.getEmail()).thenReturn("veterinario@correo.com");
+		when(usuarioMock.getPassword()).thenReturn("password123");
+		when(usuarioMock.getApellido()).thenReturn("Pérez");
+		when(usuarioMock.getNombre()).thenReturn("Juan");
+		when(usuarioMock.getRol()).thenReturn("veterinario");
+		when(usuarioMock.getEstado()).thenReturn("pendiente");
+
+		when(requestMock.getSession()).thenReturn(sessionMock);
+
+		when(servicioLoginMock.consultarUsuario("veterinario@correo.com", "password123")).thenReturn(usuarioMock);
+
+		datosLoginMock = new DatosLogin("veterinario@correo.com", "password123");
+
+		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
+
+		assertThat(modelAndView.getViewName(), is("login"));
+
+		assertThat(modelAndView.getModel(), hasKey("error"));
+		assertThat(modelAndView.getModel().get("error"), is("Usuario no verificado"));
+	}
+
+	@Test
+	public void meLogeoComoAdministradorMeRedirigueAVistaAdministrador(){
+		Usuario usuario= new Usuario();
+
+		usuario.setEstado("activo");
+		usuario.setRol("administrador");
+		usuario.setPassword("1234");
+		usuario.setEmail("admiistrador@gmail.com");
+
+		when(requestMock.getSession()).thenReturn(sessionMock);
+
+		datosLoginMock = new DatosLogin("administrador@gmail.com", "1234");
+
+		when(servicioLoginMock.consultarUsuario("administrador@gmail.com", "1234")).thenReturn(usuario);
+
+		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
+
+		assertThat(modelAndView.getViewName(), is("redirect:/administrador"));
+	}
+
+	@Test
+	public void meIntentoLogearComoVeterinarioEnEstadoInactivoYTengoUnaClaveError(){
+		Usuario usuario= new Veterinario();
+
+		usuario.setEstado("inactivo");
+		usuario.setRol("veterinario");
+		usuario.setPassword("1234");
+		usuario.setEmail("veterinario@gmail.com");
+
+		when(requestMock.getSession()).thenReturn(sessionMock);
+
+		datosLoginMock = new DatosLogin("veterinario@gmail.com", "1234");
+
+		when(servicioLoginMock.consultarUsuario("veterinario@gmail.com", "1234")).thenReturn(usuario);
+
+		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
+
+		assertThat(modelAndView.getViewName(), is("login"));
+		assertThat(modelAndView.getModel(), hasKey("error"));
+		assertThat(modelAndView.getModel().get("error"), is("Usuario no verificado"));
+
+	}
+
+
 }

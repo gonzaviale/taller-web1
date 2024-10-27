@@ -15,7 +15,7 @@ public class Usuario {
     private String apellido;
     private String password;
     private String rol;
-    private Boolean activo = false;
+    private String estado = "pendiente";
 
     @OneToMany(mappedBy = "duenio", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Mascota> mascotas = new ArrayList<>();
@@ -71,20 +71,13 @@ public class Usuario {
     public void setRol(String rol) {
         this.rol = rol;
     }
-    public Boolean getActivo() {
-        return activo;
+    public String getEstado() {
+        return estado;
     }
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
-    public boolean activo() {
-        return activo;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
-    public void activar() {
-        activo = true;
-    }
 
     public String getApellido() {
         return apellido;

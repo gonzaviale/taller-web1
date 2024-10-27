@@ -31,13 +31,13 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
 
-
-
-
     @Override
     public void guardar(Usuario usuario) {
-        if(usuario!=null && usuario.getRol()!=null && usuario.getRol().equals("dueno mascota")){
-            usuario.setActivo(Boolean.TRUE);
+        if(usuario!=null && usuario.getRol()!=null && !usuario.getRol().equals("veterinario")){
+            usuario.setEstado("activo");
+        }
+        if(usuario!=null && usuario.getRol()!=null && usuario.getRol().equals("veterinario")){
+            usuario.setEstado("pendiente");
         }
         sessionFactory.getCurrentSession().save(usuario);
     }
@@ -78,7 +78,9 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     @Override
     public List<Usuario> obtenerTodosLosVeterinariosVerificados() {
         return sessionFactory.getCurrentSession().createCriteria(Veterinario.class)
-                .add(Restrictions.eq("rol","veterinario")).list();
+                .add(Restrictions.eq("rol","veterinario"))
+                .add(Restrictions.eq("estado","activo"))
+                .list();
     }
 
     @Override
@@ -123,6 +125,41 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .add(Restrictions.eq("email", email))
                 .add(Restrictions.eq("password", password))
                 .uniqueResult();
+    }
+
+    @Override
+    public List<Usuario> obtenerTodosLosVeterinariosNoVerificados() {
+        return sessionFactory.getCurrentSession().createCriteria(Veterinario.class)
+                .add(Restrictions.eq("rol","veterinario"))
+                .add(Restrictions.eq("estado","pendiente"))
+                .list();
+    }
+
+    @Override
+    public boolean activarUsuarioBuscadoPor(Long id) {
+
+        Usuario usuarioBuscado= buscarPorId(id);
+
+        if(usuarioBuscado!=null){
+            usuarioBuscado.setEstado("activo");
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean desactivarUsuarioBuscadoPor(Long id) {
+        Usuario usuarioBuscado= buscarPorId(id);
+
+        if(usuarioBuscado!=null){
+            usuarioBuscado.setEstado("inactivo");
+
+            return true;
+        }
+
+        return false;
     }
 
 }

@@ -40,33 +40,49 @@ public class ControladorLogin {
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
+
+        if(usuarioBuscado!=null && usuarioBuscado.getRol().equals("administrador")){
+            request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
+            request.getSession().setAttribute("usuarioEnSesion", usuarioBuscado);
+            return new ModelAndView("redirect:/administrador");
+        }
+
+        if(usuarioBuscado!=null && usuarioBuscado.getRol().equals("veterinario") && !usuarioBuscado.getEstado().equals("activo")){
+            modelo.put("error", "Usuario no verificado");
+
+            return new ModelAndView("login", modelo);
+        }
+
         if (usuarioBuscado != null) {
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
             request.getSession().setAttribute("usuarioEnSesion", usuarioBuscado);
             return new ModelAndView("redirect:/home");
         }
-       Banco banco = servicioLogin.ConsultarBanco(datosLogin.getEmail(), datosLogin.getPassword());
+
+        Banco banco = servicioLogin.ConsultarBanco(datosLogin.getEmail(), datosLogin.getPassword());
 
         if(banco!= null) {
             request.getSession().setAttribute("idBanco",banco.getId());
             request.getSession().setAttribute("ROL","banco");
             return new ModelAndView("redirect:/bancoHome");
         }
-        else {
-            modelo.put("error", "Usuario o clave incorrecta");
-        }
+
+        modelo.put("error", "Usuario o clave incorrecta");
+
         return new ModelAndView("login", modelo);
     }
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
     public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario,
-                                    @RequestParam("confirmPassword") String confirmPassword) {
+                                    @RequestParam("confirmPassword") String confirmPassword,
+                                    @RequestParam("matricula") String matricula) {
         modelo.clear();
 
         Usuario nuevoUsuario;
 
         if(usuario.getRol().equals("veterinario")){
             nuevoUsuario = new Veterinario();
+            ((Veterinario) nuevoUsuario).setMatricula(matricula);
         } else {
             nuevoUsuario = new DuenoMascota();
         }
