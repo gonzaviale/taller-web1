@@ -103,8 +103,24 @@ public class ControladorPerfil {
     }
 
     @RequestMapping("/editarperfil")
-    public ModelAndView editarPerfil(){
-        return new ModelAndView("editarperfil",new ModelMap());
+    public ModelAndView editarPerfil(
+            HttpServletRequest request) {
+
+        ModelMap model = new ModelMap();
+        Usuario usuarioBuscado;
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+        if (usuarioEnSesion != null) {
+            usuarioBuscado = servicioPerfil.buscarUsuarioPorId(usuarioEnSesion.getId());
+
+            model.addAttribute("email",usuarioBuscado.getEmail());
+            model.addAttribute("nombre",usuarioBuscado.getNombre());
+            model.addAttribute("apellido", usuarioBuscado.getApellido());
+            model.addAttribute("contrasena",usuarioBuscado.getPassword());
+
+            return new ModelAndView("editarperfil",model);
+        }
+
+        return new ModelAndView("redirect:/home", new ModelMap());
     }
 
     @RequestMapping("/actualizarUsuario")
