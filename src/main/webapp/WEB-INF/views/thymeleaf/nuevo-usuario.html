@@ -101,6 +101,10 @@
 
             <input class="btn btn-lg btn-primary w-100 mb-3" type="submit" value="Registrar">
 
+            <!-- Nuevo botón de inicio de sesión -->
+            <p class="text-center mt-3">¿Ya tienes una cuenta?</p>
+            <a th:href="@{/login}" class="btn btn-outline-secondary w-100">Iniciar Sesión</a>
+
             <p th:if="${error != null}" class="alert alert-danger" th:text="'Error: ' + ${error}"></p>
         </form>
     </div>

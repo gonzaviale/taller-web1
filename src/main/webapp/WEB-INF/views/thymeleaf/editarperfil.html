@@ -10,38 +10,41 @@
 <section class="container">
 
     <h1 class="mt-5">Actualizar Usuario</h1>
-    <form method="post" class="container mt-4">
+    <form method="post" th:action="@{/actualizarUsuario}" class="container mt-4">
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="ingresa el email a cambiar">
+            <input type="email" class="form-control" id="email" name="email"
+                   placeholder="Ingresa el email a cambiar" th:value="${email}">
         </div>
 
         <div class="form-group">
             <label for="nombre">Nombre</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="ingresa al nombre que quieras cmabiar">
+            <input type="text" class="form-control" id="nombre" name="nombre"
+                   placeholder="Ingresa el nombre que quieras cambiar" th:value="${nombre}">
         </div>
 
         <div class="form-group">
             <label for="apellido">Apellido</label>
-            <input type="text" class="form-control" id="apellido" name="apellido" placeholder="ingresa el apellido al que quieras cambiar">
+            <input type="text" class="form-control" id="apellido" name="apellido"
+                   placeholder="Ingresa el apellido al que quieras cambiar" th:value="${apellido}">
         </div>
 
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="ingresa la contraseña que quieres">
+            <input type="password" class="form-control" id="password" name="password"
+                   placeholder="Ingresa la contraseña que quieres" th:value="${contrasena}">
         </div>
 
         <!-- Botón 1: Llama a la ruta para actualizar -->
-        <button class="btn btn-primary mt-3" th:formaction="@{/actualizarUsuario}" type="submit">Actualizar</button>
+        <button class="btn btn-primary mt-3" type="submit">Actualizar</button>
 
         <!-- Botón 2: Llama a la ruta para volver -->
-        <button class="btn btn-secondary mt-3" th:formaction="@{/miPerfil}" type="submit">Volver</button>
+        <a class="btn btn-secondary mt-3" th:href="@{/miPerfil}">Volver</a>
     </form>
 
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AgiA2L1LvptbI4u+3E9lmB8H2y9F2KbG5C3QaAZGzUa1lFdtBAXJImFjtN4Nx" crossorigin="anonymous"></script>
-
 
 </body>
 </html>

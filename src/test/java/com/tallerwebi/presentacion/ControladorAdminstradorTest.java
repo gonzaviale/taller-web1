@@ -47,7 +47,7 @@ public class ControladorAdminstradorTest {
     @Test
     void irAHomeAdministradorMeRedirigirSiNoHayAdminEnSesion() {
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("usuarioEnSesion")).thenReturn(null);
+        when(session.getAttribute("administrador")).thenReturn(null);
 
         ModelAndView modelAndView = controladorAdministrador.irAHomeAdministrador("", request);
 
@@ -59,7 +59,7 @@ public class ControladorAdminstradorTest {
         List<Usuario> veterinariosNoVerificados = new ArrayList<>();
         veterinariosNoVerificados.add(new Veterinario());
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("usuarioEnSesion")).thenReturn(admin);
+        when(session.getAttribute("administrador")).thenReturn(admin);
         when(servicioFiltro.obtenerTodosLosVeterinariosNoVerificados()).thenReturn(veterinariosNoVerificados);
 
         ModelAndView modelAndView = controladorAdministrador.irAHomeAdministrador("", request);
@@ -71,7 +71,7 @@ public class ControladorAdminstradorTest {
     @Test
     void aceptarUsuario_debeRedirigirSiNoHayAdminEnSesion() {
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("usuarioEnSesion")).thenReturn(null);
+        when(session.getAttribute("administrador")).thenReturn(null);
 
         ModelAndView modelAndView = controladorAdministrador.aceptarUsuario(1L, request);
 
@@ -82,7 +82,7 @@ public class ControladorAdminstradorTest {
     @Test
     void aceptarUsuario_debeRedirigirConMensajeSiActivacionEsExitosa() {
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("usuarioEnSesion")).thenReturn(admin);
+        when(session.getAttribute("administrador")).thenReturn(admin);
         when(servicioFiltro.activarUsuarioBuscadoPor(1L)).thenReturn(true);
 
         ModelAndView modelAndView = controladorAdministrador.aceptarUsuario(1L, request);
@@ -93,7 +93,7 @@ public class ControladorAdminstradorTest {
     @Test
     void aceptarUsuario_debeRedirigirConMensajeDeErrorSiActivacionFalla() {
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("usuarioEnSesion")).thenReturn(admin);
+        when(session.getAttribute("administrador")).thenReturn(admin);
         when(servicioFiltro.activarUsuarioBuscadoPor(1L)).thenReturn(false);
 
         ModelAndView modelAndView = controladorAdministrador.aceptarUsuario(1L, request);
@@ -104,7 +104,7 @@ public class ControladorAdminstradorTest {
     @Test
     void rechazarUsuario_debeRedirigirSiNoHayAdminEnSesion() {
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("usuarioEnSesion")).thenReturn(null);
+        when(session.getAttribute("administrador")).thenReturn(null);
 
         ModelAndView modelAndView = controladorAdministrador.rechazarUsuario(1L, request);
 
@@ -114,7 +114,7 @@ public class ControladorAdminstradorTest {
     @Test
     void rechazarUsuario_debeRedirigirConMensajeSiDesactivacionEsExitosa() {
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("usuarioEnSesion")).thenReturn(admin);
+        when(session.getAttribute("administrador")).thenReturn(admin);
         when(servicioFiltro.desactivarUsuarioBuscadoPor(1L)).thenReturn(true);
 
         ModelAndView modelAndView = controladorAdministrador.rechazarUsuario(1L, request);
@@ -125,7 +125,7 @@ public class ControladorAdminstradorTest {
     @Test
     void rechazarUsuario_debeRedirigirConMensajeDeErrorSiDesactivacionFalla() {
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("usuarioEnSesion")).thenReturn(admin);
+        when(session.getAttribute("administrador")).thenReturn(admin);
         when(servicioFiltro.desactivarUsuarioBuscadoPor(1L)).thenReturn(false);
 
         ModelAndView modelAndView = controladorAdministrador.rechazarUsuario(1L, request);
