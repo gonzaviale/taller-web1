@@ -35,6 +35,21 @@
       font-size: 3rem;
       margin-top: 20px;
     }
+    .chat-button {
+      position: fixed;
+      bottom: 0px; /* Distancia desde el borde inferior */
+      right: 20px; /* Distancia desde el borde derecho */
+      width: 200px;
+      height: 40px;
+      background-color: white; /* Fondo negro */
+      color: #0056b3; /* Texto en blanco */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -94,7 +109,9 @@
 <section th:if="${!publicaciones.isEmpty()}" class="container mt-4">
   <article th:replace="fragments/listarPublicaciones"></article>
 </section>
-
+<div class="chat-button">
+  <a href="/spring/getAllMessages" >Chat</a>
+</div>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 <script th:src="@{../../../resources/core/js/main.js}"></script>
 
