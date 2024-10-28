@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandeja de Entrada</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css(v=1.0.1)}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css(v=1.0.1)}"/>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div class="container my-5">
+    <div class="inbox-container">
+        <h2 class="mb-4">Bandeja de Entrada</h2>
+
+        <!-- Itera sobre los mensajes -->
+        <div th:each="mensaje : ${listMessages}"
+             th:classappend="${!mensaje.leido} ? 'unread' : ''"
+             class="message-preview">
+            <div class="message-details">
+                <!-- Nombre del emisor -->
+                <a th:href="@{/getMessagesByIds(bancoId=${mensaje.banco.getId()}, usuarioId=${mensaje.usuario.getId()})}"
+                   th:text="${mensaje.usuario.getNombre()}">
+                </a>
+
+                <!-- Banco asociado -->
+                <a th:href="@{/getMessagesByIds(bancoId=${mensaje.banco.getId()}, usuarioId=${mensaje.usuario.getId()})}"
+                   th:text="${mensaje.banco.getNombreBanco()}">
+                </a>
+            </div>
+            <!-- Vista previa del mensaje -->
+            <a th:href="@{/getMessagesByIds(bancoId=${mensaje.banco.getId()}, usuarioId=${mensaje.usuario.getId()})}"
+               class="message-text" th:text="${mensaje.mensaje}">
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+</body>
+</html>

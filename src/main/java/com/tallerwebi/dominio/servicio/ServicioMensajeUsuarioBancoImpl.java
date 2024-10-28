@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 
 import com.tallerwebi.dominio.entidad.*;
 
+import java.util.ArrayList;
+
 @Service("servicioMensajeUsuarioBanco")
 @Transactional
 public class ServicioMensajeUsuarioBancoImpl implements ServicioMensajeUsuarioBanco{
@@ -32,6 +34,38 @@ public class ServicioMensajeUsuarioBancoImpl implements ServicioMensajeUsuarioBa
             }
         } else {
             throw new Exception("El destinatario no existe");
+        }
+    }
+
+    @Override
+    public ArrayList<MensajeUsuarioBanco> getMessages(Usuario usuario) {
+        try {
+            ArrayList<MensajeUsuarioBanco> messages = new ArrayList<>();
+            messages.addAll(this.repositorioMensajeUsuarioBanco.getMessagesByUser(usuario));
+            return messages;
+        }catch (RuntimeException e){
+            return new ArrayList<MensajeUsuarioBanco>();
+        }
+    }
+
+    @Override
+    public ArrayList<MensajeUsuarioBanco> getMessagesByIds(Long usuarioId, Long bancoId) {
+        try{
+            ArrayList<MensajeUsuarioBanco> messages;
+            messages = this.repositorioMensajeUsuarioBanco.getMessagesByUserAndBank(usuarioId, bancoId);
+            return messages;
+        } catch (RuntimeException e){
+            return new ArrayList<MensajeUsuarioBanco>();
+        }
+    }
+
+    @Override
+    public Usuario searchUser(Long userId) {
+        try {
+            Usuario user = this.repositorioMensajeUsuarioBanco.searchUser(userId);
+            return user;
+        } catch (RuntimeException e){
+            return null;
         }
     }
 }
