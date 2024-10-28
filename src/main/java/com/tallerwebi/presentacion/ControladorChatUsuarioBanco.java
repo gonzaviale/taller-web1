@@ -35,13 +35,17 @@ public class ControladorChatUsuarioBanco {
     }
 
     @RequestMapping(path = "/getMessagesByIds", method = RequestMethod.GET)
-    public ModelAndView getMessagesById(Long usuarioId, Long bancoId){
+    public ModelAndView getMessagesById(Long usuarioId, Long bancoId, HttpServletRequest request){
         try {
             ModelMap model = new ModelMap();
             ArrayList<MensajeUsuarioBanco> messages = this.servicioMensajeUsuario.getMessagesByIds(usuarioId, bancoId);
             model.put("listMessages", messages);
             model.put("usuario", usuarioId);
             model.put("banco", bancoId);
+            if(request.getSession().getAttribute("usuarioEnSesion")!=null)
+                model.put("sesion", request.getSession().getAttribute("usuarioEnSesion"));
+            if(request.getSession().getAttribute("idBanco")!=null)
+                model.put("idBanco", request.getSession().getAttribute("idBanco"));
             return new ModelAndView("chattUsers", model);
         } catch (RuntimeException e) {
             ModelMap model = new ModelMap();
