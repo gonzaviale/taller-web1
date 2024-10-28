@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tallerwebi.dominio.entidad.Bot;
 import com.tallerwebi.dominio.entidad.MensajeUsuarioBanco;
 import com.tallerwebi.dominio.entidad.Usuario;
@@ -37,20 +38,24 @@ public class ControladorWebSocket {
 
     @MessageMapping("/chatMessage")
     @SendTo("/topic/chat")
-    public MensajeUsuarioBanco sendChatMessage(ChatMessage chatMessage, HttpServletRequest request) throws Exception {
+    public String sendChatMessage(ChatMessage chatMessage) throws Exception {
         Usuario user = servicioMensajeUsuarioBanco.searchUser(chatMessage.getUsuarioId());
-        System.out.println(chatMessage.getUsuarioId());
-        System.out.println("Usuario: " + chatMessage.getUsuarioId() + "Holaaaaaaaaaa");
-        System.out.println(chatMessage.getMensaje());
-        System.out.println(chatMessage.getBancoId());
         MensajeUsuarioBanco createMessage;
-        if(request.getSession().getAttribute("usuarioEnSesion")!= null){
+        if(chatMessage.getUserInSession()!=null){
             createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(),"Usuario", user, chatMessage.getBancoId());
-        } else {
-            createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(),"Banco", user, chatMessage.getBancoId());
+            System.out.println("Mensaje enviado: "+createMessage.toString());
+            System.out.println("Mensaje enviado: holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(createMessage);
+            System.out.println(jsonString);
+            return createMessage.toString();
         }
-        System.out.println(createMessage);
-        return createMessage;
+        else{
+            createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(),"Banco", user, chatMessage.getBancoId());
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(createMessage);
+            return jsonString;
+        }
     }
 
     @RequestMapping(path = "/chat")
@@ -62,6 +67,25 @@ public class ControladorWebSocket {
         private Long usuarioId;
         private Long bancoId;
         private String mensaje;
+        private Long bankInSession;
+
+        public Usuario getUserInSession() {
+            return userInSession;
+        }
+
+        public void setUserInSession(Usuario userInSession) {
+            this.userInSession = userInSession;
+        }
+
+        public Long getBankInSession() {
+            return bankInSession;
+        }
+
+        public void setBankInSession(Long bankInSession) {
+            this.bankInSession = bankInSession;
+        }
+
+        private Usuario userInSession;
 
         public Long getUsuarioId() {
             return usuarioId;

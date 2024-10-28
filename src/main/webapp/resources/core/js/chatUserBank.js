@@ -5,6 +5,7 @@ const client = new Client({
     onConnect: () => {
         client.subscribe('/topic/chat', message => {
             const mensajeUsuarioBanco = JSON.parse(message.body); // Parsear el mensaje recibido
+            console.log("conect from backend")
             showMessage(mensajeUsuarioBanco);
         });
         document.getElementById('sendButton').disabled = false;
@@ -17,17 +18,27 @@ function sendMessage() {
     const message = document.getElementById('mensaje').value;
     const userId = document.getElementById('userId').value;
     const bankId = document.getElementById('bankId').value;
-    console.log(message, userId, bankId, "los elementos")
-
-    const chatMessage = {
-        usuarioId: userId,
-        bancoId: bankId,
-        mensaje: message
-    };
+    const bankInSession = document.getElementById("emisorBank");
+    const userInSession = document.getElementById("emisorUser");
+    let chatMessage;
+    if(bankInSession){
+        chatMessage = {
+            usuarioId: userId,
+            bancoId: bankId,
+            mensaje: message,
+            bankInSession
+        }
+    } else {
+        chatMessage = {
+            usuarioId: userId,
+            bancoId: bankId,
+            mensaje: message,
+            userInSession
+        };
+    }
 
     if (client.connected) {
         client.publish({ destination: '/app/chatMessage', body: JSON.stringify(chatMessage) });
-        console.log("Chat message enviado:", JSON.stringify(chatMessage));
         document.getElementById('mensaje').value = '';
     } else {
         console.error("No se puede enviar el mensaje. WebSocket no está conectado.");
@@ -35,6 +46,7 @@ function sendMessage() {
 }
 
 function showMessage(mensajeUsuarioBanco) {
+    console.log(mensajeUsuarioBanco)
     const messagesDiv = document.getElementById('messages');
     const isUser = mensajeUsuarioBanco.emisor === 'Usuario';
 
@@ -52,6 +64,5 @@ function showMessage(mensajeUsuarioBanco) {
 
 document.getElementById('sendButton').addEventListener('click', event => {
     event.preventDefault();
-    console.log("holaaaaa")
     sendMessage();
 });
