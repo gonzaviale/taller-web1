@@ -6,12 +6,16 @@ import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.dominio.servicio.ServicioBanco;
 import com.tallerwebi.dominio.servicio.ServicioSolicitud;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -26,6 +30,9 @@ public class ControladorSolicitudesTest {
     private final ServicioSolicitud servicioSolicitudesMock = mock(ServicioSolicitud.class);
     private final ControladorSolicitudes controladorSolicitudes= new ControladorSolicitudes(servicioSolicitudesMock);
     private final HttpSession sessionMock = mock(HttpSession.class);
+    private final Model modelMock = mock(Model.class);
+    private final RedirectAttributes redirectAttributesMock = mock(RedirectAttributes.class);
+
 
     @Test
     public void deberiaMostrarPeticionesConSolicitudes() {
@@ -106,5 +113,52 @@ public class ControladorSolicitudesTest {
     }
 
 
+    @Test
+    public void deberiaMostrarFormularioSolicitudConDatosCorrectos() {
+        // Preparación
+        Long bancoId = 1L;
+        String tipoProducto = "Sangre total";
+        String tipoSangre = "DEA 1.1+";
+        int cantidad = 200;
+        Long usuarioId = 2L;
+
+        when(sessionMock.getAttribute("usuarioId")).thenReturn(usuarioId);
+
+        // Ejecución
+        String vista = controladorSolicitudes.mostrarFormularioSolicitud(bancoId, tipoProducto, tipoSangre, cantidad, modelMock, sessionMock);
+
+        // Validación
+        assertEquals("crearSolicitud", vista);
+        verify(modelMock).addAttribute("usuarioId", usuarioId);
+        verify(modelMock).addAttribute("bancoId", bancoId);
+        verify(modelMock).addAttribute("tipoProducto", tipoProducto);
+        verify(modelMock).addAttribute("tipoSangre", tipoSangre);
+        verify(modelMock).addAttribute("cantidad", cantidad);
+    }
+
+    @Test
+    public void deberiaProcesarSolicitudYRedirigirAHome() {
+        // Preparación
+        Long bancoId = 1L;
+        Long usuarioId = 2L;
+        String tipoProducto = "Plasma";
+        String tipoSangre = "DEA 1.2-";
+        int cantidad = 150;
+
+        // Ejecución
+        String vista = controladorSolicitudes.procesarSolicitud(bancoId, usuarioId, tipoProducto, tipoSangre, cantidad, redirectAttributesMock);
+
+        // Validación
+        assertEquals("redirect:/home", vista);
+
+        // Verificar que se crea una solicitud con los datos correctos y que el método agregarSolicitud fue llamado
+        verify(servicioSolicitudesMock).agregarSolicitud(argThat(solicitud ->
+                Objects.equals(solicitud.getBancoId(), bancoId) &&
+                        Objects.equals(solicitud.getUsuarioId(), usuarioId) &&
+                        solicitud.getTipoProducto().equals(tipoProducto) &&
+                        solicitud.getTipoSangre().equals(tipoSangre) &&
+                        solicitud.getCantidad() == cantidad
+        ));
+    }
 
 }

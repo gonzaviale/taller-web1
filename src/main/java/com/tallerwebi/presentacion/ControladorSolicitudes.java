@@ -7,13 +7,16 @@ import com.tallerwebi.dominio.servicio.ServicioBanco;
 import com.tallerwebi.dominio.servicio.ServicioSolicitud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -84,6 +87,39 @@ public class ControladorSolicitudes {
 
         return "redirect:/verPeticiones";
     }
+
+    @GetMapping("/crearSolicitud")
+    public String mostrarFormularioSolicitud(
+            @RequestParam("bancoId") long bancoId,
+            @RequestParam("tipoProducto") String tipoProducto,
+            @RequestParam("tipoSangre") String tipoSangre,
+            @RequestParam("cantidad") int cantidad,
+            Model model, HttpSession session) {
+
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("bancoId", bancoId);
+        model.addAttribute("tipoProducto", tipoProducto);
+        model.addAttribute("tipoSangre", tipoSangre);
+        model.addAttribute("cantidad", cantidad);
+
+        return "crearSolicitud";
+    }
+
+    @PostMapping("/procesarSolicitudaBanco")
+    public String procesarSolicitud(
+            @RequestParam(value = "bancoId", defaultValue = "0") Long bancoId,
+            @RequestParam(value = "usuarioId", defaultValue = "0") Long usuarioId,
+            @RequestParam(value = "tipoProducto", defaultValue = "") String tipoProducto,
+            @RequestParam(value = "tipoSangre", defaultValue = "") String tipoSangre,
+            @RequestParam(value = "cantidad", defaultValue = "0") Integer cantidad,
+            RedirectAttributes redirectAttributes) {
+
+        Solicitud solicitud = new Solicitud(bancoId, usuarioId, tipoProducto, tipoSangre, cantidad);
+        servicioSolicitud.agregarSolicitud(solicitud);
+        return "redirect:/home";
+    }
+
 
 
     private boolean verificarSesion(HttpSession session) {
