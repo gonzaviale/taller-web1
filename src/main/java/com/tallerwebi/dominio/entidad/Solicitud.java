@@ -24,6 +24,10 @@ public class Solicitud {
     private String estado;
 
 
+    @Column
+    private String archivoAdjunto;
+
+
     public Solicitud(long bancoId, long usuarioId, String tipoProducto, String tipoSangre, int cantidad) {
         this.bancoId = bancoId;
         this.usuarioId = usuarioId;
@@ -31,6 +35,7 @@ public class Solicitud {
         this.tipoSangre = tipoSangre;
         this.cantidad = cantidad;
         this.estado="pendiente";
+        this.archivoAdjunto = null;
     }
 
     public Solicitud() {
@@ -67,6 +72,13 @@ public class Solicitud {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+
+    public String getArchivoAdjunto() {return archivoAdjunto;
+    }
+    public void setArchivoAdjunto(String archivoAdjunto) {
+        this.archivoAdjunto = archivoAdjunto;}
+
 
     @Override
     public boolean equals(Object o) {

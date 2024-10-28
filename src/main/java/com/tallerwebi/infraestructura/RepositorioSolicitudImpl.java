@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioSolicitud;
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 import org.hibernate.Session;
@@ -88,6 +89,16 @@ public class RepositorioSolicitudImpl implements RepositorioSolicitud {
             session.update(solicitud);
         }
 
+    }
+
+    @Override
+    public Banco buscarPorId(Long bancoId) {
+        final Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Banco> cq = cb.createQuery(Banco.class);
+        Root<Banco> root = cq.from(Banco.class);
+        cq.select(root).where(cb.equal(root.get("id"), bancoId));
+        return session.createQuery(cq).uniqueResult();
     }
 
 }

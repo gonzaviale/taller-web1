@@ -25,6 +25,7 @@
                     <th scope="col">Tipo de Sangre Solicitada</th>
                     <th scope="col">Tipo de Producto</th>
                     <th scope="col">Cantidad Solicitada</th>
+                    <th scope="col">ArchivoAdjunto</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Acciones</th>
                 </tr>
@@ -38,6 +39,7 @@
                     <td th:text="${solicitud.tipoSangre}">Tipo de Sangre</td>
                     <td th:text="${solicitud.tipoProducto}">Tipo de Producto</td>
                     <td th:text="${solicitud.cantidad}">Cantidad</td>
+                    <td th:text="${solicitud.archivoAdjunto}">Cantidad</td>
                     <td th:text="${solicitud.estado}">Estado</td>
                     <td>
                         <a class="btn btn-primary"

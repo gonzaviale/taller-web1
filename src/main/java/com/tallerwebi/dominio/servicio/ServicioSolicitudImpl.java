@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.RepositorioBanco;
 import com.tallerwebi.dominio.RepositorioSolicitud;
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,11 @@ public class ServicioSolicitudImpl implements ServicioSolicitud {
         this.repositorio.solicitudAprobar(solicitudId);
     }
 
+    @Override
+    public Banco obtenerBancoXId(Long bancoId) {
 
-
+        return this.repositorio.buscarPorId(bancoId);
+    }
 
 
 }

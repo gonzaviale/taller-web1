@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.servicio;
 
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 
@@ -13,5 +14,5 @@ public interface ServicioSolicitud {
     List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatibles(Solicitud solicitud);
     void rechazarSolicitud(int solicitudId);
     void asignarPaqueteASolicitud(int solicitudId, int paqueteId);
-
+    Banco obtenerBancoXId(Long bancoId);
 }
