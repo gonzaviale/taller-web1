@@ -18,6 +18,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/wschat"); // Asegúrate de que esta ruta coincida
+        registry.addEndpoint("/wschat").setAllowedOrigins("*"); // Asegúrate de que esta ruta coincida
     }
 }

@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.entidad;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class MensajeUsuarioBanco {
@@ -20,6 +21,16 @@ public class MensajeUsuarioBanco {
     private String mensaje;
 
     private Boolean leido;
+
+    private Date fecha;
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
 
     public String getMensaje() {
         return mensaje;

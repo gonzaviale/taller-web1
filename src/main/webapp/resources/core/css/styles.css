@@ -1,0 +1,28 @@
+.inbox-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+.message-preview {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+.message-preview.unread {
+    background-color: #e9ecef; /* Fondo diferente para mensajes no leídos */
+    font-weight: bold;
+}
+.message-preview .message-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+}
+.message-preview .message-text {
+    color: #6c757d;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

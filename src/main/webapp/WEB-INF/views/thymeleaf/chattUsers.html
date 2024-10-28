@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css(v=1.0.1)}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css(v=1.0.1)}"/>
+    <script type="importmap">
+        {
+            "imports": {
+                "@stomp/stompjs": "https://ga.jspm.io/npm:@stomp/stompjs@7.0.0/esm6/index.js",
+                "sockjs-client": "https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"
+            }
+        }
+    </script>
+    <script
+            async
+            src="https://ga.jspm.io/npm:es-module-shims@1.5.1/dist/es-module-shims.js"
+            crossorigin="anonymous"
+    ></script>
+</head>
+<body>
+<header th:replace="fragments/header :: header"></header>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Chat con el Banco</h5>
+        </div>
+        <div class="card-body chat-box" style="max-height: 500px; overflow-y: auto;" id="messages">
+            <!-- Mensajes iniciales renderizados por Thymeleaf -->
+            <div th:each="mensaje : ${listMessages}">
+                <div th:if="${mensaje.emisor == 'Usuario'}">
+                    <div class="d-flex justify-content-end mb-2">
+                        <div class="p-2 bg-primary text-white rounded">
+                            <span th:text="${mensaje.mensaje}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${mensaje.emisor != 'Usuario'}">
+                    <div class="d-flex justify-content-start mb-2">
+                        <div class="p-2 bg-secondary text-white rounded">
+                            <span th:text="${mensaje.mensaje}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <form id="chatForm" class="d-flex">
+                <input type="hidden" id="userId" name="userId" th:value="${usuario}" />
+                <input type="hidden" id="bankId" name="bankId" th:value="${banco}" />
+                <input type="text" id="mensaje" class="form-control mr-2" placeholder="Escribe un mensaje..." required />
+                <button type="submit" id="sendButton" class="btn btn-primary" disabled>Enviar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" th:src="@{js/chatUserBank.js}"></script>
+</body>
+</html>
