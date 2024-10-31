@@ -1,5 +1,6 @@
-package com.tallerwebi.dominio.servicio;
+package com.tallerwebi.dominio.servicioImpl;
 
+import com.tallerwebi.dominio.servicio.ServicioImagenes;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

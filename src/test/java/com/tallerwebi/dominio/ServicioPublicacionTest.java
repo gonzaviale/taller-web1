@@ -3,7 +3,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
-import com.tallerwebi.dominio.servicio.ServicioPublicacionImpl;
+import com.tallerwebi.dominio.servicioImpl.ServicioPublicacionImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

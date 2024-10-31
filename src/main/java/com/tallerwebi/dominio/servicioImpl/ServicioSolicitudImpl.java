@@ -1,10 +1,10 @@
-package com.tallerwebi.dominio.servicio;
+package com.tallerwebi.dominio.servicioImpl;
 
-import com.tallerwebi.dominio.RepositorioBanco;
 import com.tallerwebi.dominio.RepositorioSolicitud;
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
+import com.tallerwebi.dominio.servicio.ServicioSolicitud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

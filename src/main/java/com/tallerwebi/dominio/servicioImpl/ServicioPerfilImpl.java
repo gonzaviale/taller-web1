@@ -1,9 +1,10 @@
-package com.tallerwebi.dominio.servicio;
+package com.tallerwebi.dominio.servicioImpl;
 
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.servicio.ServicioPerfil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

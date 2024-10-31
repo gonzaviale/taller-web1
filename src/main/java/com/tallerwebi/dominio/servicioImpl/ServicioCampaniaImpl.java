@@ -1,8 +1,9 @@
-package com.tallerwebi.dominio.servicio;
+package com.tallerwebi.dominio.servicioImpl;
 
 import com.tallerwebi.dominio.RepositorioCampania;
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Campana;
+import com.tallerwebi.dominio.servicio.ServicioCampania;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

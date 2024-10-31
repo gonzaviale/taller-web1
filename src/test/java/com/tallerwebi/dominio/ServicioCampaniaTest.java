@@ -2,7 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Campana;
-import com.tallerwebi.dominio.servicio.ServicioCampaniaImpl;
+import com.tallerwebi.dominio.servicioImpl.ServicioCampaniaImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.Rollback;
 

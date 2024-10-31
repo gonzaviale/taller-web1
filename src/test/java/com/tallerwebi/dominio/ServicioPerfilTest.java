@@ -4,7 +4,7 @@ import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioPerfil;
-import com.tallerwebi.dominio.servicio.ServicioPerfilImpl;
+import com.tallerwebi.dominio.servicioImpl.ServicioPerfilImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,7 @@
-package com.tallerwebi.dominio.servicio;
+package com.tallerwebi.dominio.servicioImpl;
 
 import com.tallerwebi.dominio.RepositorioMensajeUsuarioBanco;
+import com.tallerwebi.dominio.servicio.ServicioMensajeUsuarioBanco;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 
 @Service("servicioMensajeUsuarioBanco")
 @Transactional
-public class ServicioMensajeUsuarioBancoImpl implements ServicioMensajeUsuarioBanco{
+public class ServicioMensajeUsuarioBancoImpl implements ServicioMensajeUsuarioBanco {
 
     private RepositorioMensajeUsuarioBanco repositorioMensajeUsuarioBanco;
 

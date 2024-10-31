@@ -2,7 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.servicio.ServicioScore;
-import com.tallerwebi.dominio.servicio.ServicioScoreImpl;
+import com.tallerwebi.dominio.servicioImpl.ServicioScoreImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
