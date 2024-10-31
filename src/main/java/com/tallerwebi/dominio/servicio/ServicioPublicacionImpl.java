@@ -1,9 +1,8 @@
-package com.tallerwebi.dominio.servicioImpl;
+package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.RepositorioPublicacion;
 import com.tallerwebi.dominio.excepcion.*;
-import com.tallerwebi.dominio.servicio.ServicioPublicacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

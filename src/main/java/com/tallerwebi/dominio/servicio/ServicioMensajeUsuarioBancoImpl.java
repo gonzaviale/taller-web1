@@ -1,7 +1,6 @@
-package com.tallerwebi.dominio.servicioImpl;
+package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.RepositorioMensajeUsuarioBanco;
-import com.tallerwebi.dominio.servicio.ServicioMensajeUsuarioBanco;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

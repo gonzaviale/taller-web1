@@ -3,7 +3,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.MensajeUsuarioBanco;
 import com.tallerwebi.dominio.entidad.Usuario;
-import com.tallerwebi.dominio.servicioImpl.ServicioMensajeUsuarioBancoImpl;
+import com.tallerwebi.dominio.servicio.ServicioMensajeUsuarioBancoImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

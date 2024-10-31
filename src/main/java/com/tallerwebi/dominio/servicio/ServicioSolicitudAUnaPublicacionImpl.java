@@ -1,9 +1,8 @@
-package com.tallerwebi.dominio.servicioImpl;
+package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.RepositorioSolicitudAUnaPublicacion;
 import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
-import com.tallerwebi.dominio.servicio.ServicioSolicitudAUnaPublicacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

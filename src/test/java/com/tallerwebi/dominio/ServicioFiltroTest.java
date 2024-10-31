@@ -2,7 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
-import com.tallerwebi.dominio.servicioImpl.ServicioFiltroImpl;
+import com.tallerwebi.dominio.servicio.ServicioFiltroImpl;
 import com.tallerwebi.presentacion.BancoConTiposDeSangre;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
