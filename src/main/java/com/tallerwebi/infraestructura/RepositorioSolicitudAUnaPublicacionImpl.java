@@ -45,6 +45,16 @@ public class RepositorioSolicitudAUnaPublicacionImpl implements RepositorioSolic
     }
 
     @Override
+    public void marcarComoVista(Long solicitud) {
+        SolicitudAUnaPublicacion solicitudAUnaPublicacion = (SolicitudAUnaPublicacion) sessionFactory.getCurrentSession()
+                .createCriteria(SolicitudAUnaPublicacion.class)
+                .add(Restrictions.eq("id", solicitud))
+                .uniqueResult();
+        solicitudAUnaPublicacion.setVista(true);
+        sessionFactory.getCurrentSession().saveOrUpdate(solicitudAUnaPublicacion);
+    }
+
+    @Override
     public void aceptarSolicitud(Long solictud) {
         SolicitudAUnaPublicacion solicitudAUnaPublicacion = (SolicitudAUnaPublicacion) sessionFactory.getCurrentSession()
                 .createCriteria(SolicitudAUnaPublicacion.class)

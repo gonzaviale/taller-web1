@@ -61,9 +61,15 @@ public class ServicioSolicitudAUnaPublicacionImpl implements ServicioSolicitudAU
         List<SolicitudAUnaPublicacion> solicitudesPorUsuario = solicitudes.stream()
                 .filter(solicitud -> solicitud.getMascotaDonante().getDuenio().getId() == dueno.getId())
                 .filter(SolicitudAUnaPublicacion::getRechazada)
+                .filter(solicitud -> !solicitud.getVista())
                 .collect(Collectors.toList());
 
         return solicitudesPorUsuario;
+    }
+
+    @Override
+    public void marcarComoVista(Long solicitud) {
+        repositorioSolicitud.marcarComoVista(solicitud);
     }
 
     @Override

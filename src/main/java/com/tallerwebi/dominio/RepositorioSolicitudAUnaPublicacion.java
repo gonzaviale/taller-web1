@@ -15,5 +15,7 @@ public interface RepositorioSolicitudAUnaPublicacion {
     List<SolicitudAUnaPublicacion> traerTodasLasSolicitudes();
 
     SolicitudAUnaPublicacion traerSolicitudPorId(Long solicitudId);
+
+    void marcarComoVista(Long solicitud);
 }
 
