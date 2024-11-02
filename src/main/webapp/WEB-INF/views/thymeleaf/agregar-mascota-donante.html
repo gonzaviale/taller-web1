@@ -1,68 +1,84 @@
-<!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <title>Formulario de Mascota Donante</title>
+<div th:fragment="formulario">
+    <div class="card">
+        <div class="card-header text-center">
+            <h1 class="text-black">Agregar mascota donante</h1>
+        </div>
+        <div class="card-body">
+            <!-- Formulario -->
+            <form action="#" th:action="@{/agregar-donante}" method="POST" enctype="multipart/form-data">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Nombre" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="anios" class="form-label">Años:</label>
+                        <input type="number" id="anios" name="anios" placeholder="Años" class="form-control" required>
+                    </div>
+                </div>
 
-</head>
-<body>
-<h1>Formulario de Mascota Donante</h1>
-<p th:if="${errorTransfusion != null}" class="alert alert-danger" th:text="'Error: ' + ${errorTransfusion}"></p>
-<p th:if="${errorNombre != null}" class="alert alert-danger" th:text="'Error: ' + ${errorNombre}"></p>
-<p th:if="${errorImagenes != null}" class="alert alert-danger" th:text="'Error: ' + ${errorImagenes}"></p>
-<p th:if="${errorEdad != null}" class="alert alert-danger" th:text="'Error: ' + ${errorEdad}"></p>
-<p th:if="${errorPeso != null}" class="alert alert-danger" th:text="'Error: ' + ${errorPeso}"></p>
-<p th:if="${errorPesoYEdad != null}" class="alert alert-danger" th:text="'Error: ' + ${errorPesoYEdad}"></p>
-<p th:if="${errorTipo != null}" class="alert alert-danger" th:text="'Error: ' + ${errorTipo}"></p>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="peso" class="form-label">Peso:</label>
+                        <input type="number" step="0.1" id="peso" name="peso" placeholder="Peso (kg)" class="form-control" required>
+                    </div>
+                </div>
 
-<form action="#" th:action="@{/agregar-donante}" method="POST" enctype="multipart/form-data">
-    <label>¿Tu mascota alguna vez recibió una transfusión?</label><br>
-    <input type="radio" id="si" name="transfusion" value="Si">
-    <label for="si">Si</label>
-    <input type="radio" id="no" name="transfusion" value="No">
-    <label for="no">No</label><br><br>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Tipo de Mascota:</label><br>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="felino" name="tipo" value="Felino" class="form-check-input" required>
+                            <label for="felino" class="form-check-label">Felino</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="canino" name="tipo" value="Canino" class="form-check-input" required>
+                            <label for="canino" class="form-check-label">Canino</label>
+                        </div>
+                    </div>
 
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" placeholder="Nombre"><br><br>
+                    <div class="col-md-6">
+                        <label class="form-label">¿Tu mascota alguna vez recibió una transfusión?</label><br>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="si" name="transfusion" value="Si" class="form-check-input" required>
+                            <label for="si" class="form-check-label">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="no" name="transfusion" value="No" class="form-check-input" required>
+                            <label for="no" class="form-check-label">No</label>
+                        </div>
+                    </div>
+                </div>
 
-    <label for="anios">Años:</label>
-    <input type="number" id="anios" name="anios" placeholder="Años"><br><br>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h3 class="text-black">Estudios requeridos para Gatos</h3>
+                        <ul>
+                            <li>FeLV (Virus de la Leucemia Felina)</li>
+                            <li>FIV (Virus de la Inmunodeficiencia Felina)</li>
+                            <li>Hemoplasmas</li>
+                            <li>Exámenes recientes de sangre</li>
+                            <li>Vacunaciones y desparasitaciones al día</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="text-black">Estudios requeridos para Perros</h3>
+                        <ul>
+                            <li>PCR (Reacción en Cadena de la Polimerasa)</li>
+                            <li>Exámenes recientes de sangre</li>
+                        </ul>
+                    </div>
+                </div>
 
-    <label for="peso">Peso:</label>
-    <input type="number" step="0.1" id="peso" name="peso" placeholder="Peso (kg)"><br><br>
+                <div class="mb-3">
+                    <label for="imagenes" class="form-label">Subir imágenes de los estudios:</label>
+                    <input type="file" id="imagenes" name="imagenes" multiple accept="image/*" class="form-control" required>
+                </div>
 
-    <label>Tipo de Mascota:</label><br>
-    <input type="radio" id="felino" name="tipo" value="Felino">
-    <label for="felino">Felino</label>
-    <input type="radio" id="canino" name="tipo" value="Canino">
-    <label for="canino">Canino</label><br><br>
-
-    <div id="estudios-gato">
-        <h3>Estudios requeridos para Gatos</h3>
-        <ul>
-            <li>FeLV (Virus de la Leucemia Felina)</li>
-            <li>FIV (Virus de la Inmunodeficiencia Felina)</li>
-            <li>Hemoplasmas</li>
-            <li>Exámenes recientes de sangre</li>
-            <li>Vacunaciones y desparasitaciones al día</li>
-        </ul>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div id="estudios-perro">
-        <h3>Estudios requeridos para Perros</h3>
-        <ul>
-            <li>PCR (Reacción en Cadena de la Polimerasa)</li>
-            <li>Exámenes recientes de sangre</li>
-        </ul>
-    </div>
-
-    <label for="imagenes">Subir imágenes de los estudios:</label><br>
-    <input type="file" id="imagenes" name="imagenes" multiple accept="image/*"><br><br>
-
-    <input type="submit" value="Registrar">
-</form>
-</body>
-</html>
+</div>

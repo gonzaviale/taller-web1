@@ -1,6 +1,5 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidad.Felino;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Usuario;
@@ -83,7 +82,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "Si", imagenesMock, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorTransfusion", "Un animal que ya recibió una transfusión no puede ser donante");
+        thenRegistroFalla(mav, "redirect:/home", "mensaje", "no puede registrar a su mascota si ya recibio una transfusion");
     }
 
     @Rollback
@@ -106,7 +105,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "No", imagenesVacias, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorImagenes", "Una mascota no se puede registrar sin imágenes de sus estudios");
+        thenRegistroFalla(mav, "agregar-mascota", "errorImagenes", "Una mascota no se puede registrar sin imágenes de sus estudios");
     }
 
     @Test
@@ -116,7 +115,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante("", mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "No", imagenesMock, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorNombre", "El nombre de la mascota es obligatorio");
+        thenRegistroFalla(mav, "agregar-mascota", "errorNombre", "El nombre de la mascota es obligatorio");
     }
 
     @Test
@@ -126,7 +125,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), 0, mascotaMock.getPeso(), mascotaMock.getTipo(), "No", imagenesMock, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorEdad", "La edad de la mascota es obligatoria");
+        thenRegistroFalla(mav, "agregar-mascota", "errorEdad", "La edad de la mascota es obligatoria");
     }
 
     @Test
@@ -136,7 +135,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), 0f, mascotaMock.getTipo(), "No", imagenesMock, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorPeso", "El peso de la mascota es obligatorio");
+        thenRegistroFalla(mav, "agregar-mascota", "errorPeso", "El peso de la mascota es obligatorio");
     }
 
     @Test
@@ -146,7 +145,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarReceptora(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), "", imagenesMock, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorTipo", "Es obligatorio ingresar el tipo de mascota");
+        thenRegistroFalla(mav, "agregar-mascota", "errorTipo", "Es obligatorio ingresar el tipo de mascota");
     }
 
     @Test
@@ -156,7 +155,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), mascotaMock.getPeso(), mascotaMock.getTipo(), "", imagenesMock, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorTransfusion", "Es obligatorio ingresar si el animal recibió o no una transfusión");
+        thenRegistroFalla(mav, "agregar-mascota", "errorTransfusion", "Es obligatorio ingresar si el animal recibió o no una transfusión");
     }
 
     @Test
@@ -166,7 +165,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), 20f, "Canino", "No", imagenesMock, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorPesoYEdad", "Para que un perro sea donante debe pesar más de 25 kilos y tener entre 1 y 8 años");
+        thenRegistroFalla(mav, "redirect:/home", "mensaje", "Para que un perro sea donante debe pesar mas de 25 kilos y tener entre 1 y 8 anios");
     }
 
     @Test
@@ -176,7 +175,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), 10, 25f, "Canino", "No", imagenesMock, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorPesoYEdad", "Para que un perro sea donante debe pesar más de 25 kilos y tener entre 1 y 8 años");
+        thenRegistroFalla(mav, "redirect:/home", "mensaje", "Para que un perro sea donante debe pesar mas de 25 kilos y tener entre 1 y 8 anios");
     }
 
     @Test
@@ -186,7 +185,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), mascotaMock.getAnios(), 2.5f, "Felino", "No", imagenesMock, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorPesoYEdad", "Para que un gato sea donante debe pesar más de 3,5 kilos y tener entre 1 y 8 años");
+        thenRegistroFalla(mav, "redirect:/home", "mensaje", "Para que un gato sea donante debe pesar mas de 3,5 kilos y tener entre 1 y 8 anios");
     }
 
     @Test
@@ -196,7 +195,7 @@ public class ControladorAgregarMascotaTest {
 
         ModelAndView mav = agregarMascota.agregarDonante(mascotaMock.getNombre(), 15, 3.5f, "Felino", "No", imagenesMock, requestMock);
 
-        thenRegistroFalla(mav, "agregar-mascota-donante", "errorPesoYEdad", "Para que un gato sea donante debe pesar más de 3,5 kilos y tener entre 1 y 8 años");
+        thenRegistroFalla(mav, "redirect:/home", "mensaje", "Para que un gato sea donante debe pesar mas de 3,5 kilos y tener entre 1 y 8 anios");
     }
 
     private void thenRegistroExitoso(ModelAndView mav, String vista) {

@@ -1,9 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Banco;
-import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
-import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.dominio.servicio.ServicioBancoImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
@@ -15,7 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

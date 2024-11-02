@@ -1,40 +1,49 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Formulario de Mascota Receptora</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
-</head>
-<body>
-<h1>Formulario de Mascota Receptora</h1>
-<p th:if="${errorNombre != null}" class="alert alert-danger" th:text="'Error: ' + ${errorNombre}"></p>
-<p th:if="${errorImagenes != null}" class="alert alert-danger" th:text="'Error: ' + ${errorImagenes}"></p>
-<p th:if="${errorEdad != null}" class="alert alert-danger" th:text="'Error: ' + ${errorEdad}"></p>
-<p th:if="${errorPeso != null}" class="alert alert-danger" th:text="'Error: ' + ${errorPeso}"></p>
-<p th:if="${errorTipo != null}" class="alert alert-danger" th:text="'Error: ' + ${errorTipo}"></p>
+<div th:fragment="formulario">
+    <div class="card">
+        <div class="card-header text-center">
+            <h1 class="text-black">Agregar mascota receptora</h1>
+        </div>
+        <div class="card-body">
+            <!-- Formulario -->
+            <form id="formMascotaReceptora" action="#" th:action="@{/agregar-receptora}" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Nombre de la mascota" class="form-control" required>
+                </div>
 
-<form action="#" th:action="@{/agregar-receptora}" method="POST" enctype="multipart/form-data">
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" placeholder="Nombre"><br><br>
+                <div class="mb-3">
+                    <label for="anios" class="form-label">Años:</label>
+                    <input type="number" id="anios" name="anios" placeholder="Edad en años" class="form-control" min="0" required>
+                </div>
 
-    <label for="anios">Años:</label>
-    <input type="number" id="anios" name="anios" placeholder="Años"><br><br>
+                <div class="mb-3">
+                    <label for="peso" class="form-label">Peso:</label>
+                    <input type="number" step="0.1" id="peso" name="peso" placeholder="Peso en kg" class="form-control" min="0" required>
+                </div>
 
-    <label for="peso">Peso:</label>
-    <input type="number" step="0.1" id="peso" name="peso" placeholder="Peso (kg)"><br><br>
+                <div class="mb-3">
+                    <label class="form-label">Seleccionar especie:</label><br>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" id="felino" name="tipo" value="Felino" class="form-check-input" required>
+                        <label for="felino" class="form-check-label">Felino</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" id="canino" name="tipo" value="Canino" class="form-check-input" required>
+                        <label for="canino" class="form-check-label">Canino</label>
+                    </div>
+                </div>
 
-    <label>Tipo de Mascota:</label><br>
-    <input type="radio" id="felino" name="tipo" value="Felino">
-    <label for="felino">Felino</label>
-    <input type="radio" id="canino" name="tipo" value="Canino">
-    <label for="canino">Canino</label><br><br>
+                <div class="mb-3">
+                    <h3 class="text-black">Suba las imágenes de los exámenes que diagnostican lo que tiene su mascota</h3>
+                    <label for="imagenes" class="form-label">Subir imágenes de los estudios:</label>
+                    <input type="file" id="imagenes" name="imagenes" multiple accept="image/*" class="form-control" required>
+                </div>
 
-    <h3>Suba las imágenes de los exámenes que diagnostican lo que tiene su mascota</h3>
-    <label for="imagenes">Subir imágenes de los estudios:</label><br>
-    <input type="file" id="imagenes" name="imagenes" multiple accept="image/*"><br><br>
-
-    <input type="submit" value="Registrar">
-</form>
-</body>
-</html>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
