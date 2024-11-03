@@ -10,4 +10,8 @@ public interface ServicioImagenes {
     List<String> obtenerImagenesPorUsuario(Long idMascota);
     public void guardarImagen(MultipartFile imagen, String nuevoNombre, Path uploadDirectory) throws IOException;
     public void guardarExamen(MultipartFile[] imagenes, Long id) throws IOException;
+
+    void guardarFotoDePerfilUsuario(MultipartFile[] imagenes, Long id) throws IOException;
+
+    void eliminarFotoDePerfil(Long id) throws IOException;
 }

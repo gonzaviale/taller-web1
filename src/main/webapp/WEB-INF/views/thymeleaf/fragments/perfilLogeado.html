@@ -3,12 +3,25 @@
 <body>
 <div class="container mt-5">
     <div class="row align-items-center">
-        <!-- Imagen del perfil -->
-        <div class="col-md-2 text-center">
-            <picture>
-                <source media="(max-width: 768px)" th:srcset="@{/images/LogoMobile.PNG}">
-                <img th:src="@{/images/Shingen.PNG}" alt="HEROES" id="logoLogeado" class="rounded-circle" style="height: 100px; width: 100px;">
-            </picture>
+
+        <div th:if="${foto}" class="col-md-2 text-center" onclick="document.getElementById('fotoInput').click()">
+            <form th:action="@{/subirFoto}" method="post" enctype="multipart/form-data">
+                <input type="file" id="fotoInput" name="imagenes" style="display: none;" onchange="this.form.submit()">
+                 <picture>
+                        <source media="(max-width: 768px)" th:srcset="@{/images/subidas/{foto}/(foto=${foto})}">
+                        <img th:src="@{/images/subidas/{foto}/(foto=${foto})}" alt="HEROES" id="logoLogeado" class="rounded-circle" style="height: 100px; width: 100px;">
+                 </picture>
+            </form>
+        </div>
+
+        <div th:unless="${foto}" class="col-md-2 text-center" onclick="document.getElementById('entrada').click()">
+            <form th:action="@{/subirFoto}" method="post" enctype="multipart/form-data">
+                <input type="file" id="entrada" name="imagenes" style="display: none;" onchange="this.form.submit()">
+                <picture>
+                    <source media="(max-width: 768px)" th:srcset="@{/images/Shingen.PNG}">
+                    <img th:src="@{/images/Shingen.PNG}" alt="Imagen predeterminada" id="predeterminada" class="rounded-circle" style="height: 100px; width: 100px;">
+                </picture>
+            </form>
         </div>
 
         <!-- Nombre, apellido y email al lado de la imagen -->
@@ -47,6 +60,9 @@
             <div class="col-md-4 d-inline">
                 <!-- Botón "Crear publicación" -->
                 <a href="crear-publicacion.html" class="btn btn-primary">Crear publicación</a>
+            </div>
+            <div class="col-md-4 d-inline">
+                <a href="agregar-mascota.html" class="btn btn-primary">Registrar mascota</a>
             </div>
 
         </form>
