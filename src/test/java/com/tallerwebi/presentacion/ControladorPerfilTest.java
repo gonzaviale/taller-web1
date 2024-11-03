@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.*;
+import com.tallerwebi.dominio.servicio.ServicioImagenes;
 import com.tallerwebi.dominio.servicio.ServicioPerfil;
 import com.tallerwebi.dominio.servicio.ServicioSolicitudAUnaPublicacion;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,10 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +35,8 @@ public class ControladorPerfilTest {
     private HttpServletRequest request;
     @Mock
     private HttpSession session;
+    @Mock
+    private ServicioImagenes servicioImagenes;
 
 
     @BeforeEach
@@ -264,6 +270,124 @@ public class ControladorPerfilTest {
         verify(servicioPerfil, never()).actualizarUsuario(any());
 
         assertEquals("redirect:/login", result.getViewName());
+    }
+
+    @Test
+    void siTengoFotoDePerfilPrecargadaLaObtengo(){
+        Usuario usuarioBuscado = givenPreparoLaRespuestaDeLaSesionYDelServicioParaQueMeDevuelvaElUsuaioConIdUno();
+        List<String> lista= new ArrayList<>();
+        lista.add(usuarioBuscado.getId().toString()+ "_perfil");
+        when(servicioImagenes.obtenerImagenesPorUsuario(usuarioBuscado.getId())).thenReturn(lista);
+        ModelAndView result = controladorPerfil.irAMiPerfil("",request,"");
+
+        thenObtengoLaVistaPerfilYEncuentroAMiUsuarioBuscado(result, usuarioBuscado);
+        assertThat(result.getModel().get("foto"), is(equalTo(usuarioBuscado.getId().toString() + "_perfil")));
+    }
+
+    @Test
+    void siNoTengoFotoDePerfilNoTieneValorLaClaveFoto(){
+        Usuario usuarioBuscado = givenPreparoLaRespuestaDeLaSesionYDelServicioParaQueMeDevuelvaElUsuaioConIdUno();
+        ModelAndView result = controladorPerfil.irAMiPerfil("",request,"");
+
+        thenObtengoLaVistaPerfilYEncuentroAMiUsuarioBuscado(result, usuarioBuscado);
+        assertThat(result.getModel().containsKey("foto"), is(Boolean.FALSE));
+        assertThat(result.getModel().get("foto"), is(nullValue()));
+    }
+
+    @Test
+    void siLaImagenObtenidaEsNullObtengoUnMensajeEnElModeloConElValorDeImagenNoValida(){
+        givenPreparoLaRespuestaDeLaSesionYDelServicioParaQueMeDevuelvaElUsuaioConIdUno();
+
+        ModelAndView result = controladorPerfil.subirFoto(request, null);
+
+        assertThat(result.getViewName(), equalTo("redirect:/miPerfil"));
+        assertThat(result.getModel().get("mensaje"), equalTo("imagen no valida"));
+    }
+
+    @Test
+    void siNoHayUsuarioEnSesionMeRedirigeAmiPerfilConMensajeError() {
+        givenMockeoElBuscarPorIdParaNoEncontrarUsuario(); // Usuario en sesión es null
+
+        ModelAndView result = controladorPerfil.subirFoto(request, new MultipartFile[]{});
+
+        assertThat(result.getViewName(), equalTo("redirect:/home"));
+        assertThat(result.getModel().get("mensaje"), equalTo("error al encontrar al usuario logeado"));
+    }
+
+    @Test
+    void siUsuarioNoSeEncuentraMeRedirigeAmiPerfilConMensajeError() {
+        Usuario usuarioSesion = new Usuario();
+        usuarioSesion.setId(1L);
+
+        when(request.getSession().getAttribute("usuarioEnSesion")).thenReturn(usuarioSesion);
+        when(servicioPerfil.buscarUsuarioPorId(1L)).thenReturn(null);
+
+        ModelAndView result = controladorPerfil.subirFoto(request, new MultipartFile[]{});
+
+        assertThat(result.getViewName(), equalTo("redirect:/home"));
+        assertThat(result.getModel().get("mensaje"), equalTo("error al encontrar al usuario logeado"));
+    }
+
+    @Test
+    void siImagenSeGuardaExitosamenteMeRedirigeAmiPerfilConMensajeExito() throws IOException {
+        Usuario usuario = givenPreparoLaRespuestaDeLaSesionYDelServicioParaQueMeDevuelvaElUsuaioConIdUno();
+        MultipartFile[] imagenes = {mock(MultipartFile.class)};
+
+        doNothing().when(servicioImagenes).guardarFotoDePerfilUsuario(imagenes, usuario.getId());
+
+        ModelAndView result = controladorPerfil.subirFoto(request, imagenes);
+
+        assertThat(result.getViewName(), equalTo("redirect:/miPerfil"));
+        assertThat(result.getModel().get("mensaje"), equalTo("se actualizo correctamente la imagen de su perfil"));
+    }
+
+    @Test
+    void siOcurreErrorAlGuardarImagenMeRedirigeAmiPerfilConMensajeError() throws IOException {
+        Usuario usuario = givenPreparoLaRespuestaDeLaSesionYDelServicioParaQueMeDevuelvaElUsuaioConIdUno();
+        MultipartFile[] imagenes = {mock(MultipartFile.class)};
+
+        doThrow(new IOException()).when(servicioImagenes).guardarFotoDePerfilUsuario(imagenes, usuario.getId());
+
+        ModelAndView result = controladorPerfil.subirFoto(request, imagenes);
+
+        assertThat(result.getViewName(), equalTo("redirect:/miPerfil"));
+        assertThat(result.getModel().get("mensaje"), equalTo("ocurrio un error"));
+    }
+
+    @Test
+    void siUsuarioNoEstaAutenticado_redirigeConMensajeError() throws IOException {
+        when(request.getSession().getAttribute("usuarioEnSesion")).thenReturn(null);
+
+        ModelAndView result = controladorPerfil.eliminarFoto(request);
+
+        assertThat(result.getViewName(), equalTo("redirect:/home"));
+        assertThat(result.getModel().get("mensaje"), equalTo("error al encontrar al usuario logeado"));
+    }
+    @Test
+    void siEliminacionDeFotoEsExitosa_redirigeConMensajeExito() throws IOException {
+        Usuario usuarioEnSesion= givenPreparoLaRespuestaDeLaSesionYDelServicioParaQueMeDevuelvaElUsuaioConIdUno();
+        ModelAndView result = controladorPerfil.eliminarFoto(request);
+
+        assertThat(result.getViewName(), equalTo("redirect:/miPerfil"));
+        assertThat(result.getModel().get("mensaje"), equalTo("se elimino su imagen de perfil"));
+
+        verify(servicioImagenes).eliminarFotoDePerfil(usuarioEnSesion.getId());
+    }
+
+    @Test
+    void siOcurreErrorAlEliminarFoto_redirigeConMensajeError() throws IOException {
+        Usuario usuarioEnSesion = new Usuario();
+        usuarioEnSesion.setId(1L);
+
+        when(request.getSession().getAttribute("usuarioEnSesion")).thenReturn(usuarioEnSesion);
+        when(servicioPerfil.buscarUsuarioPorId(usuarioEnSesion.getId())).thenReturn(usuarioEnSesion);
+
+        doThrow(new IOException()).when(servicioImagenes).eliminarFotoDePerfil(usuarioEnSesion.getId());
+
+        ModelAndView result = controladorPerfil.eliminarFoto(request);
+
+        assertThat(result.getViewName(), equalTo("redirect:/miPerfil"));
+        assertThat(result.getModel().get("mensaje"), equalTo("ocurrio un error"));
     }
 
 }
