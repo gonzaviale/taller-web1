@@ -11,4 +11,5 @@ public interface RepositorioMensajeUsuarioBanco {
     public ArrayList<MensajeUsuarioBanco> getMessagesByUser(Usuario usuario);
     public ArrayList<MensajeUsuarioBanco> getMessagesByUserAndBank(Long usuario, Long banco);
     public Usuario searchUser(Long usuario);
+    public ArrayList<MensajeUsuarioBanco> getMessagesByBank(Long banco);
 }

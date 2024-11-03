@@ -34,6 +34,21 @@ public class ControladorChatUsuarioBanco {
         }
     }
 
+    @RequestMapping(path = "/getAllMessagesBank", method = RequestMethod.GET)
+    public ModelAndView getAllMessagesBank(HttpServletRequest request) {
+        try{
+            ModelMap model = new ModelMap();
+            Long bankId = (Long) request.getSession().getAttribute("idBanco");
+            model.put("idBanco", bankId);
+            model.put("listMessages", this.servicioMensajeUsuario.getMessagesBank(bankId));
+            return new ModelAndView("messageUser", model);
+        } catch(RuntimeException e){
+            ModelMap model = new ModelMap();
+            model.put("errorMessage", e.getMessage());
+            return new ModelAndView("messageUser", model);
+        }
+    }
+
     @RequestMapping(path = "/getMessagesByIds", method = RequestMethod.GET)
     public ModelAndView getMessagesById(Long usuarioId, Long bancoId, HttpServletRequest request){
         try {
