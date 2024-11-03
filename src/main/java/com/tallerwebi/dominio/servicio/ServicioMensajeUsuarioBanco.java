@@ -9,5 +9,6 @@ public interface ServicioMensajeUsuarioBanco {
     public ArrayList<MensajeUsuarioBanco> getMessages(Usuario usuario);
     public ArrayList<MensajeUsuarioBanco> getMessagesByIds(Long usuarioId, Long bancoId);
     public Usuario searchUser(Long userId);
+    public ArrayList<MensajeUsuarioBanco> getMessagesBank(Long bankId);
 
 }

@@ -91,5 +91,24 @@ public class RepositorioMensajeUsuarioBancoImpl implements RepositorioMensajeUsu
         }
     }
 
+    @Override
+    public ArrayList<MensajeUsuarioBanco> getMessagesByBank(Long banco) {
+        Banco bancoObj = sessionFactory.getCurrentSession().get(Banco.class, banco);
+        String hql = "SELECT m FROM MensajeUsuarioBanco m " +
+                "WHERE m.banco = :banco " +
+                "AND m.fecha = (SELECT MAX(sub.fecha) FROM MensajeUsuarioBanco sub " +
+                "               WHERE sub.banco = m.banco AND sub.usuario = m.usuario) " +
+                "ORDER BY m.fecha DESC";
+
+        try {
+            return (ArrayList<MensajeUsuarioBanco>) sessionFactory.getCurrentSession()
+                    .createQuery(hql, MensajeUsuarioBanco.class)
+                    .setParameter("banco", bancoObj)
+                    .getResultList();
+        } catch (HibernateException e) {
+            return new ArrayList<>();
+        }
+    }
+
 
 }

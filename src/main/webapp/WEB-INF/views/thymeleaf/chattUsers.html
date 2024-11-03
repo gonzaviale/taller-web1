@@ -22,12 +22,17 @@
     ></script>
 </head>
 <body>
-<header th:replace="fragments/header :: header"></header>
+<div th:if="${sesion}">
+    <header th:replace="fragments/header :: header"></header>
+</div>
+<div th:if="${idBanco}">
+    <header th:replace="fragments/headerbanco :: headerBanco"></header>
+</div>
+
+
+
 <div class="container mt-5">
     <div class="card">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Chat con el Banco</h5>
-        </div>
         <div class="card-body chat-box" style="max-height: 500px; overflow-y: auto;" id="messages">
             <!-- Mensajes iniciales renderizados por Thymeleaf -->
             <div th:each="mensaje : ${listMessages}">
@@ -52,7 +57,7 @@
                 <input type="hidden" id="userId" name="userId" th:value="${usuario}" />
                 <input type="hidden" id="bankId" name="bankId" th:value="${banco}" />
                 <input th:if="${idBanco}" type="hidden" id="emisorBank" name="bankId" th:value="${idBanco}" />
-                <input th:if="${sesion}" type="hidden" id="emisorUser" name="bankId" th:value="${sesion}" />
+                <input th:if="${sesion}" type="hidden" id="emisorUser" name="userId" th:value="${sesion}" />
                 <input type="text" id="mensaje" class="form-control mr-2" placeholder="Escribe un mensaje..." required />
                 <button type="submit" id="sendButton" class="btn btn-primary" disabled>Enviar</button>
             </form>

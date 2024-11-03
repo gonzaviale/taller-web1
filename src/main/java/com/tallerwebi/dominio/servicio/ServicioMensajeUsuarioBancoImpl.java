@@ -68,4 +68,15 @@ public class ServicioMensajeUsuarioBancoImpl implements ServicioMensajeUsuarioBa
             return null;
         }
     }
+
+    @Override
+    public ArrayList<MensajeUsuarioBanco> getMessagesBank(Long bankId) {
+        try {
+            ArrayList<MensajeUsuarioBanco> messages = new ArrayList<>();
+            messages.addAll(this.repositorioMensajeUsuarioBanco.getMessagesByBank(bankId));
+            return messages;
+        }catch (RuntimeException e){
+            return new ArrayList<>();
+        }
+    }
 }

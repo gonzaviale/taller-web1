@@ -9,7 +9,12 @@
     <link rel="stylesheet" th:href="@{/css/styles.css(v=1.0.1)}"/>
 </head>
 <body>
-<header th:replace="fragments/header :: header"></header>
+<div th:if="${idBanco==null}">
+    <header th:replace="fragments/header :: header"></header>
+</div>
+<div th:if="${idBanco}">
+    <header th:replace="fragments/headerbanco :: headerBanco"></header>
+</div>
 <div class="container my-5">
     <div class="inbox-container">
         <h2 class="mb-4">Bandeja de Entrada</h2>
