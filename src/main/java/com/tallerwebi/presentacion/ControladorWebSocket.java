@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Bot;
 import com.tallerwebi.dominio.entidad.MensajeUsuarioBanco;
 import com.tallerwebi.dominio.entidad.Usuario;
@@ -43,12 +44,9 @@ public class ControladorWebSocket {
         MensajeUsuarioBanco createMessage;
         if(chatMessage.getUserInSession()!=null){
             createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(),"Usuario", user, chatMessage.getBancoId());
-            System.out.println("Mensaje enviado: "+createMessage.toString());
-            System.out.println("Mensaje enviado: holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             ObjectMapper mapper = new ObjectMapper();
             String jsonString = mapper.writeValueAsString(createMessage);
-            System.out.println(jsonString);
-            return createMessage.toString();
+            return jsonString;
         }
         else{
             createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(),"Banco", user, chatMessage.getBancoId());
@@ -67,7 +65,8 @@ public class ControladorWebSocket {
         private Long usuarioId;
         private Long bancoId;
         private String mensaje;
-        private Long bankInSession;
+        private Banco bankInSession;
+        private Usuario userInSession;
 
         public Usuario getUserInSession() {
             return userInSession;
@@ -77,15 +76,13 @@ public class ControladorWebSocket {
             this.userInSession = userInSession;
         }
 
-        public Long getBankInSession() {
+        public Banco getBankInSession() {
             return bankInSession;
         }
 
-        public void setBankInSession(Long bankInSession) {
+        public void setBankInSession(Banco bankInSession) {
             this.bankInSession = bankInSession;
         }
-
-        private Usuario userInSession;
 
         public Long getUsuarioId() {
             return usuarioId;
