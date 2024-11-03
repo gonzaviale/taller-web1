@@ -1,6 +1,5 @@
 package com.tallerwebi.dominio.servicio;
 
-import com.tallerwebi.dominio.RepositorioBanco;
 import com.tallerwebi.dominio.RepositorioSolicitud;
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;

@@ -3,7 +3,6 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
-import com.tallerwebi.dominio.servicio.ServicioBancoImpl;
 import com.tallerwebi.dominio.servicio.ServicioSolicitudImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;

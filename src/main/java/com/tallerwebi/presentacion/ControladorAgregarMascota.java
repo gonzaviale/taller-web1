@@ -15,10 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 
 @Controller
 public class ControladorAgregarMascota {
@@ -33,14 +29,39 @@ public class ControladorAgregarMascota {
         this.servicioImagenes = servicioImagenes;
     }
 
+    @RequestMapping(path = "/agregar-mascota")
+    public ModelAndView agregarMascota() {
+        return new ModelAndView("agregar-mascota");
+    }
+
     @RequestMapping(path = "/agregar-mascota-donante")
-    public ModelAndView formularioDonante() {
-        return new ModelAndView("agregar-mascota-donante");
+    public ModelAndView formularioDonante(HttpServletRequest request) {
+
+        String requestedWith = request.getHeader("X-Requested-With");
+
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+
+        if (!"XMLHttpRequest".equals(requestedWith) || usuarioEnSesion==null || !(usuarioEnSesion.getRol().equals("dueño mascota"))) {
+
+            return new ModelAndView("redirect:/home");
+        }
+
+        return new ModelAndView("agregar-mascota-donante :: formulario");
     }
 
     @RequestMapping(path = "/agregar-mascota-receptora")
-    public ModelAndView formularioReceptora() {
-        return new ModelAndView("agregar-mascota-receptora");
+    public ModelAndView formularioReceptora(HttpServletRequest request) {
+
+        String requestedWith = request.getHeader("X-Requested-With");
+
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+
+        if (!"XMLHttpRequest".equals(requestedWith) || usuarioEnSesion==null || !(usuarioEnSesion.getRol().equals("dueño mascota"))) {
+
+            return new ModelAndView("redirect:/home");
+        }
+
+        return new ModelAndView("agregar-mascota-receptora :: formulario");
     }
 
     @PostMapping("/agregar-donante")
@@ -53,46 +74,46 @@ public class ControladorAgregarMascota {
                                        HttpServletRequest request) {
 
         modelo.clear();
-        if (transfusion == null || transfusion.isEmpty()){
+      if (transfusion == null || transfusion.isEmpty()){
             modelo.put("errorTransfusion", "Es obligatorio ingresar si el animal recibió o no una transfusión");
-            return new ModelAndView("agregar-mascota-donante", modelo);
-        }
+            return new ModelAndView("agregar-mascota", modelo);
+      }
         if (transfusion.equals("Si")) {
-            modelo.put("errorTransfusion", "Un animal que ya recibió una transfusión no puede ser donante");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            modelo.put("mensaje", "no puede registrar a su mascota si ya recibio una transfusion");
+            return new ModelAndView("redirect:/home", modelo);
         }
 
         if (imagenes == null || imagenes.length == 0) {
             modelo.put("errorImagenes", "Una mascota no se puede registrar sin imágenes de sus estudios");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         if (nombre == null || nombre.isEmpty()) {
             modelo.put("errorNombre", "El nombre de la mascota es obligatorio");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         if (anios == null|| anios == 0 ) {
             modelo.put("errorEdad", "La edad de la mascota es obligatoria");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         if (peso == null || peso == 0f) {
             modelo.put("errorPeso", "El peso de la mascota es obligatorio");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         if(tipo == null || tipo.isEmpty()){
-            modelo.put("errorTipo", "Es obligatorio ingresar el tipo de mascota");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            modelo.put("errorTipo", "Es obligatorio ingresar la especie de su mascota");
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         if (tipo.equals("Canino") && (peso < 25f || anios <= 1 || anios >= 8)) {
-            modelo.put("errorPesoYEdad", "Para que un perro sea donante debe pesar más de 25 kilos y tener entre 1 y 8 años");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            modelo.put("mensaje", "Para que un perro sea donante debe pesar mas de 25 kilos y tener entre 1 y 8 anios");
+            return new ModelAndView("redirect:/home", modelo);
         } else if (tipo.equals("Felino") && (peso < 3.5f || anios <= 1 || anios >= 8)) {
-            modelo.put("errorPesoYEdad", "Para que un gato sea donante debe pesar más de 3,5 kilos y tener entre 1 y 8 años");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            modelo.put("mensaje", "Para que un gato sea donante debe pesar mas de 3,5 kilos y tener entre 1 y 8 anios");
+            return new ModelAndView("redirect:/home", modelo);
         }
 
         Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
@@ -100,7 +121,7 @@ public class ControladorAgregarMascota {
         Mascota mascota = crearMascotaSegunTipo(tipo);
         if (mascota == null) {
             modelo.put("errorTipo", "El tipo de mascota no es válido");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         asignarAtributosComunes(mascota, nombre, anios, peso, tipo, duenoMascota);
@@ -114,7 +135,9 @@ public class ControladorAgregarMascota {
             throw new RuntimeException(e);
         }
 
-        return new ModelAndView("redirect:/home");
+        ModelMap model = new ModelMap("mensaje", "la mascota fue registrada correctamente");
+
+        return new ModelAndView("redirect:/home", model);
     }
 
     @PostMapping("/agregar-receptora")
@@ -128,34 +151,35 @@ public class ControladorAgregarMascota {
 
         if (imagenes == null || imagenes.length == 0) {
             modelo.put("errorImagenes", "Una mascota no se puede registrar sin imágenes de sus estudios");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         if (nombre == null || nombre.isEmpty()) {
             modelo.put("errorNombre", "El nombre de la mascota es obligatorio");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         if (anios == null|| anios == 0 ) {
             modelo.put("errorEdad", "La edad de la mascota es obligatoria");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         if (peso == null || peso == 0f) {
             modelo.put("errorPeso", "El peso de la mascota es obligatorio");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         if(tipo == null || tipo.isEmpty()){
             modelo.put("errorTipo", "Es obligatorio ingresar el tipo de mascota");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
+
         Usuario duenoMascota = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
 
         Mascota mascota = crearMascotaSegunTipo(tipo);
         if (mascota == null) {
             modelo.put("errorTipo", "El tipo de mascota no es válido");
-            return new ModelAndView("agregar-mascota-donante", modelo);
+            return new ModelAndView("agregar-mascota", modelo);
         }
 
         asignarAtributosComunes(mascota, nombre, anios, peso, tipo, duenoMascota);
@@ -169,7 +193,9 @@ public class ControladorAgregarMascota {
             throw new RuntimeException(e);
         }
 
-        return new ModelAndView("redirect:/home");
+        ModelMap model = new ModelMap("mensaje", "la mascota fue registrada correctamente");
+
+        return new ModelAndView("redirect:/home", model);
     }
 
     private Mascota crearMascotaSegunTipo(String tipo) {

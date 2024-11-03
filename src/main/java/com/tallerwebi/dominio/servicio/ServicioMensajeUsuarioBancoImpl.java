@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @Service("servicioMensajeUsuarioBanco")
 @Transactional
-public class ServicioMensajeUsuarioBancoImpl implements ServicioMensajeUsuarioBanco{
+public class ServicioMensajeUsuarioBancoImpl implements ServicioMensajeUsuarioBanco {
 
     private RepositorioMensajeUsuarioBanco repositorioMensajeUsuarioBanco;
 
