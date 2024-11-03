@@ -355,7 +355,7 @@ public class ControladorPerfilTest {
     }
 
     @Test
-    void siUsuarioNoEstaAutenticado_redirigeConMensajeError() throws IOException {
+    void siUsuarioNoEstaAutenticado_redirigeConMensajeError() {
         when(request.getSession().getAttribute("usuarioEnSesion")).thenReturn(null);
 
         ModelAndView result = controladorPerfil.eliminarFoto(request);
