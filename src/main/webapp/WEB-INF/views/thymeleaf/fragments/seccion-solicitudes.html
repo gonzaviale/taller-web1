@@ -53,8 +53,12 @@
                             <span th:text="' ('"></span>
                             <a th:href="@{/{nombre}.{id}/(nombre=${solicitud.getMascotaDonante().getDuenio().getNombre()}, id=${solicitud.getMascotaDonante().getDuenio().getId()})}"
                                th:text="${solicitud.getMascotaDonante().getDuenio().getNombre() + ' ' + solicitud.getMascotaDonante().getDuenio().getApellido()}"></a>
-                            <span th:text="') fue aceptada. Solo falta que se les asigne un veterinario para llevar a cabo la transfusión.'"></span>
+                            <span th:text="') fue aceptada. Solo falta que uno de nuestros veterinarios verifique que todo está bien para realizar la transfusión.'"></span>
                         </p>
+                        <form th:action="@{/solicitud-vista}" method="POST" class="d-inline-block">
+                            <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
+                            <input type="submit" class="btn btn-primary" value="Ok">
+                        </form>
                     </div>
                 </div>
             </article>

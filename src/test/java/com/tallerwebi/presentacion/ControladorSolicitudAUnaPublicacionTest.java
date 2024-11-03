@@ -46,14 +46,14 @@ public class ControladorSolicitudAUnaPublicacionTest {
     }
 
     @Test
-    public void queSePuedaAceptarUnaSolicitud(){
+    public void queSePuedaAceptarUnaSolicitud() {
         ModelAndView mav = controladorSolicitudAUnaPublicacion.aceptarSolicitud(solicitudAUnaPublicacionMock.getId());
 
         thenExito(mav, "redirect:/miPerfil");
     }
 
     @Test
-    public void queSePuedaRechazarUnaSolicitud()  {
+    public void queSePuedaRechazarUnaSolicitud() {
         doNothing().when(servicioSolicitudAUnaPublicacionMock).rechazarSolicitud(anyLong());
         when(servicioSolicitudAUnaPublicacionMock.traerSolicitudPorId(anyLong())).thenReturn(solicitudAUnaPublicacionMock);
         ModelAndView mav = controladorSolicitudAUnaPublicacion.rechazarSolicitud(solicitudAUnaPublicacionMock.getId());
@@ -62,7 +62,7 @@ public class ControladorSolicitudAUnaPublicacionTest {
     }
 
     @Test
-    public void queSiSeRechazaUnaSolicitudLaPublicacionVuelvaAEstarActiva(){
+    public void queSiSeRechazaUnaSolicitudLaPublicacionVuelvaAEstarActiva() {
         doNothing().when(servicioSolicitudAUnaPublicacionMock).rechazarSolicitud(anyLong());
         when(servicioSolicitudAUnaPublicacionMock.traerSolicitudPorId(anyLong())).thenReturn(solicitudAUnaPublicacionMock);
         ModelAndView mav = controladorSolicitudAUnaPublicacion.rechazarSolicitud(solicitudAUnaPublicacionMock.getId());
@@ -73,6 +73,12 @@ public class ControladorSolicitudAUnaPublicacionTest {
         assertThat(solicitudAUnaPublicacionMock.getPublicacion().getEstaActiva().toString(), equalToIgnoringCase("true"));
     }
 
+    @Test
+    public void queSePuedanMarcarLasSolicitudesComoVistas() throws PublicacionNoExistente {
+        when(solicitudAUnaPublicacionMock.getVista()).thenReturn(false);
+        ModelAndView mav = controladorSolicitudAUnaPublicacion.solicitudVista(solicitudAUnaPublicacionMock.getId());
+        thenExito(mav, "redirect:/miPerfil");
+    }
 
     private ModelAndView whenRealizarSolicitud(Long mascotaDonante, Long mascotaReceptora, Long publicacion) throws PublicacionNoExistente {
         return controladorSolicitudAUnaPublicacion.realizarSolicitud(mascotaDonante, mascotaReceptora, publicacion);
