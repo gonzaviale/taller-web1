@@ -10,6 +10,7 @@ public class SolicitudAUnaPublicacion {
     private Boolean aprobada;
     private Boolean pendiente;
     private Boolean rechazada;
+    private Boolean vista;
 
     @ManyToOne
     private Mascota mascotaDonante;
@@ -19,6 +20,9 @@ public class SolicitudAUnaPublicacion {
 
     @ManyToOne
     private Publicacion publicacion;
+
+    @ManyToOne
+    private Usuario veterinario;
 
     public Mascota getMascotaReceptora() {
         return mascotaReceptora;
@@ -74,5 +78,21 @@ public class SolicitudAUnaPublicacion {
 
     public void setPublicacion(Publicacion publicacion) {
         this.publicacion = publicacion;
+    }
+
+    public Usuario getVeterinario() {
+        return veterinario;
+    }
+
+    public void setVeterinario(Usuario veterinario) {
+        this.veterinario = veterinario;
+    }
+
+    public Boolean getVista() {
+        return vista;
+    }
+
+    public void setVista(Boolean vista) {
+        this.vista = vista;
     }
 }

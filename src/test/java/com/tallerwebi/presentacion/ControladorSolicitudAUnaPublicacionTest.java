@@ -6,13 +6,12 @@ import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.PublicacionNoExistente;
 import com.tallerwebi.dominio.servicio.ServicioMascota;
+import com.tallerwebi.dominio.servicio.ServicioPerfil;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
 import com.tallerwebi.dominio.servicio.ServicioSolicitudAUnaPublicacion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.concurrent.atomic.LongAccumulator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
@@ -28,6 +27,7 @@ public class ControladorSolicitudAUnaPublicacionTest {
     Mascota mascotaReceptora = mock(Mascota.class);
     Publicacion publicacionMock = mock(Publicacion.class);
     SolicitudAUnaPublicacion solicitudAUnaPublicacionMock = mock(SolicitudAUnaPublicacion.class);
+    Usuario vet = mock(Usuario.class);
 
     @BeforeEach
     public void init() {
@@ -36,6 +36,8 @@ public class ControladorSolicitudAUnaPublicacionTest {
         when(publicacionMock.getId()).thenReturn(1l);
         when(solicitudAUnaPublicacionMock.getId()).thenReturn(1l);
         when(solicitudAUnaPublicacionMock.getPublicacion()).thenReturn(publicacionMock);
+        when(vet.getRol()).thenReturn("Veterinario");
+        when(vet.getNombre()).thenReturn("vet");
     }
 
     @Test
@@ -46,14 +48,23 @@ public class ControladorSolicitudAUnaPublicacionTest {
     }
 
     @Test
-    public void queSePuedaAceptarUnaSolicitud(){
+    public void queSePuedaAceptarUnaSolicitud() {
         ModelAndView mav = controladorSolicitudAUnaPublicacion.aceptarSolicitud(solicitudAUnaPublicacionMock.getId());
 
         thenExito(mav, "redirect:/miPerfil");
     }
 
     @Test
-    public void queSePuedaRechazarUnaSolicitud()  {
+    public void queAlAceptarUnaSolicitudSeAsigneUnVeterinario() {
+        ModelAndView mav = controladorSolicitudAUnaPublicacion.aceptarSolicitud(solicitudAUnaPublicacionMock.getId());
+        when(solicitudAUnaPublicacionMock.getVeterinario()).thenReturn(vet);
+
+        thenExito(mav, "redirect:/miPerfil");
+        assertThat(solicitudAUnaPublicacionMock.getVeterinario().getNombre(), equalToIgnoringCase(vet.getNombre()));
+    }
+
+    @Test
+    public void queSePuedaRechazarUnaSolicitud() {
         doNothing().when(servicioSolicitudAUnaPublicacionMock).rechazarSolicitud(anyLong());
         when(servicioSolicitudAUnaPublicacionMock.traerSolicitudPorId(anyLong())).thenReturn(solicitudAUnaPublicacionMock);
         ModelAndView mav = controladorSolicitudAUnaPublicacion.rechazarSolicitud(solicitudAUnaPublicacionMock.getId());
@@ -62,7 +73,7 @@ public class ControladorSolicitudAUnaPublicacionTest {
     }
 
     @Test
-    public void queSiSeRechazaUnaSolicitudLaPublicacionVuelvaAEstarActiva(){
+    public void queSiSeRechazaUnaSolicitudLaPublicacionVuelvaAEstarActiva() {
         doNothing().when(servicioSolicitudAUnaPublicacionMock).rechazarSolicitud(anyLong());
         when(servicioSolicitudAUnaPublicacionMock.traerSolicitudPorId(anyLong())).thenReturn(solicitudAUnaPublicacionMock);
         ModelAndView mav = controladorSolicitudAUnaPublicacion.rechazarSolicitud(solicitudAUnaPublicacionMock.getId());
@@ -73,6 +84,12 @@ public class ControladorSolicitudAUnaPublicacionTest {
         assertThat(solicitudAUnaPublicacionMock.getPublicacion().getEstaActiva().toString(), equalToIgnoringCase("true"));
     }
 
+    @Test
+    public void queSePuedanMarcarLasSolicitudesComoVistas() throws PublicacionNoExistente {
+        when(solicitudAUnaPublicacionMock.getVista()).thenReturn(false);
+        ModelAndView mav = controladorSolicitudAUnaPublicacion.solicitudVista(solicitudAUnaPublicacionMock.getId());
+        thenExito(mav, "redirect:/miPerfil");
+    }
 
     private ModelAndView whenRealizarSolicitud(Long mascotaDonante, Long mascotaReceptora, Long publicacion) throws PublicacionNoExistente {
         return controladorSolicitudAUnaPublicacion.realizarSolicitud(mascotaDonante, mascotaReceptora, publicacion);
