@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio;
 
 
+import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.dominio.servicio.ServicioSolicitudImpl;
@@ -12,12 +14,15 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
-
+import static org.mockito.Mockito.any;
 import javax.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -28,7 +33,9 @@ import static org.mockito.Mockito.*;
 public class ServicioSolicitudTest {
 
     private final RepositorioSolicitud repositorioSolicitudMock = mock(RepositorioSolicitud.class);
-    private final ServicioSolicitudImpl servicioSolicitud = new ServicioSolicitudImpl( repositorioSolicitudMock );
+    private final RepositorioBanco repositorioBancoMock = mock(RepositorioBanco.class);
+
+    private final ServicioSolicitudImpl servicioSolicitud = new ServicioSolicitudImpl( repositorioSolicitudMock , repositorioBancoMock );
 
     @Rollback
     @Transactional
@@ -104,5 +111,126 @@ public class ServicioSolicitudTest {
             verify(repositorioSolicitudMock).rechazarSolicitud(1);
     }
 
+
+    @Rollback
+    @Transactional
+    @Test
+    public void asignarPaqueteASolicitudDeberiaLlamarSolicitudAprobar() {
+        int solicitudId = 1;
+        long paqueteId = 100L;
+
+        // Crear objeto mock de la solicitud
+        Solicitud solicitudMock = mock(Solicitud.class);
+        when(solicitudMock.getBancoId()).thenReturn(1L);
+        when(repositorioSolicitudMock.buscarSolicitudPorId(solicitudId)).thenReturn(solicitudMock);
+
+        // Crear objeto mock del banco
+        Banco bancoMock = mock(Banco.class);
+        PaqueteDeSangre paqueteMock = mock(PaqueteDeSangre.class);
+        when(bancoMock.getPaquete(paqueteId)).thenReturn(paqueteMock);
+        when(repositorioBancoMock.buscarPorId(1L)).thenReturn(bancoMock);
+
+        // Llamar al método
+        servicioSolicitud.asignarPaqueteASolicitud(solicitudId, paqueteId);
+
+        // Verificar que solicitudAprobar fue llamada
+        verify(repositorioSolicitudMock).solicitudAprobar(solicitudId);
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    public void asignarPaqueteASolicitudDeberiaObtenerBancoPorId() {
+        int solicitudId = 1;
+        long paqueteId = 100L;
+
+        // Crear objetos mock
+        Solicitud solicitudMock = mock(Solicitud.class);
+        when(solicitudMock.getBancoId()).thenReturn(1L);
+        when(repositorioSolicitudMock.buscarSolicitudPorId(solicitudId)).thenReturn(solicitudMock);
+
+        Banco bancoMock = mock(Banco.class);
+        PaqueteDeSangre paqueteMock = mock(PaqueteDeSangre.class);
+        when(bancoMock.getPaquete(paqueteId)).thenReturn(paqueteMock);
+        when(repositorioBancoMock.buscarPorId(1L)).thenReturn(bancoMock);
+
+        // Llamar al método
+        servicioSolicitud.asignarPaqueteASolicitud(solicitudId, paqueteId);
+
+        // Verificar que repositorioBanco.buscarPorId fue llamado
+        verify(repositorioBancoMock).buscarPorId(1L);
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    public void asignarPaqueteASolicitudDeberiaEliminarPaqueteDelBanco() {
+        int solicitudId = 1;
+        long paqueteId = 100L;
+
+        // Crear objetos mock
+        Solicitud solicitudMock = mock(Solicitud.class);
+        when(solicitudMock.getBancoId()).thenReturn(1L);
+        when(repositorioSolicitudMock.buscarSolicitudPorId(solicitudId)).thenReturn(solicitudMock);
+
+        Banco bancoMock = mock(Banco.class);
+        PaqueteDeSangre paqueteMock = mock(PaqueteDeSangre.class);
+        when(bancoMock.getPaquete(paqueteId)).thenReturn(paqueteMock);
+        when(repositorioBancoMock.buscarPorId(1L)).thenReturn(bancoMock);
+
+
+        servicioSolicitud.asignarPaqueteASolicitud(solicitudId, paqueteId);
+
+
+        verify(bancoMock).eliminarPaquete(paqueteId);
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    public void asignarPaqueteASolicitudDeberiaActualizarBanco() {
+        int solicitudId = 1;
+        long paqueteId = 100L;
+
+        // Crear objetos mock
+        Solicitud solicitudMock = mock(Solicitud.class);
+        when(solicitudMock.getBancoId()).thenReturn(1L);
+        when(repositorioSolicitudMock.buscarSolicitudPorId(solicitudId)).thenReturn(solicitudMock);
+
+        Banco bancoMock = mock(Banco.class);
+        PaqueteDeSangre paqueteMock = mock(PaqueteDeSangre.class);
+        when(bancoMock.getPaquete(paqueteId)).thenReturn(paqueteMock);
+        when(repositorioBancoMock.buscarPorId(1L)).thenReturn(bancoMock);
+
+        // Llamar al método
+        servicioSolicitud.asignarPaqueteASolicitud(solicitudId, paqueteId);
+
+        // Verificar que el banco fue actualizado
+        verify(repositorioBancoMock).actualizarBanco(bancoMock);
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    public void asignarPaqueteASolicitudDeberiaGuardarEntrega() {
+        int solicitudId = 1;
+        long paqueteId = 100L;
+
+        // Crear objetos mock
+        Solicitud solicitudMock = mock(Solicitud.class);
+        when(solicitudMock.getBancoId()).thenReturn(1L);
+        when(repositorioSolicitudMock.buscarSolicitudPorId(solicitudId)).thenReturn(solicitudMock);
+
+        Banco bancoMock = mock(Banco.class);
+        PaqueteDeSangre paqueteMock = mock(PaqueteDeSangre.class);
+        when(bancoMock.getPaquete(paqueteId)).thenReturn(paqueteMock);
+        when(repositorioBancoMock.buscarPorId(1L)).thenReturn(bancoMock);
+
+        // Llamar al método
+        servicioSolicitud.asignarPaqueteASolicitud(solicitudId, paqueteId);
+
+
+        verify(repositorioSolicitudMock).guardarEntrega(any(Entrega.class));
+    }
 
 }

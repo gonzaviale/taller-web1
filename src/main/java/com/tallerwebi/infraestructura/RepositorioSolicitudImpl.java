@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioSolicitud;
 import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 import org.hibernate.Session;
@@ -32,6 +33,19 @@ public class RepositorioSolicitudImpl implements RepositorioSolicitud {
         return solicitud1;
     }
 
+    @Override
+    public Entrega guardarEntrega(Entrega entrega) {
+        sessionFactory.getCurrentSession().save(entrega);
+        return entrega;
+    }
+
+    @Override
+    public Entrega buscarEntregaPorSolicitudId(int solicitudId) {
+        return (Entrega) sessionFactory.getCurrentSession()
+                .createCriteria(Entrega.class)
+                .add(Restrictions.eq("solicitudId", solicitudId))
+                .uniqueResult();
+    }
 
     @Override
     public Solicitud buscarSolicitudPorId(int id) {
@@ -100,5 +114,7 @@ public class RepositorioSolicitudImpl implements RepositorioSolicitud {
         cq.select(root).where(cb.equal(root.get("id"), bancoId));
         return session.createQuery(cq).uniqueResult();
     }
+
+
 
 }

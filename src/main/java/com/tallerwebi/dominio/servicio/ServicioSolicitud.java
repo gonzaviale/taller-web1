@@ -13,6 +13,6 @@ public interface ServicioSolicitud {
     Solicitud buscarSolicitud(int id);
     List<PaqueteDeSangre> obtenerPaquetesDeSangreCompatibles(Solicitud solicitud);
     void rechazarSolicitud(int solicitudId);
-    void asignarPaqueteASolicitud(int solicitudId, int paqueteId);
+    void asignarPaqueteASolicitud(int solicitudId, long paqueteId);
     Banco obtenerBancoXId(Long bancoId);
 }
