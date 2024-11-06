@@ -42,7 +42,7 @@ public class ServicioImagenesImpl implements ServicioImagenes {
         }
     }
 
-@Override
+    @Override
     public void guardarExamen(MultipartFile[] imagenes, Long id) throws IOException {
         String basePath = System.getProperty("user.dir");
         Path uploadDirectory = Paths.get(basePath, "src", "main", "webapp", "resources", "images", "subidas");
@@ -63,4 +63,61 @@ public class ServicioImagenesImpl implements ServicioImagenes {
             }
         }
     }
+
+    @Override
+    public void guardarFotoDePerfilUsuario(MultipartFile[] imagenes, Long id) throws IOException {
+        String basePath = System.getProperty("user.dir");
+        Path uploadDirectory = Paths.get(basePath, "src", "main", "webapp", "resources", "images", "subidas");
+
+        if (Files.notExists(uploadDirectory)) {
+            Files.createDirectories(uploadDirectory);
+        }
+
+        // quiero eliminar la anterior para que la busqueda solo me arroje una sola coincidencia
+        File directorio = new File(uploadDirectory.toString());
+        File[] archivos = directorio.listFiles();
+        if (archivos != null) {
+            for (File archivo : archivos) {
+                //pa que no borre fotos de otros
+                if (archivo.getName().startsWith(id + "_perfil")) {
+                    archivo.delete();
+                }
+            }
+        }
+
+        for (MultipartFile imagen : imagenes) {
+            if (!imagen.isEmpty()) {
+                String nombreOriginal = imagen.getOriginalFilename();
+                if (nombreOriginal != null) {
+                    String nuevoNombre = id + "_perfil" + nombreOriginal;
+
+                    guardarImagen(imagen, nuevoNombre, uploadDirectory);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void eliminarFotoDePerfil(Long id) throws IOException {
+        String basePath = System.getProperty("user.dir");
+        Path uploadDirectory = Paths.get(basePath, "src", "main", "webapp", "resources", "images", "subidas");
+
+        if (Files.notExists(uploadDirectory)) {
+            Files.createDirectories(uploadDirectory);
+        }
+
+        // quiero eliminar la anterior para que la busqueda solo me arroje una sola coincidencia
+        File directorio = new File(uploadDirectory.toString());
+        File[] archivos = directorio.listFiles();
+        if (archivos != null) {
+            for (File archivo : archivos) {
+                //pa que no borre fotos de otros
+                if (archivo.getName().startsWith(id + "_perfil")) {
+                    archivo.delete();
+                }
+            }
+        }
+
+    }
+
 }

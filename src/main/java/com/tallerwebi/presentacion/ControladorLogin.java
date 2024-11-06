@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.DuenoMascota;
 import com.tallerwebi.dominio.entidad.Veterinario;
+import com.tallerwebi.dominio.servicio.ServicioImagenes;
 import com.tallerwebi.dominio.servicio.ServicioLogin;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
@@ -13,19 +14,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @Controller
 public class ControladorLogin {
 
     private final ServicioLogin servicioLogin;
     final private ModelMap modelo = new ModelMap();
+    private final ServicioImagenes servicioImagenes;
 
     @Autowired
-    public ControladorLogin(ServicioLogin servicioLogin) {
+    public ControladorLogin(ServicioLogin servicioLogin,ServicioImagenes servicioImagenes) {
         this.servicioLogin = servicioLogin;
+        this.servicioImagenes= servicioImagenes;
+
     }
 
     @RequestMapping("/login")
@@ -75,7 +81,8 @@ public class ControladorLogin {
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
     public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario,
                                     @RequestParam("confirmPassword") String confirmPassword,
-                                    @RequestParam("matricula") String matricula) {
+                                    @RequestParam("matricula") String matricula,
+                                    @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes) {
         modelo.clear();
 
         Usuario nuevoUsuario;
@@ -129,7 +136,13 @@ public class ControladorLogin {
             return new ModelAndView("nuevo-usuario", modelo);
         }
 
-        return new ModelAndView("redirect:/login");
+        try {
+            servicioImagenes.guardarFotoDePerfilUsuario(imagenes, nuevoUsuario.getId());
+        } catch (IOException e) {
+            modelo.put("error","ocurrio un error al cargar la imagen");
+        }
+
+        return new ModelAndView("redirect:/login",modelo);
     }
 
     private void setearUsuario(Usuario nuevoUsuario, Usuario usuario) {
