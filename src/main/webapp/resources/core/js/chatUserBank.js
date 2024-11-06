@@ -1,10 +1,10 @@
 import { Client } from '@stomp/stompjs';
 
 const client = new Client({
-    brokerURL: 'ws://localhost:8080/spring/wschat', // Cambia a tu broker URL correcto
+    brokerURL: 'ws://localhost:8080/spring/wschat',
     onConnect: () => {
         client.subscribe('/topic/chat', message => {
-            const mensajeUsuarioBanco = JSON.parse(message.body); // Parsear el mensaje recibido
+            const mensajeUsuarioBanco = JSON.parse(message.body);
             console.log("conect from backend")
             showMessage(mensajeUsuarioBanco);
         });
