@@ -74,6 +74,12 @@ public class ServicioSolicitudAUnaPublicacionImpl implements ServicioSolicitudAU
     }
 
     @Override
+    public void asignarVeterinario(Long solicitud) {
+        Usuario vet = repositorioSolicitud.traerVeterinario();
+        repositorioSolicitud.asignarVeterinario(vet, traerSolicitudPorId(solicitud));
+    }
+
+    @Override
     public void aceptarSolicitud(Long solicitud) {
         repositorioSolicitud.aceptarSolicitud(solicitud);
     }

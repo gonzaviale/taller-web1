@@ -1,7 +1,7 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
+import com.tallerwebi.dominio.entidad.Usuario;
 
 import java.util.List;
 
@@ -17,5 +17,9 @@ public interface RepositorioSolicitudAUnaPublicacion {
     SolicitudAUnaPublicacion traerSolicitudPorId(Long solicitudId);
 
     void marcarComoVista(Long solicitud);
+
+    Usuario traerVeterinario();
+
+    void asignarVeterinario(Usuario vet, SolicitudAUnaPublicacion solicitud);
 }
 

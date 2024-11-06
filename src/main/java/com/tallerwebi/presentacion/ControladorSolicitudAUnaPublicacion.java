@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
 import com.tallerwebi.dominio.excepcion.PublicacionNoExistente;
 import com.tallerwebi.dominio.servicio.ServicioMascota;
+import com.tallerwebi.dominio.servicio.ServicioPerfil;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
 import com.tallerwebi.dominio.servicio.ServicioSolicitudAUnaPublicacion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class ControladorSolicitudAUnaPublicacion {
     @RequestMapping(path = "/aceptar-solicitud-publicacion", method = RequestMethod.POST)
     public ModelAndView aceptarSolicitud(@RequestParam("solicitudId") Long solicitud){
         servicioSolicitud.aceptarSolicitud(solicitud);
+        servicioSolicitud.asignarVeterinario(solicitud);
 
         return new ModelAndView("redirect:/miPerfil");
     }
