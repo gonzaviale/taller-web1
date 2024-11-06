@@ -69,6 +69,34 @@ public class Banco {
         this.puntos = 0;
     }
 
+    public void eliminarPaquete(long paqueteId) {
+
+        PaqueteDeSangre paqueteAEliminar = null;
+
+        for (PaqueteDeSangre paquete : stockSangre) {
+            if (paquete.getId() == paqueteId) {
+                paqueteAEliminar = paquete;
+                break;
+            }
+        }
+
+        if (paqueteAEliminar != null) {
+            stockSangre.remove(paqueteAEliminar);
+
+        }
+    }
+
+
+    public PaqueteDeSangre getPaquete(long paqueteId) {
+
+        for (PaqueteDeSangre paquete : stockSangre) {
+            if (paquete.getId() == paqueteId) {
+                return paquete;
+            }
+        }
+        return null;
+
+    }
 
 
     public List<PaqueteDeSangre> getPaquetesDeSangre() {
@@ -197,4 +225,6 @@ public class Banco {
     public List<Campana> getCampanias() {
         return this.campanas;
     }
+
+
 }

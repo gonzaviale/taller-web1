@@ -3,8 +3,10 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.RepositorioBanco;
 import com.tallerwebi.dominio.RepositorioSolicitud;
 import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
+import com.tallerwebi.dominio.servicio.ServicioSolicitudImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.hibernate.SessionFactory;
@@ -57,6 +59,25 @@ public class RepositorioSolicitudTest {
         assertThat(solicitudGuardada.getTipoSangre(), is("DEA 1.2+"));
         assertThat(solicitudGuardada.getCantidad(), is(4));
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testGuardarEntrega() {
+
+        Entrega entrega = new Entrega();
+        entrega.setSolicitudId(1);
+        entrega.setPaqueteId(100L);
+        entrega.setDireccion("Calle de Prueba 123");
+
+        Entrega entregaGuardada = repositorioSolicitud.guardarEntrega(entrega);
+
+        assertThat(entregaGuardada.getId(), notNullValue());
+        assertThat(entregaGuardada.getSolicitudId(), is(1));
+        assertThat(entregaGuardada.getPaqueteId(), is(100L));
+        assertThat(entregaGuardada.getDireccion(), is("Calle de Prueba 123"));
+    }
+
 
 
     @Test
@@ -161,5 +182,7 @@ public class RepositorioSolicitudTest {
         Solicitud solicitudAprobada = repositorioSolicitud.buscarSolicitudPorId(solicitudGuardada.getId());
         assertThat(solicitudAprobada.getEstado(), is("aprobada"));
     }
+
+
 
 }

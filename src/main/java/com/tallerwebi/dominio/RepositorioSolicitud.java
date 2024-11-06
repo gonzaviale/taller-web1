@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 
@@ -20,4 +21,8 @@ public interface RepositorioSolicitud {
     void solicitudAprobar(int solicitudId);
 
     Banco buscarPorId(Long bancoId);
+
+    Entrega guardarEntrega(Entrega entrega);
+
+    Entrega buscarEntregaPorSolicitudId(int id);
 }
