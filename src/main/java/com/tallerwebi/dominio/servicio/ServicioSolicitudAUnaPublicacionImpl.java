@@ -47,8 +47,9 @@ public class ServicioSolicitudAUnaPublicacionImpl implements ServicioSolicitudAU
         List<SolicitudAUnaPublicacion> solicitudes = repositorioSolicitud.traerTodasLasSolicitudes();
 
         List<SolicitudAUnaPublicacion> solicitudesPorUsuario = solicitudes.stream()
-                .filter(solicitud -> solicitud.getMascotaDonante().getDuenio().getId() == dueno.getId())
+                .filter(solicitud -> solicitud.getMascotaReceptora().getDuenio().getId() == dueno.getId())
                 .filter(SolicitudAUnaPublicacion::getAprobada)
+                .filter(solicitud -> !solicitud.getVista())
                 .collect(Collectors.toList());
 
         return solicitudesPorUsuario;
@@ -59,11 +60,23 @@ public class ServicioSolicitudAUnaPublicacionImpl implements ServicioSolicitudAU
         List<SolicitudAUnaPublicacion> solicitudes = repositorioSolicitud.traerTodasLasSolicitudes();
 
         List<SolicitudAUnaPublicacion> solicitudesPorUsuario = solicitudes.stream()
-                .filter(solicitud -> solicitud.getMascotaDonante().getDuenio().getId() == dueno.getId())
+                .filter(solicitud -> solicitud.getMascotaReceptora().getDuenio().getId() == dueno.getId())
                 .filter(SolicitudAUnaPublicacion::getRechazada)
+                .filter(solicitud -> !solicitud.getVista())
                 .collect(Collectors.toList());
 
         return solicitudesPorUsuario;
+    }
+
+    @Override
+    public void marcarComoVista(Long solicitud) {
+        repositorioSolicitud.marcarComoVista(solicitud);
+    }
+
+    @Override
+    public void asignarVeterinario(Long solicitud) {
+        Usuario vet = repositorioSolicitud.traerVeterinario();
+        repositorioSolicitud.asignarVeterinario(vet, traerSolicitudPorId(solicitud));
     }
 
     @Override
