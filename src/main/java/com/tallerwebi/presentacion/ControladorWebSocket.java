@@ -39,22 +39,20 @@ public class ControladorWebSocket {
 
     @MessageMapping("/chatMessage")
     @SendTo("/topic/chat")
-    public String sendChatMessage(ChatMessage chatMessage) throws Exception {
+    public MensajeUsuarioBanco sendChatMessage(ChatMessage chatMessage) throws Exception {
         Usuario user = servicioMensajeUsuarioBanco.searchUser(chatMessage.getUsuarioId());
         MensajeUsuarioBanco createMessage;
-        if(chatMessage.getUserInSession()!=null){
-            createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(),"Usuario", user, chatMessage.getBancoId());
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonString = mapper.writeValueAsString(createMessage);
-            return jsonString;
+
+        if (chatMessage.getUserInSession() != null) {
+            createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(), "Usuario", user, chatMessage.getBancoId());
+        } else {
+            createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(), "Banco", user, chatMessage.getBancoId());
         }
-        else{
-            createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(),"Banco", user, chatMessage.getBancoId());
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonString = mapper.writeValueAsString(createMessage);
-            return jsonString;
-        }
+
+        return createMessage;
     }
+
+
 
     @RequestMapping(path = "/chat")
     public ModelAndView chat() {
