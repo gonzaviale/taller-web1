@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Bot;
 import com.tallerwebi.dominio.entidad.MensajeUsuarioBanco;
@@ -13,8 +13,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ControladorWebSocket {
@@ -39,17 +37,20 @@ public class ControladorWebSocket {
 
     @MessageMapping("/chatMessage")
     @SendTo("/topic/chat")
-    public MensajeUsuarioBanco sendChatMessage(ChatMessage chatMessage) throws Exception {
+    public String sendChatMessage(ChatMessage chatMessage) throws Exception {
         Usuario user = servicioMensajeUsuarioBanco.searchUser(chatMessage.getUsuarioId());
         MensajeUsuarioBanco createMessage;
-
+        JSONObject json = new JSONObject();
         if (chatMessage.getUserInSession() != null) {
             createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(), "Usuario", user, chatMessage.getBancoId());
         } else {
             createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(), "Banco", user, chatMessage.getBancoId());
         }
-
-        return createMessage;
+        json.put("mensaje", createMessage.getMensaje());
+        json.put("usuario", createMessage.getUsuario().getId());
+        json.put("banco", createMessage.getBanco().getId());
+        json.put("emisor", createMessage.getEmisor());
+        return json.toString();
     }
 
 
