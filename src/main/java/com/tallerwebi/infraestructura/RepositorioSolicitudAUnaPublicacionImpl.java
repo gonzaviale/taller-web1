@@ -3,13 +3,16 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.RepositorioSolicitudAUnaPublicacion;
 import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.*;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository("repositorioSolicitudAUnaPublicacion")
 public class RepositorioSolicitudAUnaPublicacionImpl implements RepositorioSolicitudAUnaPublicacion {
@@ -59,7 +62,7 @@ public class RepositorioSolicitudAUnaPublicacionImpl implements RepositorioSolic
         Usuario vet = traerVeterinarioSinSolicitudes();
 
         if (vet == null) {
-            //vet = traerVeterinarioConMenosSolicitudes();
+            vet = traerVeterinarioConMenosSolicitudes();
         }
 
         if (vet == null) {
@@ -84,23 +87,22 @@ public class RepositorioSolicitudAUnaPublicacionImpl implements RepositorioSolic
     }
 
     private Usuario traerVeterinarioConMenosSolicitudes() {
-        DetachedCriteria subquery = DetachedCriteria.forClass(SolicitudAUnaPublicacion.class, "s")
-                .createAlias("s.veterinario", "v")
+        List<Object[]> resultado = sessionFactory.getCurrentSession()
+                .createCriteria(SolicitudAUnaPublicacion.class, "solicitud")
                 .setProjection(Projections.projectionList()
-                        .add(Projections.groupProperty("v.id"))
-                        .add(Projections.rowCount(), "countSolicitudes"))
-                .addOrder(Order.asc("countSolicitudes"));
+                        .add(Projections.groupProperty("solicitud.veterinario.id"), "veterinarioId")
+                        .add(Projections.rowCount(), "numSolicitudes"))
+                .addOrder(Order.asc("numSolicitudes"))
+                .list();
 
-        Usuario vet = (Usuario) sessionFactory.getCurrentSession().createCriteria(Usuario.class, "u")
-                .add(Restrictions.eq("u.rol", "Veterinario"))
-                .add(Subqueries.propertyIn("u.id", subquery.setProjection(Projections.property("v.id"))))
-                .setProjection(Projections.projectionList()
-                        .add(Projections.groupProperty("u.id"))
-                        .add(Projections.property("u.nombre"), "nombre"))
-                .setMaxResults(1)
-                .uniqueResult();
+        if (resultado.isEmpty()) {
+            return null;
+        }
 
-        return vet;
+        Long veterinarioId = (Long) resultado.get(0)[0];
+
+        return (Usuario) sessionFactory.getCurrentSession()
+                .get(Usuario.class, veterinarioId);
     }
 
     private Usuario traerVeterinarioConMenorId() {
