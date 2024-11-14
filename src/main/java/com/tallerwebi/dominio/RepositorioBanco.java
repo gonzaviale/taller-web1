@@ -1,11 +1,8 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.Banco;
-import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
-import com.tallerwebi.dominio.entidad.Solicitud;
-import com.tallerwebi.dominio.entidad.Usuario;
-import com.tallerwebi.presentacion.BancoConTiposDeSangre;
+import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +20,11 @@ public interface RepositorioBanco {
 
     List<PaqueteDeSangre> obtenerPaquetesDeSangrePorBanco(Long idBanco);
 
-    List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnSangreDeTodosLosBancos(String sangreBuscada);
+    List<BancoConTiposDeSangreDTO> obtenerLaCoincidenciaEnSangreDeTodosLosBancos(String sangreBuscada);
 
-    List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(String tipoProducto);
+    List<BancoConTiposDeSangreDTO> obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(String tipoProducto);
 
-    List<BancoConTiposDeSangre> obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(String sangreBuscada, String tipoProducto);
+    List<BancoConTiposDeSangreDTO> obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(String sangreBuscada, String tipoProducto);
 
     PaqueteDeSangre buscarSangreXId(int paqueteId);
 

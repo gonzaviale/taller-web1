@@ -3,7 +3,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidad.*;
-import com.tallerwebi.presentacion.BancoConTiposDeSangre;
+import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -126,10 +126,10 @@ public class RepositorioBancoImpl implements RepositorioBanco {
     }
 
     @Override
-    public List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnSangreDeTodosLosBancos(String sangreBuscada) {
+    public List<BancoConTiposDeSangreDTO> obtenerLaCoincidenciaEnSangreDeTodosLosBancos(String sangreBuscada) {
 
         //necesito un lugar donde almacenar los resultados
-        List<BancoConTiposDeSangre> resultados = new ArrayList<>();
+        List<BancoConTiposDeSangreDTO> resultados = new ArrayList<>();
 
         //obtengo todos los bancos
         List<Banco> bancos = getAllBanco();
@@ -140,7 +140,7 @@ public class RepositorioBancoImpl implements RepositorioBanco {
             for (PaqueteDeSangre paquete : banco.getPaquetesDeSangre()) {
                 //si el paquete que contiene es igual
                 if (paquete.getTipoSangre().contains(sangreBuscada)) {
-                    BancoConTiposDeSangre bancoConTipos = getBancoConTiposDeSangre(banco, paquete);
+                    BancoConTiposDeSangreDTO bancoConTipos = getBancoConTiposDeSangre(banco, paquete);
                     //guardo el objeto
                     resultados.add(bancoConTipos);
                 }
@@ -152,9 +152,9 @@ public class RepositorioBancoImpl implements RepositorioBanco {
     }
 
     @Override
-    public List<BancoConTiposDeSangre> obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(String tipoProducto) {
+    public List<BancoConTiposDeSangreDTO> obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(String tipoProducto) {
         //necesito un lugar donde almacenar los resultados
-        List<BancoConTiposDeSangre> resultados = new ArrayList<>();
+        List<BancoConTiposDeSangreDTO> resultados = new ArrayList<>();
 
         //obtengo todos los bancos
         List<Banco> bancos = getAllBanco();
@@ -165,7 +165,7 @@ public class RepositorioBancoImpl implements RepositorioBanco {
             for (PaqueteDeSangre paquete : banco.getPaquetesDeSangre()) {
                 //si el paquete que contiene es igual
                 if (paquete.getTipoProducto().contains(tipoProducto)) {
-                    BancoConTiposDeSangre bancoConTipos = getBancoConTiposDeSangre(banco, paquete);
+                    BancoConTiposDeSangreDTO bancoConTipos = getBancoConTiposDeSangre(banco, paquete);
                     //guardo el objeto
                     resultados.add(bancoConTipos);
                 }
@@ -177,10 +177,10 @@ public class RepositorioBancoImpl implements RepositorioBanco {
     }
 
     @Override
-    public List<BancoConTiposDeSangre> obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(String sangreBuscada, String tipoProducto) {
+    public List<BancoConTiposDeSangreDTO> obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(String sangreBuscada, String tipoProducto) {
 
         //necesito un lugar donde almacenar los resultados
-        List<BancoConTiposDeSangre> resultados = new ArrayList<>();
+        List<BancoConTiposDeSangreDTO> resultados = new ArrayList<>();
 
         //obtengo todos los bancos
         List<Banco> bancos = getAllBanco();
@@ -191,7 +191,7 @@ public class RepositorioBancoImpl implements RepositorioBanco {
             for (PaqueteDeSangre paquete : banco.getPaquetesDeSangre()) {
                 //si el paquete que contiene es igual
                 if (paquete.getTipoSangre().contains(sangreBuscada) && paquete.getTipoProducto().contains(tipoProducto)) {
-                    BancoConTiposDeSangre bancoConTipos = getBancoConTiposDeSangre(banco, paquete);
+                    BancoConTiposDeSangreDTO bancoConTipos = getBancoConTiposDeSangre(banco, paquete);
                     //guardo el objeto
                     resultados.add(bancoConTipos);
                 }
@@ -202,8 +202,8 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         return resultados;
     }
 
-    private BancoConTiposDeSangre getBancoConTiposDeSangre(Banco banco, PaqueteDeSangre paquete) {
-        BancoConTiposDeSangre bancoConTipos = new BancoConTiposDeSangre();
+    private BancoConTiposDeSangreDTO getBancoConTiposDeSangre(Banco banco, PaqueteDeSangre paquete) {
+        BancoConTiposDeSangreDTO bancoConTipos = new BancoConTiposDeSangreDTO();
         //datos banco a guardar en el objeto
         bancoConTipos.setBancoId(banco.getId());
         bancoConTipos.setNombreBanco(banco.getNombreBanco());
