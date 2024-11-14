@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.servicio.ServicioImagenes;
 import com.tallerwebi.dominio.servicio.ServicioLogin;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
+import com.tallerwebi.presentacion.DTO.DatosLoginDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,7 +24,7 @@ public class ControladorLoginTest {
 
 	private ControladorLogin controladorLogin;
 	private Usuario usuarioMock;
-	private DatosLogin datosLoginMock;
+	private DatosLoginDTO datosLoginMock;
 	private HttpServletRequest requestMock;
 	private HttpSession sessionMock;
 	private ServicioLogin servicioLoginMock;
@@ -32,7 +33,7 @@ public class ControladorLoginTest {
 
 	@BeforeEach
 	public void init(){
-		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
+		datosLoginMock = new DatosLoginDTO("dami@unlam.com", "123");
 		usuarioMock = mock(Usuario.class);
 		servicioImagenes= mock(ServicioImagenes.class);
 		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
@@ -206,7 +207,7 @@ public class ControladorLoginTest {
 
 		when(servicioLoginMock.consultarUsuario("veterinario@correo.com", "password123")).thenReturn(usuarioMock);
 
-		datosLoginMock = new DatosLogin("veterinario@correo.com", "password123");
+		datosLoginMock = new DatosLoginDTO("veterinario@correo.com", "password123");
 
 		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
 
@@ -227,7 +228,7 @@ public class ControladorLoginTest {
 
 		when(requestMock.getSession()).thenReturn(sessionMock);
 
-		datosLoginMock = new DatosLogin("administrador@gmail.com", "1234");
+		datosLoginMock = new DatosLoginDTO("administrador@gmail.com", "1234");
 
 		when(servicioLoginMock.consultarUsuario("administrador@gmail.com", "1234")).thenReturn(usuario);
 
@@ -247,7 +248,7 @@ public class ControladorLoginTest {
 
 		when(requestMock.getSession()).thenReturn(sessionMock);
 
-		datosLoginMock = new DatosLogin("veterinario@gmail.com", "1234");
+		datosLoginMock = new DatosLoginDTO("veterinario@gmail.com", "1234");
 
 		when(servicioLoginMock.consultarUsuario("veterinario@gmail.com", "1234")).thenReturn(usuario);
 

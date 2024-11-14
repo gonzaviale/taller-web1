@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
+import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,7 +60,7 @@ public class ControladorBusquedaTest {
 
         ModelAndView modelAndView = controladorBusqueda.buscar("banco de sangre");
 
-        List<BancoConTiposDeSangre> bancoConTiposDeSangres= (List<BancoConTiposDeSangre>) modelAndView.getModel().get("listaBancos");
+        List<BancoConTiposDeSangreDTO> bancoConTiposDeSangres= (List<BancoConTiposDeSangreDTO>) modelAndView.getModel().get("listaBancos");
 
         assertThat(bancoConTiposDeSangres, not(IsEmptyCollection.class));
         assertThat(bancoConTiposDeSangres.size(), equalTo(2));
@@ -116,9 +117,9 @@ public class ControladorBusquedaTest {
     }
 
     private void givenMockeoElServicioParaQueMeDevuelvaUnaListaDeBancoConTiposDeSangre() {
-        ArrayList<BancoConTiposDeSangre> bancoConTiposDeSangres= new ArrayList<>();
+        ArrayList<BancoConTiposDeSangreDTO> bancoConTiposDeSangres= new ArrayList<>();
         for (int i = 0; i < 2; i++) {
-            bancoConTiposDeSangres.add(new BancoConTiposDeSangre());
+            bancoConTiposDeSangres.add(new BancoConTiposDeSangreDTO());
         }
 
         when(servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("","")).thenReturn(bancoConTiposDeSangres);
@@ -302,7 +303,7 @@ public class ControladorBusquedaTest {
 
         ModelAndView modelAndView = controladorBusqueda.filtrarBancos("sadasd", "");
 
-        ArrayList <BancoConTiposDeSangre> BancoConTiposDeSangre = (ArrayList<BancoConTiposDeSangre>) modelAndView.getModel().get("listaBancos");
+        ArrayList <BancoConTiposDeSangreDTO> BancoConTiposDeSangre = (ArrayList<BancoConTiposDeSangreDTO>) modelAndView.getModel().get("listaBancos");
         assertThat(BancoConTiposDeSangre.size(), equalTo(0));
     }
 
@@ -313,7 +314,7 @@ public class ControladorBusquedaTest {
 
         ModelAndView modelAndView = controladorBusqueda.filtrarBancos("", "");
 
-        ArrayList <BancoConTiposDeSangre> BancoConTiposDeSangre = (ArrayList<BancoConTiposDeSangre>) modelAndView.getModel().get("listaBancos");
+        ArrayList <BancoConTiposDeSangreDTO> BancoConTiposDeSangre = (ArrayList<BancoConTiposDeSangreDTO>) modelAndView.getModel().get("listaBancos");
         assertThat(BancoConTiposDeSangre.size(), equalTo(3));
     }
 
@@ -324,7 +325,7 @@ public class ControladorBusquedaTest {
 
         ModelAndView modelAndView = controladorBusqueda.filtrarBancos("1", "");
 
-        ArrayList <BancoConTiposDeSangre> BancoConTiposDeSangre = (ArrayList<BancoConTiposDeSangre>) modelAndView.getModel().get("listaBancos");
+        ArrayList <BancoConTiposDeSangreDTO> BancoConTiposDeSangre = (ArrayList<BancoConTiposDeSangreDTO>) modelAndView.getModel().get("listaBancos");
         assertThat(BancoConTiposDeSangre.size(),equalTo(1));
         assertThat(BancoConTiposDeSangre, hasItem(hasProperty("tipoSangre",is("1"))));
     }
@@ -332,10 +333,10 @@ public class ControladorBusquedaTest {
 
     private void givenMockeoElServicioParaQueMeDevuelvaLaListaCompletaDeBancosConSagre() {
 
-        ArrayList <BancoConTiposDeSangre> bancos= new ArrayList<>();
+        ArrayList <BancoConTiposDeSangreDTO> bancos= new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-            bancos.add(new BancoConTiposDeSangre());
+            bancos.add(new BancoConTiposDeSangreDTO());
         }
 
         when(servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("","")).thenReturn(bancos);
@@ -344,8 +345,8 @@ public class ControladorBusquedaTest {
 
     private void givenMockeoElServicioParaQueMeDevuelvaLaListaCompletaDeBancosConSagreConValores() {
 
-        ArrayList <BancoConTiposDeSangre> bancos= new ArrayList<>();
-        BancoConTiposDeSangre bancoPrueba=new BancoConTiposDeSangre();
+        ArrayList <BancoConTiposDeSangreDTO> bancos= new ArrayList<>();
+        BancoConTiposDeSangreDTO bancoPrueba=new BancoConTiposDeSangreDTO();
             bancoPrueba.setTipoSangre("1");
             bancos.add(bancoPrueba);
 

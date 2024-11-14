@@ -1,13 +1,11 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidad.Banco;
-import com.tallerwebi.dominio.entidad.Campana;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.RepositorioBanco;
-import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
-import com.tallerwebi.presentacion.BancoConTiposDeSangre;
+import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -177,7 +175,7 @@ public class RepositorioBancoTest {
         repositorioBanco.guardarSangre(paqueteB,banco);
         repositorioBanco.guardarSangre(paqueteO,banco);
 
-        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos("C");
+        List<BancoConTiposDeSangreDTO> resultados= repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos("C");
 
         assertThat(resultados.size(),is(0));
     }
@@ -204,7 +202,7 @@ public class RepositorioBancoTest {
         repositorioBanco.guardarSangre(paqueteB,banco);
         repositorioBanco.guardarSangre(paqueteO,banco);
 
-        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos("+");
+        List<BancoConTiposDeSangreDTO> resultados= repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos("+");
 
         assertThat(resultados.size(), is(2) );
         assertThat(resultados, hasItems(
@@ -237,7 +235,7 @@ public class RepositorioBancoTest {
         repositorioBanco.guardarSangre(paqueteB,banco);
         repositorioBanco.guardarSangre(paqueteO,banco);
 
-        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos("");
+        List<BancoConTiposDeSangreDTO> resultados= repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos("");
 
         assertThat(resultados.size(), is(3) );
         assertThat(resultados, hasItems(
@@ -269,7 +267,7 @@ public class RepositorioBancoTest {
         repositorioBanco.guardarSangre(paqueteB,banco);
         repositorioBanco.guardarSangre(paqueteO,banco);
 
-        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos("");
+        List<BancoConTiposDeSangreDTO> resultados= repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos("");
 
         assertThat(resultados.size(), is(3) );
         assertThat(resultados, hasItems(
@@ -302,7 +300,7 @@ public class RepositorioBancoTest {
         repositorioBanco.guardarSangre(paqueteB,banco);
         repositorioBanco.guardarSangre(paqueteO,banco);
 
-        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos("A+");
+        List<BancoConTiposDeSangreDTO> resultados= repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos("A+");
 
         assertThat(resultados.size(), is(0) );
     }
@@ -330,7 +328,7 @@ public class RepositorioBancoTest {
         repositorioBanco.guardarSangre(paqueteB,banco);
         repositorioBanco.guardarSangre(paqueteO,banco);
 
-        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos("total");
+        List<BancoConTiposDeSangreDTO> resultados= repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos("total");
 
         assertThat(resultados.size(), is(2) );
         assertThat(resultados, hasItems(
@@ -362,7 +360,7 @@ public class RepositorioBancoTest {
         repositorioBanco.guardarSangre(paqueteB,banco);
         repositorioBanco.guardarSangre(paqueteO,banco);
 
-        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos("","");
+        List<BancoConTiposDeSangreDTO> resultados= repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos("","");
 
         assertThat(resultados.size(), is(3) );
         assertThat(resultados, hasItems(
@@ -394,7 +392,7 @@ public class RepositorioBancoTest {
         repositorioBanco.guardarSangre(paqueteB,banco);
         repositorioBanco.guardarSangre(paqueteO,banco);
 
-        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos("---","---");
+        List<BancoConTiposDeSangreDTO> resultados= repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos("---","---");
 
         assertThat(resultados.size(), is(0) );
     }
@@ -422,7 +420,7 @@ public class RepositorioBancoTest {
         repositorioBanco.guardarSangre(paqueteB,banco);
         repositorioBanco.guardarSangre(paqueteO,banco);
 
-        List<BancoConTiposDeSangre> resultados= repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos("+","total");
+        List<BancoConTiposDeSangreDTO> resultados= repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos("+","total");
 
         assertThat(resultados.size(), is(2) );
         assertThat(resultados, hasItems(
