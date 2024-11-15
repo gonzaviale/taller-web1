@@ -37,31 +37,12 @@ public class ControladorAgregarMascota {
     @RequestMapping(path = "/agregar-mascota-donante")
     public ModelAndView formularioDonante(HttpServletRequest request) {
 
-        String requestedWith = request.getHeader("X-Requested-With");
-
-        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
-
-        if (!"XMLHttpRequest".equals(requestedWith) || usuarioEnSesion==null || !(usuarioEnSesion.getRol().equals("dueño mascota"))) {
-
-            return new ModelAndView("redirect:/home");
-        }
-
-        return new ModelAndView("agregar-mascota-donante :: formulario");
+        return new ModelAndView("agregar-mascota-donante");
     }
 
     @RequestMapping(path = "/agregar-mascota-receptora")
     public ModelAndView formularioReceptora(HttpServletRequest request) {
-
-        String requestedWith = request.getHeader("X-Requested-With");
-
-        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
-
-        if (!"XMLHttpRequest".equals(requestedWith) || usuarioEnSesion==null || !(usuarioEnSesion.getRol().equals("dueño mascota"))) {
-
-            return new ModelAndView("redirect:/home");
-        }
-
-        return new ModelAndView("agregar-mascota-receptora :: formulario");
+        return new ModelAndView("agregar-mascota-receptora");
     }
 
     @PostMapping("/agregar-donante")
