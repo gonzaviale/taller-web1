@@ -28,11 +28,11 @@ import java.util.ArrayList;
 import org.springframework.http.HttpHeaders;
 
 @RestController
-public class FileUploadController {
+public class ControladorFileUpload {
     private ServicioMensajeUsuarioBanco servicioMensajeUsuarioBanco;
 
     @Autowired
-    public FileUploadController(ServicioBot servicioBot, ServicioMensajeUsuarioBanco servicioMensajeUsuarioBanco) {
+    public ControladorFileUpload(ServicioBot servicioBot, ServicioMensajeUsuarioBanco servicioMensajeUsuarioBanco) {
         this.servicioMensajeUsuarioBanco = servicioMensajeUsuarioBanco;
     }
 
