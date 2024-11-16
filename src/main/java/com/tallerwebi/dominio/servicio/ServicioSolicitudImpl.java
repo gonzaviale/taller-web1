@@ -59,12 +59,14 @@ public class ServicioSolicitudImpl implements ServicioSolicitud {
 
     @Override
     public Entrega asignarPaqueteASolicitud(int solicitudId, long paqueteId) {
+
         this.repositorio.solicitudAprobar(solicitudId);
-        Banco banco = this.repositorioBanco.buscarPorId(buscarSolicitud(solicitudId).getBancoId());
+        Solicitud solicitud = this.repositorio.buscarSolicitudPorId(solicitudId);
+        Banco banco = this.repositorioBanco.buscarPorId(solicitud.getBancoId());
         PaqueteDeSangre paquete = banco.getPaquete(paqueteId);
         banco.eliminarPaquete(paqueteId);
         this.repositorioBanco.actualizarBanco(banco);
-        Entrega entrega = new Entrega(solicitudId, paquete.getId(),banco.getDireccion());
+        Entrega entrega = new Entrega(solicitudId, paquete.getId(),banco.getDireccion(), banco.getHorario());
        return   this.repositorio.guardarEntrega(entrega);
 
 

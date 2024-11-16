@@ -59,6 +59,7 @@ public class RepositorioSolicitudImpl implements RepositorioSolicitud {
         final Session session = sessionFactory.getCurrentSession();
         return session.createCriteria(Solicitud.class)
                 .add(Restrictions.eq("bancoId", idBanco))
+                .add(Restrictions.eq("estado", "pendiente"))
                 .list();
     }
 

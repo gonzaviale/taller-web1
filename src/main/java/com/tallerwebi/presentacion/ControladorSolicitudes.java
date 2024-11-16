@@ -86,6 +86,9 @@ public class ControladorSolicitudes {
         }
        Entrega entrega = servicioSolicitud.asignarPaqueteASolicitud(solicitudId, paqueteId);
 
+        //TODO falta enviar un mensaje con los datos de la entrega
+
+
         return "redirect:/verPeticiones";
     }
 
