@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tallerwebi.dominio.entidad.Banco;
+import org.json.JSONObject;
+import com.tallerwebi.presentacion.DTO.ChatMessageDTO;
 import com.tallerwebi.dominio.entidad.Bot;
 import com.tallerwebi.dominio.entidad.MensajeUsuarioBanco;
 import com.tallerwebi.dominio.entidad.Usuario;
@@ -13,8 +13,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ControladorWebSocket {
@@ -39,17 +37,20 @@ public class ControladorWebSocket {
 
     @MessageMapping("/chatMessage")
     @SendTo("/topic/chat")
-    public MensajeUsuarioBanco sendChatMessage(ChatMessage chatMessage) throws Exception {
+    public String sendChatMessage(ChatMessageDTO chatMessage) throws Exception {
         Usuario user = servicioMensajeUsuarioBanco.searchUser(chatMessage.getUsuarioId());
         MensajeUsuarioBanco createMessage;
-
+        JSONObject json = new JSONObject();
         if (chatMessage.getUserInSession() != null) {
             createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(), "Usuario", user, chatMessage.getBancoId());
         } else {
             createMessage = servicioMensajeUsuarioBanco.enviarMensaje(chatMessage.getMensaje(), "Banco", user, chatMessage.getBancoId());
         }
-
-        return createMessage;
+        json.put("mensaje", createMessage.getMensaje());
+        json.put("usuario", createMessage.getUsuario().getId());
+        json.put("banco", createMessage.getBanco().getId());
+        json.put("emisor", createMessage.getEmisor());
+        return json.toString();
     }
 
 
@@ -59,51 +60,5 @@ public class ControladorWebSocket {
         return new ModelAndView("chatbot");
     }
 
-    public static class ChatMessage {
-        private Long usuarioId;
-        private Long bancoId;
-        private String mensaje;
-        private Banco bankInSession;
-        private Usuario userInSession;
 
-        public Usuario getUserInSession() {
-            return userInSession;
-        }
-
-        public void setUserInSession(Usuario userInSession) {
-            this.userInSession = userInSession;
-        }
-
-        public Banco getBankInSession() {
-            return bankInSession;
-        }
-
-        public void setBankInSession(Banco bankInSession) {
-            this.bankInSession = bankInSession;
-        }
-
-        public Long getUsuarioId() {
-            return usuarioId;
-        }
-
-        public void setUsuarioId(Long usuarioId) {
-            this.usuarioId = usuarioId;
-        }
-
-        public Long getBancoId() {
-            return bancoId;
-        }
-
-        public void setBancoId(Long bancoId) {
-            this.bancoId = bancoId;
-        }
-
-        public String getMensaje() {
-            return mensaje;
-        }
-
-        public void setMensaje(String mensaje) {
-            this.mensaje = mensaje;
-        }
-    }
 }

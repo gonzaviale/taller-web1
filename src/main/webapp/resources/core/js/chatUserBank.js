@@ -4,10 +4,16 @@ const client = new Client({
     brokerURL: 'ws://localhost:8080/spring/wschat',
     onConnect: () => {
         client.subscribe('/topic/chat', message => {
-            const mensajeUsuarioBanco = JSON.parse(message.body);
-            console.log("conect from backend")
-            showMessage(mensajeUsuarioBanco);
+            try {
+                // Intentar leer directamente el mensaje como texto
+                const mensajeUsuarioBanco = JSON.parse(message.body);
+                console.log(mensajeUsuarioBanco);
+                showMessage(mensajeUsuarioBanco);
+            } catch (error) {
+                console.error("Error al procesar el mensaje:", error);
+            }
         });
+
         document.getElementById('sendButton').disabled = false;
     },
 });
