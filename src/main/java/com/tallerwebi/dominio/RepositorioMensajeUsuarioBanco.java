@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public interface RepositorioMensajeUsuarioBanco {
-    public MensajeUsuarioBanco crearMensaje(String mensaje, String emisor, Usuario usuario, Banco banco);
-    public Banco searchBankById(Long banco);
-    public ArrayList<MensajeUsuarioBanco> getMessagesByUser(Usuario usuario);
-    public ArrayList<MensajeUsuarioBanco> getMessagesByUserAndBank(Long usuario, Long banco);
-    public Usuario searchUser(Long usuario);
-    public ArrayList<MensajeUsuarioBanco> getMessagesByBank(Long banco);
+     MensajeUsuarioBanco crearMensaje(String mensaje, String emisor, Usuario usuario, Banco banco);
+     Banco searchBankById(Long banco);
+     ArrayList<MensajeUsuarioBanco> getMessagesByUser(Usuario usuario);
+     ArrayList<MensajeUsuarioBanco> getMessagesByUserAndBank(Long usuario, Long banco);
+     Usuario searchUser(Long usuario);
+     ArrayList<MensajeUsuarioBanco> getMessagesByBank(Long banco);
+     void crearArchivo(String mensaje, String emisor, Usuario usuario, Long banco, String pdf);
 }
