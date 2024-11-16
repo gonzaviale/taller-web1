@@ -110,5 +110,19 @@ public class RepositorioMensajeUsuarioBancoImpl implements RepositorioMensajeUsu
         }
     }
 
+    @Override
+    public void crearArchivo(String mensaje, String emisor, Usuario usuario, Long banco, String pdf) {
+        MensajeUsuarioBanco mensajeUsuario = new MensajeUsuarioBanco();
+        Banco banco1 = searchBankById(banco);
+        mensajeUsuario.setBanco(banco1);
+        mensajeUsuario.setMensaje(mensaje);
+        mensajeUsuario.setEmisor(emisor);
+        mensajeUsuario.setUsuario(usuario);
+        mensajeUsuario.setFecha(new Date());
+        mensajeUsuario.setLeido(false);
+        mensajeUsuario.setPdf(pdf);
+        sessionFactory.getCurrentSession().save(mensajeUsuario);
+    }
+
 
 }

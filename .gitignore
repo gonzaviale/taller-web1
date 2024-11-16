@@ -19,3 +19,6 @@ hs_err_pid*
 /.idea/
 /.settings/
 /src/main/webapp/resources/images/subidas
+/uploads
+
+/tallerwebi-base.iml
