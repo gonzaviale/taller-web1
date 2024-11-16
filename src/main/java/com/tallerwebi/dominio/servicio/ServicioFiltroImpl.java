@@ -52,18 +52,25 @@ public class ServicioFiltroImpl implements ServicioFiltro {
 
     @Override
     public ArrayList<BancoConTiposDeSangreDTO> obtenerCoincidenciasEnBancosDeSangre(String sangreBuscada, String tipoProducto) {
-
+        ArrayList<BancoConTiposDeSangreDTO> coincidenciasEnBancos = new ArrayList<>();
         if (validadorCampo(sangreBuscada).equals(sangreBuscada) && validadorCampo(tipoProducto).isEmpty()) {
-            return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
+            coincidenciasEnBancos.addAll(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
+            coincidenciasEnBancos.sort((o1, o2) -> o2.getPuntos().compareTo(o1.getPuntos()));
+            return coincidenciasEnBancos;
         }
         if (validadorCampo(sangreBuscada).isEmpty() && validadorCampo(tipoProducto).equals(tipoProducto)) {
-            return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(tipoProducto));
+            coincidenciasEnBancos.addAll(repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(tipoProducto));
+            coincidenciasEnBancos.sort((o1, o2) -> o2.getPuntos().compareTo(o1.getPuntos()));
+            return coincidenciasEnBancos;
         }
         if (validadorCampo(sangreBuscada).equals(sangreBuscada) && validadorCampo(tipoProducto).equals(tipoProducto)) {
-            return new ArrayList<>(repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(sangreBuscada, tipoProducto));
+            coincidenciasEnBancos.addAll(repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(sangreBuscada, tipoProducto));
+            coincidenciasEnBancos.sort((o1, o2) -> o2.getPuntos().compareTo(o1.getPuntos()));
+            return coincidenciasEnBancos;
         }
-
-        return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
+        coincidenciasEnBancos.addAll(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
+        coincidenciasEnBancos.sort((o1, o2) -> o2.getPuntos().compareTo(o1.getPuntos()));
+        return coincidenciasEnBancos;
     }
 
     @Override

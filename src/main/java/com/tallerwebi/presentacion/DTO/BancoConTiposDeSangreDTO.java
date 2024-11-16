@@ -16,5 +16,6 @@ public class BancoConTiposDeSangreDTO {
     private String pais;
     private String telefono;
     private String email;
+    private Integer puntos;
 
 }
