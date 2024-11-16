@@ -211,6 +211,7 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         bancoConTipos.setTelefono(banco.getTelefono());
         bancoConTipos.setCiudad(banco.getCiudad());
         bancoConTipos.setEmail(banco.getEmail());
+        bancoConTipos.setPuntos(banco.getPuntos());
         //datos de sangre a guardar en el objeto
         bancoConTipos.setTipoSangre(paquete.getTipoSangre());
         bancoConTipos.setSangreId(paquete.getId());
