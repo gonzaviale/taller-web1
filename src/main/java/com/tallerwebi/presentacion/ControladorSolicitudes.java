@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
 import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.dominio.servicio.ServicioBanco;
@@ -83,7 +84,7 @@ public class ControladorSolicitudes {
         if (!verificarSesion(session)) {
             return "redirect:/login";
         }
-        servicioSolicitud.asignarPaqueteASolicitud(solicitudId, paqueteId);
+       Entrega entrega = servicioSolicitud.asignarPaqueteASolicitud(solicitudId, paqueteId);
 
         return "redirect:/verPeticiones";
     }
