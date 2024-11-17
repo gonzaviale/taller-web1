@@ -39,7 +39,7 @@
 
     <div class="login-container">
         <h3 class="text-center mb-4">Registro de Usuario</h3>
-        <form th:action="@{/registrarme}" method="POST" th:object="${usuario}" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <form th:action="@{/registrarme}" method="POST" th:object="${usuario}" enctype="multipart/form-data" class="needs-validation"  accept-charset="UTF-8" novalidate>
 
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
