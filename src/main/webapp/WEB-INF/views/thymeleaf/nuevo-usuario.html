@@ -86,11 +86,19 @@
 
             <!-- Campos adicionales para veterinario -->
             <div id="veterinario-fields" class="hidden">
+
+                <div class="mb-3">
+                    <label for="file" class="form-label">Suba su matrícula</label>
+                    <input type="file" id="file" name="file" class="form-control" accept=".pdf">
+                    <div class="invalid-feedback">Por favor, suba un archivo PDF válido.</div>
+                </div>
+
                 <div class="mb-3">
                     <label for="matricula" class="form-label">Matrícula</label>
                     <input type="text" id="matricula" name="matricula" class="form-control" placeholder="Ingrese su matrícula">
                     <div class="invalid-feedback">Por favor, ingrese su matrícula.</div>
                 </div>
+
             </div>
 
             <!-- Nuevo campo opcional de foto de perfil -->
