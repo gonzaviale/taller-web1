@@ -38,8 +38,13 @@ public class ControladorPublicacion {
         if (request != null && request.getSession().getAttribute("usuarioEnSesion") != null) {
             nuevaPublicacion.setDuenioPublicacion((Usuario) request.getSession().getAttribute("usuarioEnSesion"));
         }
-        Mascota mascota = servicioMascota.buscarMascotaPorId(mascotaId);
-        nuevaPublicacion.setMascotaDonante(mascota);
+        if (mascotaId == 0 || mascotaId == null) {
+            model = new ModelMap("mensaje", "Debe ingresar una mascota");
+            return new ModelAndView("redirect:/home", model);
+        } else {
+            Mascota mascota = servicioMascota.buscarMascotaPorId(mascotaId);
+            nuevaPublicacion.setMascotaDonante(mascota);
+        }
         try {
             servicioPublicacion.guardarPublicacion(nuevaPublicacion);
         } catch (PublicacionSinTipoDeSangre ex) {

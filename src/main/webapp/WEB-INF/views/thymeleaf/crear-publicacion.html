@@ -30,10 +30,11 @@
 
         <div class="mb-3">
             <label for="mascota" class="form-label">Selecciona una Mascota</label>
-           <select id="mascota" name="mascota" class="form-select">
-                <option value="" disabled>Elige una mascota</option>
+           <select id="mascota" name="mascota" class="form-select" required>
+                <option value="">Elige una mascota</option>
                 <option th:each="mascota : ${misMascotas}" th:value="${mascota.id}" th:text="${mascota.nombre}"></option>
             </select>
+            <div class="invalid-feedback">Por favor, ingrese una mascota.</div>
         </div>
 
         <!-- Campo Puede Movilizarse -->
@@ -114,7 +115,7 @@
 
                 // Si es el primer intento, mostramos una alerta
                 if (firstAttempt) {
-                    alert("Por favor, complete los campos obligatorios: Título, Tipo de Sangre, y Tipo de Publicación.");
+                    alert("Por favor, complete los campos obligatorios: Título y Mascota");
                     firstAttempt = false;  // Cambiamos el estado para permitir el segundo intento
                 } else {
                     form.classList.add('was-validated');  // Aplicamos la validación visual de Bootstrap
