@@ -7,7 +7,6 @@ import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
 import com.tallerwebi.presentacion.DTO.UsuarioFiltradoDTO;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
