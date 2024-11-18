@@ -1,9 +1,9 @@
-package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion.DTO;
 
 import lombok.Data;
 
 @Data
-public class BancoConTiposDeSangre {
+public class BancoConTiposDeSangreDTO {
 
     private Long bancoId;
     private Long sangreId;
@@ -16,5 +16,6 @@ public class BancoConTiposDeSangre {
     private String pais;
     private String telefono;
     private String email;
+    private Integer puntos;
 
 }

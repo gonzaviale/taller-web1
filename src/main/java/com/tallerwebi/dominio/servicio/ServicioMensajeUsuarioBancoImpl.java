@@ -38,6 +38,11 @@ public class ServicioMensajeUsuarioBancoImpl implements ServicioMensajeUsuarioBa
     }
 
     @Override
+    public void enviarArchivo(String mensaje, String emisor, Usuario usuario, Long banco, String pdf) {
+        repositorioMensajeUsuarioBanco.crearArchivo(mensaje, emisor, usuario, banco, pdf);
+    }
+
+    @Override
     public ArrayList<MensajeUsuarioBanco> getMessages(Usuario usuario) {
         try {
             ArrayList<MensajeUsuarioBanco> messages = new ArrayList<>();

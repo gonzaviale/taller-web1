@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import org.json.JSONObject;
-import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.presentacion.DTO.ChatMessageDTO;
 import com.tallerwebi.dominio.entidad.Bot;
 import com.tallerwebi.dominio.entidad.MensajeUsuarioBanco;
 import com.tallerwebi.dominio.entidad.Usuario;
@@ -37,7 +37,7 @@ public class ControladorWebSocket {
 
     @MessageMapping("/chatMessage")
     @SendTo("/topic/chat")
-    public String sendChatMessage(ChatMessage chatMessage) throws Exception {
+    public String sendChatMessage(ChatMessageDTO chatMessage) throws Exception {
         Usuario user = servicioMensajeUsuarioBanco.searchUser(chatMessage.getUsuarioId());
         MensajeUsuarioBanco createMessage;
         JSONObject json = new JSONObject();
@@ -60,51 +60,5 @@ public class ControladorWebSocket {
         return new ModelAndView("chatbot");
     }
 
-    public static class ChatMessage {
-        private Long usuarioId;
-        private Long bancoId;
-        private String mensaje;
-        private Banco bankInSession;
-        private Usuario userInSession;
 
-        public Usuario getUserInSession() {
-            return userInSession;
-        }
-
-        public void setUserInSession(Usuario userInSession) {
-            this.userInSession = userInSession;
-        }
-
-        public Banco getBankInSession() {
-            return bankInSession;
-        }
-
-        public void setBankInSession(Banco bankInSession) {
-            this.bankInSession = bankInSession;
-        }
-
-        public Long getUsuarioId() {
-            return usuarioId;
-        }
-
-        public void setUsuarioId(Long usuarioId) {
-            this.usuarioId = usuarioId;
-        }
-
-        public Long getBancoId() {
-            return bancoId;
-        }
-
-        public void setBancoId(Long bancoId) {
-            this.bancoId = bancoId;
-        }
-
-        public String getMensaje() {
-            return mensaje;
-        }
-
-        public void setMensaje(String mensaje) {
-            this.mensaje = mensaje;
-        }
-    }
 }

@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
+import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -38,7 +39,7 @@ public class ControladorBusqueda {
             model.put("publicaciones",publicaciones);
         }
         if(tipoDeBusqueda.equals("banco de sangre")){
-            List<BancoConTiposDeSangre> bancoConTiposDeSangres= this.servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("","");
+            List<BancoConTiposDeSangreDTO> bancoConTiposDeSangres= this.servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("","");
             model.put("listaBancos",bancoConTiposDeSangres);
         }
         if(tipoDeBusqueda.equals("usuarios")){
@@ -56,7 +57,7 @@ public class ControladorBusqueda {
     @RequestMapping(path = "/busqueda")
     public ModelAndView busqueda(){
         ModelMap model= new ModelMap();
-        model.put("datos",new BancoConTiposDeSangre());
+        model.put("datos",new BancoConTiposDeSangreDTO());
         return new ModelAndView("busqueda",model);
     }
 
@@ -94,7 +95,7 @@ public class ControladorBusqueda {
             @RequestParam(required = false) String tipoDeProducto) {
         ModelMap model = new ModelMap();
 
-        List<BancoConTiposDeSangre> bancoConTiposDeSangres= this.servicioFiltro.obtenerCoincidenciasEnBancosDeSangre(sangreBuscada,tipoDeProducto);
+        List<BancoConTiposDeSangreDTO> bancoConTiposDeSangres= this.servicioFiltro.obtenerCoincidenciasEnBancosDeSangre(sangreBuscada,tipoDeProducto);
         model.put("listaBancos",bancoConTiposDeSangres);
 
         return new ModelAndView("busqueda", model);

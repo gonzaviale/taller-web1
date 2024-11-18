@@ -18,6 +18,10 @@ public class Entrega
     @Column
     private  String direccion;
 
+
+    @Column
+    private String horario;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -30,11 +34,20 @@ public class Entrega
 
     }
 
-    public Entrega(int solicitudId, Long paqueteId, String direccion) {
+    public Entrega(int solicitudId, Long paqueteId, String direccion,String horario) {
 
         this.solicitudId= solicitudId;
         this.paqueteId = paqueteId;
         this.direccion = direccion;
+        this.horario = horario;
+    }
+
+    public String getHorario() {
+        return horario;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
     }
 
     public int getSolicitudId() {

@@ -28,9 +28,11 @@
         <section class="card-body">
             <h5 class="card-title" th:text="${banco.getNombreBanco()}"></h5>
             <p class="card-text">
+                <strong>Puntos: </strong><span th:text="${banco.getPuntos()}"></span>
+                <br>
                 <strong>Dirección: </strong><span th:text="${banco.getDireccion()}"></span>,
                 <strong>Ciudad: </strong><span th:text="${banco.getCiudad()}"></span>,
-                <strong>País: </strong><span th:text="${banco.getPais()}"></span>
+                <strong style="display: none">País: </strong><span th:text="${banco.getPais()}"></span>
             </p>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">

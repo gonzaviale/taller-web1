@@ -5,7 +5,7 @@ import com.tallerwebi.dominio.RepositorioMascota;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
-import com.tallerwebi.presentacion.BancoConTiposDeSangre;
+import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -51,19 +51,26 @@ public class ServicioFiltroImpl implements ServicioFiltro {
     }
 
     @Override
-    public ArrayList<BancoConTiposDeSangre> obtenerCoincidenciasEnBancosDeSangre(String sangreBuscada, String tipoProducto) {
-
+    public ArrayList<BancoConTiposDeSangreDTO> obtenerCoincidenciasEnBancosDeSangre(String sangreBuscada, String tipoProducto) {
+        ArrayList<BancoConTiposDeSangreDTO> coincidenciasEnBancos = new ArrayList<>();
         if (validadorCampo(sangreBuscada).equals(sangreBuscada) && validadorCampo(tipoProducto).isEmpty()) {
-            return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
+            coincidenciasEnBancos.addAll(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
+            coincidenciasEnBancos.sort((o1, o2) -> o2.getPuntos().compareTo(o1.getPuntos()));
+            return coincidenciasEnBancos;
         }
         if (validadorCampo(sangreBuscada).isEmpty() && validadorCampo(tipoProducto).equals(tipoProducto)) {
-            return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(tipoProducto));
+            coincidenciasEnBancos.addAll(repositorioBanco.obtenerLaCoincidenciaEnTipoDeProductoDeTodosLosBancos(tipoProducto));
+            coincidenciasEnBancos.sort((o1, o2) -> o2.getPuntos().compareTo(o1.getPuntos()));
+            return coincidenciasEnBancos;
         }
         if (validadorCampo(sangreBuscada).equals(sangreBuscada) && validadorCampo(tipoProducto).equals(tipoProducto)) {
-            return new ArrayList<>(repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(sangreBuscada, tipoProducto));
+            coincidenciasEnBancos.addAll(repositorioBanco.obtenerCoincidenciaEnTipoDeProductoYSangreDeTodosLosBancos(sangreBuscada, tipoProducto));
+            coincidenciasEnBancos.sort((o1, o2) -> o2.getPuntos().compareTo(o1.getPuntos()));
+            return coincidenciasEnBancos;
         }
-
-        return new ArrayList<>(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
+        coincidenciasEnBancos.addAll(repositorioBanco.obtenerLaCoincidenciaEnSangreDeTodosLosBancos(sangreBuscada));
+        coincidenciasEnBancos.sort((o1, o2) -> o2.getPuntos().compareTo(o1.getPuntos()));
+        return coincidenciasEnBancos;
     }
 
     @Override

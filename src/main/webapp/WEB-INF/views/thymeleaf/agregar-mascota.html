@@ -15,59 +15,17 @@
     <h1 class="text-center text-black justify-content-center mb-3">Registra tu mascota</h1>
 
     <div class="container text-center mb-4 d-flex gap-2">
-        <button id="btnDonante" class="btn btn-primary btn-lg flex-fill" onclick="seleccionarFormulario('donante')">Mascota Donante</button>
-        <button id="btnReceptora" class="btn btn-secondary btn-lg flex-fill" onclick="seleccionarFormulario('receptora')">Mascota Receptora</button>
+        <a href="/spring/agregar-mascota-donante" class="btn btn-primary btn-lg flex-fill">Mascota Donante</a>
+        <a href="/spring/agregar-mascota-receptora" class="btn btn-secondary btn-lg flex-fill">Mascota Receptora</a>
     </div>
 
-    <!-- Contenedor donde se cargará el formulario -->
-    <div id="formulario-contenedor" class="card"></div>
+
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
-
-    function seleccionarFormulario(tipo) {
-        cargarFormulario(tipo);
-        actualizarBotones(tipo);
-    }
-
-    function actualizarBotones(tipo) {
-        if (tipo === 'donante') {
-            document.getElementById('btnDonante').classList.add('btn-primary');
-            document.getElementById('btnDonante').classList.remove('btn-secondary');
-            document.getElementById('btnReceptora').classList.add('btn-secondary');
-            document.getElementById('btnReceptora').classList.remove('btn-primary');
-        } else {
-            document.getElementById('btnReceptora').classList.add('btn-primary');
-            document.getElementById('btnReceptora').classList.remove('btn-secondary');
-            document.getElementById('btnDonante').classList.add('btn-secondary');
-            document.getElementById('btnDonante').classList.remove('btn-primary');
-        }
-    }
-
-    function cargarFormulario(tipo) {
-        let url = tipo === 'donante' ? '/spring/agregar-mascota-donante' : '/spring/agregar-mascota-receptora';
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (data) {
-                $('#formulario-contenedor').html(data);
-                agregarManejoSubmit(tipo);
-            },
-            error: function () {
-                $('#formulario-contenedor').html('<p class="text-danger text-center">Error al cargar el formulario.</p>');
-            }
-        });
-    }
-
-    $(document).ready(function () {
-        cargarFormulario('donante');
-    });
-
-</script>
 
 </body>
 </html>
