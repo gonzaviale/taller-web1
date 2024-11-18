@@ -11,8 +11,8 @@
         <!-- Campo de búsqueda por sangre -->
         <div class="col-md-6">
             <label for="sangre" class="form-label">Tipo de Sangre</label>
-            <select class="form-select" id="sangre" name="sangre">
-                <option value="">Seleccione el tipo de sangre</option>
+            <select class="form-select" id="sangre" name="sangre" required>
+                <option value="" selected disabled>Seleccione el tipo de sangre</option>
                 <option value="DEA-1.1.">DEA-1.1.</option>
                 <option value="DEA-1.2.">DEA-1.2.-</option>
                 <option value="DEA-3">DEA-3</option>
@@ -22,6 +22,9 @@
                 <option value="DEA-7">DEA-7</option>
                 <option value="DEA-8 ">DEA-8-</option>
             </select>
+            <div class="invalid-feedback">
+                Por favor selecciona un tipo de sangre.
+            </div>
         </div>
 
         <!-- Campo de búsqueda por tipo de búsqueda -->
@@ -61,20 +64,89 @@
     })()
 </script>
 
+<section th:if="${users==null}">
 
+    <article class="container mt-4">
+        <h1 class="mb-4">Lista de Perfiles de USUARIOS</h1>
 
-<article th:if="${listaUsuarios}" class="container mt-4">
-    <h1 class="mb-4">Lista de Perfiles de USUARIOS</h1>
-    <article th:each="usuario : ${listaUsuarios}" class="card mb-3">
-        <section class="card-body">
-            <a th:href="@{/{nombre}.{id}/(nombre=${usuario.nombre}, id=${usuario.id})}">
-                <h5 class="text-muted" th:text="${usuario.nombre + ' ' + usuario.apellido}"></h5>
-            </a>
-            <p class="card-text">
-                <strong>Email: </strong><span th:text="${usuario.email}"></span>
-            </p>
-        </section>
+        <div th:if="${listaUsuarios.size() > 0}">
+
+            <article th:each="usuario : ${listaUsuarios}" class="card mb-3">
+
+                <section class="card-body">
+                    <a th:href="@{/{nombre}.{id}/(nombre=${usuario.nombre}, id=${usuario.id})}">
+                        <h5 class="text-muted" th:text="${usuario.nombre + ' ' + usuario.apellido}"></h5>
+                    </a>
+                    <p class="card-text">
+                        <strong>Email: </strong><span th:text="${usuario.email}"></span>
+                    </p>
+                </section>
+
+            </article>
+        </div>
+
+    <!-- Mensaje de "no usuarios" -->
+    <div th:if="${listaUsuarios.size() == 0}" class="alert alert-warning text-center mx-auto col-md-6">
+        <p>No se encontraron usuarios con esa publicación o mascota.</p>
+    </div>
     </article>
-</article>
+
+</section>
+
+<section th:if="${users != null}">
+
+    <article class="container mt-4">
+        <h1 class="mb-4 text-center">Lista de Perfiles de USUARIOS</h1>
+
+        <div th:if="${listaUsuarios.size() > 0}">
+            <article th:each="usuario : ${listaUsuarios}" class="card mb-3">
+                <section class="card-body">
+                    <a th:href="@{/{nombre}.{id}/(nombre=${usuario.nombre}, id=${usuario.id})}">
+                        <h5 class="text-muted text-center" th:text="${usuario.nombre + ' ' + usuario.apellido}"></h5>
+                    </a>
+                    <p class="card-text text-center">
+                        <strong>Email: </strong><span th:text="${usuario.email}"></span>
+                    </p>
+                </section>
+                <!-- Línea separadora -->
+                <hr class="my-4">
+
+                <!-- Bloque de coincidencias en Publicaciones y Mascotas en formato horizontal -->
+                <div class="d-flex justify-content-between mt-3">
+                    <!-- Sección de Publicaciones -->
+                    <div class="text-center flex-fill mx-2">
+                        <h6 class="text-primary">Publicaciones</h6>
+                        <div class="text-muted" style="font-size: 0.9rem;">
+                            <p><strong>Busqueda:</strong> <span th:text="${usuario.cantidadPublicacionesBusqueda}"></span></p>
+                            <p><strong>Donación:</strong> <span th:text="${usuario.cantidadPublicacionesDonacion}"></span></p>
+                            <p><strong>Venta:</strong> <span th:text="${usuario.cantidadPublicacionesVenta}"></span></p>
+                        </div>
+                    </div>
+
+                    <!-- Sección de Mascotas -->
+                    <div class="text-center flex-fill mx-2">
+                        <h6 class="text-primary">Mascotas</h6>
+                        <div class="text-muted" style="font-size: 0.9rem;">
+                            <p><strong>Cantidad de Mascotas:</strong> <span th:text="${usuario.cantidadDeMascotas}"></span></p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </article>
+        </div>
+
+        <!-- Mensaje de "no usuarios" -->
+
+        <div th:if="${listaUsuarios.size() == 0}" class="alert alert-warning text-center mx-auto col-md-6">
+            <!-- Línea separadora -->
+            <hr class="my-4">
+
+            <p>No se encontraron usuarios con esa publicación o mascota.</p>
+        </div>
+    </article>
+
+</section>
+
 </body>
 </html>

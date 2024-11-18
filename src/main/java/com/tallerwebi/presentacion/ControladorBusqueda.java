@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
 import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
+import com.tallerwebi.presentacion.DTO.UsuarioFiltradoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,12 +105,13 @@ public class ControladorBusqueda {
 
     @RequestMapping(path = "/filtradodeusuarios", method = RequestMethod.GET)
     public ModelAndView filtradoDeUsuarios(
-            @RequestParam(required = false) String sangreBuscada,
+            @RequestParam(required = false) String sangre,
             @RequestParam(required = false) String tipoDeBusqueda) {
         ModelMap model = new ModelMap();
 
-        List<Usuario> usuarios= this.servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangreBuscada,tipoDeBusqueda);
+        List<UsuarioFiltradoDTO> usuarios= this.servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangre,tipoDeBusqueda);
         model.put("listaUsuarios",usuarios);
+        model.put("users","sad");
 
         return new ModelAndView("busqueda", model);
     }

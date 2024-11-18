@@ -71,12 +71,7 @@
     <div class="d-grid gap-2 mb-4">
       <a href="crear-publicacion.html" class="btn btn-custom btn-lg w-100">Crear Publicación</a>
       <a href="/spring/chat" class="btn btn-outline-primary btn-lg w-100">ChatBot</a>
-      <a href="agregar-mascota.html" class="btn btn-outline-primary btn-lg w-100">Registrar mascota</a>
-    </div>
-
-    <!-- Opciones específicas según el rol -->
-    <div th:if="${rol == 'dueño mascota'}" class="d-grid gap-2 mb-4">
-      <a href="/spring/agregar-mascota" class="btn btn-success btn-lg w-100">Registrar mi mascota</a>
+      <a th:if="${rol == 'dueño mascota'}" href="agregar-mascota.html" class="btn btn-outline-primary btn-lg w-100">Registrar mascota</a>
     </div>
 
     <div th:if="${rol == 'veterinario'}" class="d-grid gap-2">
@@ -111,7 +106,6 @@
   <a href="/spring/getAllMessages" >Chat</a>
 </div>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
-<script th:src="@{../../../resources/core/js/main.js}"></script>
 
 </body>
 </html>

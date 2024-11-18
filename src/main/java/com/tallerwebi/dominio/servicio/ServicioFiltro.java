@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
+import com.tallerwebi.presentacion.DTO.UsuarioFiltradoDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public interface ServicioFiltro {
 
     List<Usuario> obtenerTodosLosUsuariosConPublicacionesOMascotasDadasDeAlta();
 
-    List<Usuario> obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(String sangreBuscada, String tipoDeBusqueda);
+    List<UsuarioFiltradoDTO> obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(String sangreBuscada, String tipoDeBusqueda);
 
     List<Usuario> obtenerTodosLosVeterinariosVerificados();
 
