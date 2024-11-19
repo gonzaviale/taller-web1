@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario Dinámico</title>
+    <title>Registrar mascota</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
@@ -16,23 +16,23 @@
             <h1 class="text-black">Agregar mascota donante</h1>
         </div>
         <div class="card-body">
-            <!-- Formulario -->
-            <form action="#" th:action="@{/agregar-donante}" method="POST" enctype="multipart/form-data">
+            <form th:action="@{/definir-tipo-donante}" method="POST" enctype="multipart/form-data" th:object="${mascota}">
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="nombre" class="form-label">Nombre:</label>
-                        <input type="text" id="nombre" name="nombre" placeholder="Nombre" class="form-control" required>
+                        <input type="text" id="nombre" name="nombre" placeholder="Nombre" th:field="*{nombre}" class="form-control" required>
                     </div>
                     <div class="col-md-6">
                         <label for="anios" class="form-label">Años:</label>
-                        <input type="number" id="anios" name="anios" placeholder="Años" class="form-control" required>
+                        <input type="number" id="anios" name="anios" placeholder="Años" th:field="*{anios}" class="form-control" required>
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="peso" class="form-label">Peso:</label>
-                        <input type="number" step="0.1" id="peso" name="peso" placeholder="Peso (kg)" class="form-control" required>
+                        <input type="number" step="0.1" id="peso" name="peso" placeholder="Peso (kg)" th:field="*{peso}"
+                               class="form-control" required>
                     </div>
                 </div>
 
@@ -40,11 +40,13 @@
                     <div class="col-md-6">
                         <label class="form-label">Tipo de Mascota:</label><br>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="felino" name="tipo" value="Felino" class="form-check-input" required>
+                            <input type="radio" id="felino" name="tipo" value="Felino" th:field="*{tipo}" class="form-check-input"
+                                   required>
                             <label for="felino" class="form-check-label">Felino</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" id="canino" name="tipo" value="Canino" class="form-check-input" required>
+                            <input type="radio" id="canino" name="tipo" value="Canino" th:field="*{tipo}" class="form-check-input"
+                                   required>
                             <label for="canino" class="form-check-label">Canino</label>
                         </div>
                     </div>
@@ -61,34 +63,8 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <h3 class="text-black">Estudios requeridos para Gatos</h3>
-                        <ul>
-                            <li>FeLV (Virus de la Leucemia Felina)</li>
-                            <li>FIV (Virus de la Inmunodeficiencia Felina)</li>
-                            <li>Hemoplasmas</li>
-                            <li>Exámenes recientes de sangre</li>
-                            <li>Vacunaciones y desparasitaciones al día</li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <h3 class="text-black">Estudios requeridos para Perros</h3>
-                        <ul>
-                            <li>PCR (Reacción en Cadena de la Polimerasa)</li>
-                            <li>Exámenes recientes de sangre</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="imagenes" class="form-label">Subir imágenes de los estudios:</label>
-                    <input type="file" id="imagenes" name="imagenes" multiple accept="image/*" class="form-control" required>
-                </div>
-
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Registrar</button>
+                    <button type="submit" class="btn btn-primary">Siguiente</button>
                 </div>
             </form>
         </div>
