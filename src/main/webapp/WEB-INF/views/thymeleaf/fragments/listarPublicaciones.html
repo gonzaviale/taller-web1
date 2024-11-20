@@ -39,8 +39,7 @@
             </ul>
 
         </section>
-        <section th:if="${mascotasNecesitadas}">
-            <div th:replace="fragments/realizar-solicitud-a-una-publicacion"></div>
+        <section th:if="${!mascotasNecesitadas.isEmpty()}"></div>
         </section>
     </article>
 </article>
