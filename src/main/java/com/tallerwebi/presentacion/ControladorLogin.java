@@ -85,8 +85,8 @@ public class ControladorLogin {
     public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario,
                                     @RequestParam("confirmPassword") String confirmPassword,
                                     @RequestParam("matricula") String matricula,
-                                    @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes,
-                                    @RequestParam(value = "direccion", required = false) String direccion,
+                                    @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes
+                                   ,@RequestParam(value = "direccion", required = false) String direccion,
                                     @RequestParam(value = "ciudad", required = false) String ciudad,
                                     @RequestParam(value = "pais", required = false) String pais,
                                     @RequestParam(value = "telefono", required = false) String telefono,
@@ -96,13 +96,7 @@ public class ControladorLogin {
 
         Usuario nuevoUsuario;
 
-        if(usuario.getRol().equals("banco")){
 
-            Banco banco = new Banco(usuario.getNombre(),direccion,ciudad,pais,telefono, usuario.getEmail(), usuario.getPassword(), horario);
-            servicioLogin.RegistrarBanco(banco);
-            redirectAttributes.addFlashAttribute("mensajeExito", "Usuario registrado con éxito");
-            return new ModelAndView("redirect:/login",modelo);
-        }
 
 
         if(usuario.getRol().equals("veterinario")){
@@ -144,9 +138,20 @@ public class ControladorLogin {
 
         setearUsuario(nuevoUsuario,usuario);
 
+
+
+        if(usuario.getRol().equals("banco")){
+
+            Banco banco = new Banco(usuario.getNombre(),direccion,ciudad,pais,telefono, usuario.getEmail(), usuario.getPassword(), horario);
+            servicioLogin.RegistrarBanco(banco);
+            redirectAttributes.addFlashAttribute("mensajeExito", "Usuario registrado con éxito");
+            return new ModelAndView("redirect:/login",modelo);
+        }
+
+
+
         try {
             servicioLogin.registrar(nuevoUsuario);
-            redirectAttributes.addFlashAttribute("mensajeExito", "Usuario registrado con éxito");
 
         } catch (UsuarioExistente e) {
             modelo.put("error", "El usuario ya existe");
