@@ -16,10 +16,12 @@
         .login-container {
             margin-top: 20px;
             width: 500px;
+            max-height: 80vh;
             padding: 30px;
             background-color: #f7f7f7;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
         }
 
         body {
@@ -74,13 +76,18 @@
             <label class="form-label">¿Cómo te querés registrar?:</label>
             <div class="mb-3">
                 <div class="form-check">
-                    <input type="radio" name="rol" id="dueno" th:field="*{rol}" class="form-check-input" value="dueño mascota" required onclick="toggleVeterinarioFields(false)">
+                    <input type="radio" name="rol" id="dueno" th:field="*{rol}" class="form-check-input" value="dueño mascota" required onclick="toggleVeterinarioFields(false); toggleBancoFields(false)">
                     <label for="dueno" class="form-check-label">Dueño de mascota</label>
                 </div>
                 <div class="form-check">
-                    <input type="radio" name="rol" id="veterinario" th:field="*{rol}" class="form-check-input" value="veterinario" onclick="toggleVeterinarioFields(true)">
+                    <input type="radio" name="rol" id="veterinario" th:field="*{rol}" class="form-check-input" value="veterinario" onclick="toggleVeterinarioFields(true); toggleBancoFields(false)">
                     <label for="veterinario" class="form-check-label">Veterinario</label>
                 </div>
+                <div class="form-check">
+                    <input type="radio" name="rol" id="banco" th:field="*{rol}" class="form-check-input" value="banco" onclick="toggleBancoFields(true);toggleVeterinarioFields(false)">
+                    <label for="banco" class="form-check-label">Banco de sangre</label>
+                </div>
+
                 <div class="invalid-feedback">Por favor, elija una opción.</div>
             </div>
 
@@ -92,6 +99,41 @@
                     <div class="invalid-feedback">Por favor, ingrese su matrícula.</div>
                 </div>
             </div>
+
+            <!-- Campos adicionales para el banco -->
+            <div id="banco-fields" class="hidden">
+                <div class="mb-3">
+                    <label for="direccion" class="form-label">Dirección</label>
+                    <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ingrese la dirección">
+                    <div class="invalid-feedback">Por favor, ingrese la dirección.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="ciudad" class="form-label">Ciudad</label>
+                    <input type="text" id="ciudad" name="ciudad" class="form-control" placeholder="Ingrese la ciudad">
+                    <div class="invalid-feedback">Por favor, ingrese la ciudad.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="pais" class="form-label">País</label>
+                    <input type="text" id="pais" name="pais" class="form-control" placeholder="Ingrese el país">
+                    <div class="invalid-feedback">Por favor, ingrese el país.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <input type="text" id="telefono" name="telefono" class="form-control" placeholder="Ingrese el teléfono">
+                    <div class="invalid-feedback">Por favor, ingrese el teléfono.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="horario" class="form-label">Horario de funcionamiento</label>
+                    <input type="text" id="horario" name="horario" class="form-control" placeholder="Ingrese el horario de funcionamiento">
+                    <div class="invalid-feedback">Por favor, ingrese el horario.</div>
+                </div>
+            </div>
+
+
 
             <!-- Nuevo campo opcional de foto de perfil -->
             <div class="mb-3">
@@ -127,6 +169,19 @@
             document.getElementById('matricula').removeAttribute('required');
         }
     }
+
+
+
+    function toggleBancoFields(isBanco) {
+        var bancoFields = document.getElementById('banco-fields');
+        if (isBanco) {
+            bancoFields.classList.remove('hidden');
+        } else {
+            bancoFields.classList.add('hidden');
+        }
+    }
+
+
 
     // Inicializar validación de Bootstrap
     (function () {
