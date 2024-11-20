@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>CrearCampaña</title>
@@ -19,7 +20,7 @@
 <main>
     <div class="container mt-5">
         <h2>Crear Campaña de Donación</h2>
-        <form th:action="@{'/crearcamp'}" method="post">
+        <form th:action="@{'/crearcamp'}" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
@@ -45,7 +46,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="ubicacion" class="form-label">Ubicación</label>
-                        <input type="text" class="form-control" id="ubicacion" name="ubicacion" required/>
+                        <input type="text" class="form-control" id="ubicacion" name="ubicacion" th:value="${ubicacion}" readonly required/>
                     </div>
                 </div>
             </div>
@@ -54,6 +55,7 @@
                 <label for="descripcion" class="form-label">Descripción</label>
                 <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
             </div>
+
 
             <button type="submit" class="btn btn-primary">Crear Campaña</button>
         </form>

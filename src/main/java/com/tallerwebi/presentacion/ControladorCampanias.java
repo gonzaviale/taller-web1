@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -39,6 +40,7 @@ public class ControladorCampanias {
         if (idBanco == null) {
             return new ModelAndView("redirect:/login");
         }
+        modelo.put("ubicacion",servicioBanco.BuscarBancoId(idBanco).getDireccion());
         modelo.put("error", error);
         return new ModelAndView("crearCampania", modelo);
     }
