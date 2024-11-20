@@ -39,22 +39,8 @@
             </ul>
 
         </section>
-        <section th:if="${mascotasNecesitadas != null and !mascotasNecesitadas.isEmpty()}">
-            <form th:action="@{/realizar-solicitud}" method="post">
-                <input type="hidden" name="mascotaDonante" th:value="${publicacion.getMascotaDonante().getId()}">
-                <input type="hidden" name="publicacion" th:value="${publicacion.getId()}">
-                <div class="mb-3">
-                    <label for="mascota" class="form-label">Selecciona una mascota</label>
-                    <select id="mascota" name="mascotaReceptora" class="form-select">
-                        <option value="">Elige una mascota</option>
-                        <option th:each="mascota : ${mascotasNecesitadas}"
-                                th:if="${mascota.tipo} != null and ${publicacion.mascotaDonante?.tipo} != null and ${mascota.tipo} == ${publicacion.mascotaDonante?.tipo}"
-                                th:value="${mascota.id}" th:text="${mascota.nombre}"></option>
-                    </select>
-                </div>
-                <input type="submit" value="Enviar solicitud" class="btn btn-primary">
-            </form>
-            </div>
+        <section th:if="${mascotasNecesitadas}">
+            <div th:replace="fragments/realizar-solicitud-a-una-publicacion"></div>
         </section>
     </article>
 </article>
