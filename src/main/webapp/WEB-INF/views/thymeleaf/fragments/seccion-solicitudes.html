@@ -90,5 +90,36 @@
         </div>
     </div>
 </section>
+<section th:if="${solicitudesDelVet}">
+    <div class="container">
+        <div class="row">
+            <article th:each="solicitud : ${solicitudesDelVet}" class="col-12 mb-3">
+                <div class="card" style="background-color: #d4edda;">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <span th:text="'Se te asigno la solicitud para que '"></span>
+                            <strong th:text="${solicitud.getMascotaDonante().getNombre()}"></strong>
+                            <span th:text="' ('"></span>
+                            <a th:href="@{/{nombre}.{id}/(nombre=${solicitud.getMascotaDonante().getDuenio().getNombre()}, id=${solicitud.getMascotaDonante().getDuenio().getId()})}"
+                               th:text="${solicitud.getMascotaDonante().getDuenio().getNombre() + ' ' + solicitud.getMascotaDonante().getDuenio().getApellido()}"></a>
+                            <span th:text="') '"></span>
+                            <span th:text="' le done sangre a '"></span>
+                            <strong th:text="${solicitud.getMascotaReceptora().getNombre()}"></strong>
+                            <span th:text="' ('"></span>
+                            <a th:href="@{/{nombre}.{id}/(nombre=${solicitud.getMascotaReceptora().getDuenio().getNombre()}, id=${solicitud.getMascotaReceptora().getDuenio().getId()})}"
+                               th:text="${solicitud.getMascotaReceptora().getDuenio().getNombre() + ' ' + solicitud.getMascotaReceptora().getDuenio().getApellido()}"></a>
+                            <span th:text="')'"></span>
+                            <span th:text="'. Ahora tenés que comunicarte con ambas partes para acordar día y horario de transfusión.'"></span>
+                        </p>
+                        <form th:action="@{/solicitud-vista}" method="POST" class="d-inline-block">
+                            <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
+                            <input type="submit" class="btn btn-primary" value="Ok">
+                        </form>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
 </body>
 </html>
