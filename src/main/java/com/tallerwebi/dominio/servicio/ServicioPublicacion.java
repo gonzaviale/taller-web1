@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ServicioPublicacion {
 
-    void guardarPublicacion(Publicacion publicacion) throws PublicacionNoValida, PublicacionSinTitulo;
+    void guardarPublicacion(Publicacion publicacion) throws PublicacionSinTipoDeSangre, PublicacionSinTipoDePublicacion, PublicacionNoValida, PublicacionSinTitulo;
     Publicacion busquedaDeUna(Publicacion publicacion) throws PublicacionNoExistente;
     List<Publicacion> obtenerTodasLasPublicaciones();
     Publicacion busquedaPorId(Long publicacionId) throws PublicacionNoExistente;

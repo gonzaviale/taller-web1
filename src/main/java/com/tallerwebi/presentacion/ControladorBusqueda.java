@@ -1,11 +1,9 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.RepositorioMascota;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
-import com.tallerwebi.dominio.servicio.ServicioMascota;
 import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,37 +13,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ControladorBusqueda {
 
     private final ServicioFiltro servicioFiltro;
-    private final ServicioMascota servicioMascota;
 
     @Autowired
-    public ControladorBusqueda(ServicioFiltro serviciofiltro, ServicioMascota servicioMascota){
+    public ControladorBusqueda(ServicioFiltro serviciofiltro){
         this.servicioFiltro= serviciofiltro;
-        this.servicioMascota = servicioMascota;
     }
     @RequestMapping(path = "/busquedaFiltrada")
-    public ModelAndView buscar (@RequestParam("tipoDeBusqueda") String tipoDeBusqueda, HttpServletRequest request)
+    public ModelAndView buscar (@RequestParam("tipoDeBusqueda") String tipoDeBusqueda)
     {
         ModelMap model= new ModelMap();
 
+        if(tipoDeBusqueda.equals("mascotas")){
+            List<Mascota> mascotas= this.servicioFiltro.consultarMascota("","" ,"");
+            model.put("listaMascotas",mascotas);
+        }
         if(tipoDeBusqueda.equals("publicacion")){
             List<Publicacion> publicaciones= this.servicioFiltro.consultarPublicaciones("","","","");
-
-            List<Mascota> misMascotas = servicioMascota.obtenerMascotasPorDueno((Usuario) request.getSession().getAttribute("usuarioEnSesion"));
-            List<Mascota> mascotasNecesitadas = misMascotas.stream()
-                    .filter(Mascota::isReceptor)
-                    .filter(Mascota::isAprobado)
-                    .collect(Collectors.toList());
             model.put("publicaciones",publicaciones);
-            model.put("mascotasNecesitadas", mascotasNecesitadas);
         }
         if(tipoDeBusqueda.equals("banco de sangre")){
             List<BancoConTiposDeSangreDTO> bancoConTiposDeSangres= this.servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("","");

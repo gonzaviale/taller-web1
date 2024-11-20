@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ControladorAgregarMascotaTest {
-/*
+
     ServicioMascota servicioMascotaMock = mock(ServicioMascota.class);
     ServicioImagenes servicioImagenesMock = mock(ServicioImagenes.class);
     ControladorAgregarMascota agregarMascota = new ControladorAgregarMascota(servicioMascotaMock, servicioImagenesMock);
@@ -205,5 +205,5 @@ public class ControladorAgregarMascotaTest {
     private void thenRegistroFalla(ModelAndView mav, String vista, String errorKey, String error) {
         assertThat(mav.getViewName(), equalToIgnoringCase(vista));
         assertThat(mav.getModel().get(errorKey).toString(), equalToIgnoringCase(error));
-    }*/
+    }
 }
