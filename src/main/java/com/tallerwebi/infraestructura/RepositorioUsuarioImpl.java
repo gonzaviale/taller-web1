@@ -163,4 +163,9 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         return false;
     }
 
+    @Override
+    public void guardarBanco(Banco banco) {
+        sessionFactory.getCurrentSession().save(banco);
+    }
+
 }
