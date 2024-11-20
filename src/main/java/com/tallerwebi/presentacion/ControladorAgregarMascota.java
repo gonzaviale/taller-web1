@@ -22,14 +22,12 @@ public class ControladorAgregarMascota {
 
     private final ServicioMascota servicioMascota;
     private final ServicioImagenes servicioImagenes;
-    private final RepositorioMascotaImpl repositorioMascota;
     private ModelMap modelo = new ModelMap();
 
     @Autowired
     public ControladorAgregarMascota(ServicioMascota servicioMascota, ServicioImagenes servicioImagenes, RepositorioMascotaImpl repositorioMascota) {
         this.servicioMascota = servicioMascota;
         this.servicioImagenes = servicioImagenes;
-        this.repositorioMascota = repositorioMascota;
     }
 
     @RequestMapping(path = "/agregar-mascota")
