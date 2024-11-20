@@ -31,7 +31,7 @@ public class ControladorPerfil {
     public ControladorPerfil(ServicioPerfil servicioPerfil, ServicioSolicitudAUnaPublicacion servicioSolicitudAUnaPublicacion, ServicioImagenes servicioImagenes) {
         this.servicioPerfil = servicioPerfil;
         this.servicioSolicitudAUnaPublicacion = servicioSolicitudAUnaPublicacion;
-        this.servicioImagenes= servicioImagenes;
+        this.servicioImagenes = servicioImagenes;
     }
 
     @RequestMapping("/miPerfil")
@@ -41,29 +41,34 @@ public class ControladorPerfil {
             @RequestParam(value = "listar", required = false) String listar) {
 
         ModelMap model = new ModelMap();
-        Usuario usuarioBuscado=null;
-        Usuario usuarioEnSesion= (Usuario) request.getSession().getAttribute("usuarioEnSesion");
-        if(usuarioEnSesion!=null){
+        Usuario usuarioBuscado = null;
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+        if (usuarioEnSesion != null) {
             usuarioBuscado = servicioPerfil.buscarUsuarioPorId(usuarioEnSesion.getId());
         }
 
         if (usuarioBuscado != null) {
-            model.addAttribute("miperfil",Boolean.TRUE);
+            model.addAttribute("miperfil", Boolean.TRUE);
             model.addAttribute("usuarioBuscado", usuarioBuscado);
-            model.addAttribute("mensaje",mensaje);
+            model.addAttribute("mensaje", mensaje);
 
-            List<SolicitudAUnaPublicacion> solicitudesRecibidas = servicioSolicitudAUnaPublicacion.traerSolicitudesPendientesDelUsuario(usuarioBuscado);
-            model.addAttribute("solicitudesRecibidas", solicitudesRecibidas);
+            if (usuarioBuscado.getRol().equals("veterinario")) {
+                List<SolicitudAUnaPublicacion> solicitudesDelVet = servicioSolicitudAUnaPublicacion.traerSolicitudesHechasAlVet(usuarioBuscado);
+                model.addAttribute("solicitudesDelVet", solicitudesDelVet);
+            } //else {
+                List<SolicitudAUnaPublicacion> solicitudesRecibidas = servicioSolicitudAUnaPublicacion.traerSolicitudesPendientesDelUsuario(usuarioBuscado);
+                model.addAttribute("solicitudesRecibidas", solicitudesRecibidas);
 
-            List<SolicitudAUnaPublicacion> solicitudesAceptadas = servicioSolicitudAUnaPublicacion.traerSolicitudesAceptadasDelUsuario(usuarioBuscado);
-            model.addAttribute("solicitudesAceptadas", solicitudesAceptadas);
+                List<SolicitudAUnaPublicacion> solicitudesAceptadas = servicioSolicitudAUnaPublicacion.traerSolicitudesAceptadasDelUsuario(usuarioBuscado);
+                model.addAttribute("solicitudesAceptadas", solicitudesAceptadas);
 
-            List<SolicitudAUnaPublicacion> solicitudesRechazadas = servicioSolicitudAUnaPublicacion.traerSolicitudesRechazadasDelUsuario(usuarioBuscado);
-            model.addAttribute("solicitudesRechazadas", solicitudesRechazadas);
+                List<SolicitudAUnaPublicacion> solicitudesRechazadas = servicioSolicitudAUnaPublicacion.traerSolicitudesRechazadasDelUsuario(usuarioBuscado);
+                model.addAttribute("solicitudesRechazadas", solicitudesRechazadas);
+            //}
 
             anidirFotoDePerfil(usuarioBuscado, model);
 
-            aniadirListado(usuarioBuscado, model,listar);
+            aniadirListado(usuarioBuscado, model, listar);
 
             return new ModelAndView("perfil", model);
         }
@@ -73,31 +78,31 @@ public class ControladorPerfil {
 
     private void anidirFotoDePerfil(Usuario usuarioBuscado, ModelMap model) {
         //cargar imagen al perfil si la tiene
-        List <String> nombreDeArchivoImagen= servicioImagenes.obtenerImagenesPorUsuario(usuarioBuscado.getId());
-        if(!(nombreDeArchivoImagen.isEmpty())){
+        List<String> nombreDeArchivoImagen = servicioImagenes.obtenerImagenesPorUsuario(usuarioBuscado.getId());
+        if (!(nombreDeArchivoImagen.isEmpty())) {
 
-            for(String archivo: nombreDeArchivoImagen){
+            for (String archivo : nombreDeArchivoImagen) {
 
-                if(archivo.startsWith(usuarioBuscado.getId().toString() + "_perfil")){
+                if (archivo.startsWith(usuarioBuscado.getId().toString() + "_perfil")) {
 
-                    model.addAttribute("foto",archivo);
+                    model.addAttribute("foto", archivo);
                     return;
                 }
             }
         }
     }
 
-    private void aniadirListado(Usuario usuarioBuscado, ModelMap model,String listar) {
+    private void aniadirListado(Usuario usuarioBuscado, ModelMap model, String listar) {
 
-        if(listar!=null && listar.equals("mascotas")){
-            List<Mascota> misMascotas=servicioPerfil.obtenerMascotasDelUsuario(usuarioBuscado.getId());
-            model.addAttribute("listaMascotas",misMascotas);
-        }else if(listar!=null && listar.equals("publicaciones")){
-            List<Publicacion> publicaciones=servicioPerfil.obtenerPublicacionesDelUsuario(usuarioBuscado.getId());
-            model.addAttribute("publicaciones",publicaciones);
-        }else{
-            List<Mascota> misMascotas=servicioPerfil.obtenerMascotasDelUsuario(usuarioBuscado.getId());
-            model.addAttribute("listaMascotas",misMascotas);
+        if (listar != null && listar.equals("mascotas")) {
+            List<Mascota> misMascotas = servicioPerfil.obtenerMascotasDelUsuario(usuarioBuscado.getId());
+            model.addAttribute("listaMascotas", misMascotas);
+        } else if (listar != null && listar.equals("publicaciones")) {
+            List<Publicacion> publicaciones = servicioPerfil.obtenerPublicacionesDelUsuario(usuarioBuscado.getId());
+            model.addAttribute("publicaciones", publicaciones);
+        } else {
+            List<Mascota> misMascotas = servicioPerfil.obtenerMascotasDelUsuario(usuarioBuscado.getId());
+            model.addAttribute("listaMascotas", misMascotas);
         }
 
     }
@@ -109,17 +114,17 @@ public class ControladorPerfil {
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
 
-        if(usuario!=null && id.equals(usuario.getId())){
+        if (usuario != null && id.equals(usuario.getId())) {
             return new ModelAndView("redirect:/miPerfil");
         }
 
         Usuario usuarioBuscado = servicioPerfil.buscarUsuarioPorId(id);
 
-        ModelMap model= new ModelMap();
+        ModelMap model = new ModelMap();
         if (usuarioBuscado != null) {
-            model.addAttribute("miperfil",Boolean.FALSE);
+            model.addAttribute("miperfil", Boolean.FALSE);
             model.addAttribute("user", usuarioBuscado);
-            this.aniadirListado(usuarioBuscado, model,listar);
+            this.aniadirListado(usuarioBuscado, model, listar);
             return new ModelAndView("perfil", model);
         }
         return new ModelAndView("redirect:/home");
@@ -135,12 +140,12 @@ public class ControladorPerfil {
         if (usuarioEnSesion != null) {
             usuarioBuscado = servicioPerfil.buscarUsuarioPorId(usuarioEnSesion.getId());
 
-            model.addAttribute("email",usuarioBuscado.getEmail());
-            model.addAttribute("nombre",usuarioBuscado.getNombre());
+            model.addAttribute("email", usuarioBuscado.getEmail());
+            model.addAttribute("nombre", usuarioBuscado.getNombre());
             model.addAttribute("apellido", usuarioBuscado.getApellido());
-            model.addAttribute("contrasena",usuarioBuscado.getPassword());
+            model.addAttribute("contrasena", usuarioBuscado.getPassword());
 
-            return new ModelAndView("editarperfil",model);
+            return new ModelAndView("editarperfil", model);
         }
 
         return new ModelAndView("redirect:/home", new ModelMap());
@@ -148,10 +153,10 @@ public class ControladorPerfil {
 
     @RequestMapping("/actualizarUsuario")
     public ModelAndView actualizarUsuario(HttpServletRequest request,
-                                    @RequestParam String email,
-                                    @RequestParam String nombre,
-                                    @RequestParam String apellido,
-                                    @RequestParam String password) {
+                                          @RequestParam String email,
+                                          @RequestParam String nombre,
+                                          @RequestParam String apellido,
+                                          @RequestParam String password) {
 
         Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
 
@@ -178,18 +183,18 @@ public class ControladorPerfil {
 
     @RequestMapping("subirFoto")
     public ModelAndView subirFoto(HttpServletRequest request,
-                                  @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes){
+                                  @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes) {
 
-        ModelMap modelo= new ModelMap();
+        ModelMap modelo = new ModelMap();
 
-        Usuario usuarioBuscado=null;
-        Usuario usuarioEnSesion= (Usuario) request.getSession().getAttribute("usuarioEnSesion");
-        if(usuarioEnSesion!=null){
+        Usuario usuarioBuscado = null;
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+        if (usuarioEnSesion != null) {
             usuarioBuscado = servicioPerfil.buscarUsuarioPorId(usuarioEnSesion.getId());
         }
 
-        if(usuarioBuscado==null){
-            modelo.put("mensaje","error al encontrar al usuario logeado");
+        if (usuarioBuscado == null) {
+            modelo.put("mensaje", "error al encontrar al usuario logeado");
             return new ModelAndView("redirect:/home", modelo);
         }
 
@@ -200,9 +205,9 @@ public class ControladorPerfil {
 
         try {
             servicioImagenes.guardarFotoDePerfilUsuario(imagenes, usuarioBuscado.getId());
-            modelo.put("mensaje","se actualizo correctamente la imagen de su perfil");
+            modelo.put("mensaje", "se actualizo correctamente la imagen de su perfil");
         } catch (IOException e) {
-            modelo.put("mensaje","ocurrio un error");
+            modelo.put("mensaje", "ocurrio un error");
         }
 
         return new ModelAndView("redirect:/miPerfil", modelo);
@@ -211,23 +216,23 @@ public class ControladorPerfil {
     @RequestMapping("eliminarFoto")
     public ModelAndView eliminarFoto(HttpServletRequest request) {
 
-        ModelMap modelo= new ModelMap();
+        ModelMap modelo = new ModelMap();
 
-        Usuario usuarioBuscado=null;
-        Usuario usuarioEnSesion= (Usuario) request.getSession().getAttribute("usuarioEnSesion");
-        if(usuarioEnSesion!=null){
+        Usuario usuarioBuscado = null;
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+        if (usuarioEnSesion != null) {
             usuarioBuscado = servicioPerfil.buscarUsuarioPorId(usuarioEnSesion.getId());
         }
 
-        if(usuarioBuscado==null){
-            modelo.put("mensaje","error al encontrar al usuario logeado");
+        if (usuarioBuscado == null) {
+            modelo.put("mensaje", "error al encontrar al usuario logeado");
             return new ModelAndView("redirect:/home", modelo);
         }
         try {
-        servicioImagenes.eliminarFotoDePerfil(usuarioBuscado.getId());
-        modelo.put("mensaje","se elimino su imagen de perfil");
+            servicioImagenes.eliminarFotoDePerfil(usuarioBuscado.getId());
+            modelo.put("mensaje", "se elimino su imagen de perfil");
         } catch (IOException e) {
-            modelo.put("mensaje","ocurrio un error");
+            modelo.put("mensaje", "ocurrio un error");
         }
 
         return new ModelAndView("redirect:/miPerfil", modelo);
