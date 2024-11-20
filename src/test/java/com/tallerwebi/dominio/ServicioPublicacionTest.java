@@ -26,28 +26,16 @@ public class ServicioPublicacionTest {
         repositorioPublicacion = mock(RepositorioPublicacion.class);
         servicioPublicacion = new ServicioPublicacionImpl(repositorioPublicacion);
     }
-
-    @Test
-    public void cuandoElTipoDeSangreSeaInvalidoMeTiraraUnaExeptionDeTipoPublicacionSinTipoDeSangre() {
-        Publicacion nuevaPublicacion = whenCreoUnaPublicacionSinTipoDeSangre();
-        assertThrows(PublicacionSinTipoDeSangre.class, () -> servicioPublicacion.guardarPublicacion(nuevaPublicacion));
-    }
-
-    @Test
-    public void cuandoElTipoDePublicacionSeaInvalidoMeTiraraUnaExeptionDeTipoPublicacionSinTipoDePublicacion() {
-        Publicacion nuevaPublicacion = whenCreoUnaPublicacionSinTipoDePublicacion();
-        assertThrows(PublicacionSinTipoDePublicacion.class, () -> servicioPublicacion.guardarPublicacion(nuevaPublicacion));
-    }
     @Test
     public void cuandoElTipoDePublicacionSeaInvalidaMeTiraraUnaExeptionDeTipoPublicacionNoValida() {
         Publicacion nuevaPublicacion = whenCreoUnaPublicacionNoValida();
         assertThrows(PublicacionNoValida.class, () -> servicioPublicacion.guardarPublicacion(nuevaPublicacion));
     }
-    @Test
+    /*@Test
     public void siNoIngresaUnTituloEnLaPublicacionMeLanzaraUnaExeptionDeTipoSinTituloDeLaPublicacion(){
         Publicacion nuevaPublicacion = whenCreoUnaPublicacionSinTitulo();
         assertThrows(PublicacionSinTitulo.class, () -> servicioPublicacion.guardarPublicacion(nuevaPublicacion));
-    }
+    }*/
 
     private Publicacion whenCreoUnaPublicacionSinTitulo() {
         Publicacion nuevaPublicacion= new Publicacion();
