@@ -20,12 +20,20 @@ public class ServicioPublicacionImpl implements ServicioPublicacion {
     }
 
     @Override
-    public void guardarPublicacion(Publicacion publicacion) throws PublicacionNoValida, PublicacionSinTitulo {
-        if (publicacion.getTitulo().isEmpty()){
+    public void guardarPublicacion(Publicacion publicacion) throws PublicacionSinTipoDeSangre, PublicacionSinTipoDePublicacion, PublicacionNoValida, PublicacionSinTitulo {
+        //deberia de consultar en la base de datos por un tipo de sangre valida
+        //estan deberian estar precargadas volver mas tarde a realizar esta validacion
+        if (publicacion.getTipoDeSangre().isEmpty() && publicacion.getTipoDePublicacion().isEmpty() && publicacion.getTitulo().isEmpty()){
             throw new PublicacionNoValida();
         }
         if(publicacion.getTitulo().isEmpty()){
             throw new PublicacionSinTitulo();
+        }
+        if(publicacion.getTipoDeSangre().isEmpty()){
+           throw new PublicacionSinTipoDeSangre();
+        }
+        if(publicacion.getTipoDePublicacion().isEmpty() ){
+            throw new PublicacionSinTipoDePublicacion();
         }
         publicacion.activar();
         repositorioPublicacion.guardarPublicacion(publicacion);
