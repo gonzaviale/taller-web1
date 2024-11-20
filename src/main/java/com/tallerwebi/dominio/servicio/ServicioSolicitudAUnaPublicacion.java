@@ -15,4 +15,5 @@ public interface ServicioSolicitudAUnaPublicacion {
     List<SolicitudAUnaPublicacion> traerSolicitudesRechazadasDelUsuario(Usuario dueno);
     void marcarComoVista(Long solicitud);
     void asignarVeterinario(Long solicitud);
+    List<SolicitudAUnaPublicacion> traerSolicitudesHechasAlVet(Usuario usuarioBuscado);
 }

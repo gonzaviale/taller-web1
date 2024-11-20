@@ -47,6 +47,7 @@ public class ControladorHome {
         List<Mascota> misMascotas = servicioMascota.obtenerMascotasPorDueno(usuarioEnSesion);
         List<Mascota> mascotasNecesitadas = misMascotas.stream()
                 .filter(Mascota::isReceptor)
+                .filter(Mascota::isAprobado)
                 .collect(Collectors.toList());
         model.addAttribute("publicaciones", publicaciones);
         model.addAttribute("mensaje", mensaje);
