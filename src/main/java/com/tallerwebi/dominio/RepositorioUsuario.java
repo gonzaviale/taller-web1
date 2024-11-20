@@ -38,5 +38,7 @@ public interface RepositorioUsuario {
     boolean activarUsuarioBuscadoPor(Long id);
 
     boolean desactivarUsuarioBuscadoPor(Long id);
+
+    void guardarBanco(Banco banco);
 }
 
