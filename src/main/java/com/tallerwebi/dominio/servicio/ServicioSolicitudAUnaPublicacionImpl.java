@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service("ServicioSolicitudAUnaPublicacion")
@@ -78,16 +77,6 @@ public class ServicioSolicitudAUnaPublicacionImpl implements ServicioSolicitudAU
     public void asignarVeterinario(Long solicitud) {
         Usuario vet = repositorioSolicitud.traerVeterinario();
         repositorioSolicitud.asignarVeterinario(vet, traerSolicitudPorId(solicitud));
-    }
-
-    @Override
-    public List<SolicitudAUnaPublicacion> traerSolicitudesHechasAlVet(Usuario usuarioBuscado) {
-        List<SolicitudAUnaPublicacion> solicitudes = repositorioSolicitud.traerTodasLasSolicitudes();
-
-        return solicitudes.stream()
-                .filter(solicitud -> solicitud.getVeterinario() != null &&
-                        Objects.equals(solicitud.getVeterinario().getId(), usuarioBuscado.getId()))
-                .collect(Collectors.toList());
     }
 
     @Override

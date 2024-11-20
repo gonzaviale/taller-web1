@@ -1,10 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioSolicitud;
-import com.tallerwebi.dominio.entidad.Banco;
-import com.tallerwebi.dominio.entidad.Entrega;
-import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
-import com.tallerwebi.dominio.entidad.Solicitud;
+import com.tallerwebi.dominio.entidad.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -44,6 +41,14 @@ public class RepositorioSolicitudImpl implements RepositorioSolicitud {
         return (Entrega) sessionFactory.getCurrentSession()
                 .createCriteria(Entrega.class)
                 .add(Restrictions.eq("solicitudId", solicitudId))
+                .uniqueResult();
+    }
+
+    @Override
+    public Usuario buscarUsuarioXId(long usuarioId) {
+       return (Usuario) sessionFactory.getCurrentSession()
+                .createCriteria(Usuario.class)
+                .add(Restrictions.eq("id", usuarioId))
                 .uniqueResult();
     }
 

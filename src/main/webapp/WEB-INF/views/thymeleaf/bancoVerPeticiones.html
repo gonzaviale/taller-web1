@@ -21,7 +21,7 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th scope="col">Id del Solicitante</th>
+                    <th scope="col">Nombre del Solicitante</th>
                     <th scope="col">Tipo de Sangre Solicitada</th>
                     <th scope="col">Tipo de Producto</th>
                     <th scope="col">Cantidad Solicitada</th>
@@ -34,7 +34,7 @@
                     <td colspan="6">No hay solicitudes.</td>
                 </tr>
                 <tr th:each="solicitud : ${solicitudes}">
-                    <td th:text="${solicitud.usuarioId}">Nombre del Solicitante</td>
+                    <td th:text="${nombresUsuarios[solicitud.id]}">Nombre del Solicitante</td>
                     <td th:text="${solicitud.tipoSangre}">Tipo de Sangre</td>
                     <td th:text="${solicitud.tipoProducto}">Tipo de Producto</td>
                     <td th:text="${solicitud.cantidad}">Cantidad</td>
