@@ -69,9 +69,9 @@
 
     <!-- Botones principales -->
     <div class="d-grid gap-2 mb-4">
-      <a href="crear-publicacion.html" class="btn btn-custom btn-lg w-100">Crear Publicación</a>
+      <a href="crear-publicacion.html" class="btn btn-custom btn-lg w-100">Publicar mascota donante</a>
       <a href="/spring/chat" class="btn btn-outline-primary btn-lg w-100">ChatBot</a>
-      <a th:if="${rol == 'dueño mascota'}" href="agregar-mascota.html" class="btn btn-outline-primary btn-lg w-100">Registrar mascota</a>
+      <a th:if="${rol == 'dueño mascota'}" href="agregar-mascota.html" class="btn btn-outline-primary btn-lg w-100">Registrar mi mascota</a>
     </div>
 
     <div th:if="${rol == 'veterinario'}" class="d-grid gap-2">

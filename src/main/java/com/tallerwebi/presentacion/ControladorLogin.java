@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -87,11 +88,21 @@ public class ControladorLogin {
     public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario,
                                     @RequestParam("confirmPassword") String confirmPassword,
                                     @RequestParam("matricula") String matricula,
+                                    @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes
+                                   ,@RequestParam(value = "direccion", required = false) String direccion,
+                                    @RequestParam(value = "ciudad", required = false) String ciudad,
+                                    @RequestParam(value = "pais", required = false) String pais,
+                                    @RequestParam(value = "telefono", required = false) String telefono,
+                                    @RequestParam(value = "horario", required = false) String horario,
+                                    RedirectAttributes redirectAttributes) {
                                     @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes,
                                     @RequestParam (value="file",required = false) MultipartFile file) {
         modelo.clear();
 
         Usuario nuevoUsuario;
+
+
+
 
         if(usuario.getRol().equals("veterinario")){
             nuevoUsuario = new Veterinario();
@@ -132,8 +143,21 @@ public class ControladorLogin {
 
         setearUsuario(nuevoUsuario,usuario);
 
+
+
+        if(usuario.getRol().equals("banco")){
+
+            Banco banco = new Banco(usuario.getNombre(),direccion,ciudad,pais,telefono, usuario.getEmail(), usuario.getPassword(), horario);
+            servicioLogin.RegistrarBanco(banco);
+            redirectAttributes.addFlashAttribute("mensajeExito", "Usuario registrado con éxito");
+            return new ModelAndView("redirect:/login",modelo);
+        }
+
+
+
         try {
             servicioLogin.registrar(nuevoUsuario);
+
         } catch (UsuarioExistente e) {
             modelo.put("error", "El usuario ya existe");
             return new ModelAndView("nuevo-usuario", modelo);

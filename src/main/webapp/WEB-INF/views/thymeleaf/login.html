@@ -31,7 +31,13 @@
 
 <body>
 
-<main role="main" class="d-flex justify-content-center align-items-center vh-100">
+<main role="main" class="d-flex justify-content-center align-items-center vh-100  flex-column">
+
+    <!-- Mensaje de éxito si está disponible -->
+    <div th:if="${mensajeExito != null}" class="alert alert-success text-center">
+        <p th:text="${mensajeExito}">Usuario registrado con éxito</p>
+    </div>
+
 
     <div class="login-container">
         <h3 class="text-center mb-4">Iniciar Sesión</h3>

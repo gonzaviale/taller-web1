@@ -9,4 +9,6 @@ public interface ServicioLogin {
     Usuario consultarUsuario(String email, String password);
     void registrar(Usuario usuario) throws UsuarioExistente;
     Banco ConsultarBanco(String email, String password);
+
+    void RegistrarBanco(Banco banco);
 }

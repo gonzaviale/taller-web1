@@ -34,6 +34,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     @Override
     public void guardar(Usuario usuario) {
         if(usuario!=null && usuario.getRol()!=null && !usuario.getRol().equals("veterinario")){
+            usuario.setRol("dueño mascota");
             usuario.setEstado("activo");
         }
         if(usuario!=null && usuario.getRol()!=null && usuario.getRol().equals("veterinario")){
@@ -160,6 +161,11 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         }
 
         return false;
+    }
+
+    @Override
+    public void guardarBanco(Banco banco) {
+        sessionFactory.getCurrentSession().save(banco);
     }
 
 }
