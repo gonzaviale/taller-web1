@@ -19,7 +19,7 @@
                             <span th:text="' ('"></span>
                             <a th:href="@{/{nombre}.{id}/(nombre=${solicitud.getMascotaReceptora().getDuenio().getNombre()}, id=${solicitud.getMascotaReceptora().getDuenio().getId()})}"
                                th:text="${solicitud.getMascotaReceptora().getDuenio().getNombre() + ' ' + solicitud.getMascotaReceptora().getDuenio().getApellido()}"></a>
-                            <span th:text="').'"></span>
+                            <span th:text="'). Si aceptas vas a tener que esperar que el veterinario notifique el día y la hora para la transfusón.'"></span>
                         </p>
                         <div class="d-flex justify-content-between mt-3">
                             <!-- Formulario de Aprobación -->
@@ -53,7 +53,7 @@
                             <span th:text="' ('"></span>
                             <a th:href="@{/{nombre}.{id}/(nombre=${solicitud.getMascotaDonante().getDuenio().getNombre()}, id=${solicitud.getMascotaDonante().getDuenio().getId()})}"
                                th:text="${solicitud.getMascotaDonante().getDuenio().getNombre() + ' ' + solicitud.getMascotaDonante().getDuenio().getApellido()}"></a>
-                            <span th:text="') fue aceptada. Solo falta que uno de nuestros veterinarios verifique que todo está bien para realizar la transfusión.'"></span>
+                            <span th:text="') fue aceptada. Solo falta que uno de nuestros veterinarios te confirme un día y horario para la transfusión.'"></span>
                         </p>
                         <form th:action="@{/solicitud-vista}" method="POST" class="d-inline-block">
                             <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
