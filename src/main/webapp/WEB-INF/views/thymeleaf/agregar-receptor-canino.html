@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar mascota</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<form th:action="@{/agregar-receptora}" method="POST" enctype="multipart/form-data" th:object="${mascota}">
+    <input type="hidden" th:value="${mascotaAux.nombre}" th:field="*{nombre}">
+    <input type="hidden" th:value="${mascotaAux.tipo}" th:field="*{tipo}">
+    <input type="hidden" th:value="${mascotaAux.anios}" th:field="*{anios}">
+    <input type="hidden" th:value="${mascotaAux.peso}" th:field="*{peso}">
+    <div class="row mb-3">
+        <div class="mb-3">
+            <label for="tipoSangre" class="form-label">Tipo de sangre:</label>
+            <select name="tipoSangre" id="tipoSangre" th:field="*{sangre}">
+                <option value="">Seleccione el tipo de sangre de su mascota</option>
+                <option value="DEA-1.1.">DEA-1.1.</option>
+                <option value="DEA-1.2.">DEA-1.2.-</option>
+                <option value="DEA-3">DEA-3</option>
+                <option value="DEA-4">DEA-4-</option>
+                <option value="DEA-5">DEA-5</option>
+                <option value="DEA-6">DEA-6-</option>
+                <option value="DEA-7">DEA-7</option>
+                <option value="DEA-8 ">DEA-8-</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <h3 class="text-black">Suba las imágenes de los exámenes que diagnostican lo que tiene su mascota</h3>
+            <label for="imagenes" class="form-label">Subir imágenes de los estudios:</label>
+            <input type="file" id="imagenes" name="imagenes" multiple accept="image/*" class="form-control" required>
+        </div>
+    </div>
+    <input type="submit" value="Registrar">
+</form>
+</body>
+</html>

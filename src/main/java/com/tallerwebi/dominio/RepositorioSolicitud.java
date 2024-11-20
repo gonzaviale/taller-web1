@@ -1,6 +1,9 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.entidad.*;
+import com.tallerwebi.dominio.entidad.Banco;
+import com.tallerwebi.dominio.entidad.Entrega;
+import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
+import com.tallerwebi.dominio.entidad.Solicitud;
 
 import java.util.List;
 
@@ -22,6 +25,4 @@ public interface RepositorioSolicitud {
     Entrega guardarEntrega(Entrega entrega);
 
     Entrega buscarEntregaPorSolicitudId(int id);
-
-    Usuario buscarUsuarioXId(long usuarioId);
 }
