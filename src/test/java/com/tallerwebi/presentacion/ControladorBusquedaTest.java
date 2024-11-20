@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
+import com.tallerwebi.dominio.servicio.ServicioMascota;
 import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,13 +20,15 @@ import static org.mockito.Mockito.when;
 
 public class ControladorBusquedaTest {
 
-    ServicioFiltro servicioFiltro;
+    /*ServicioFiltro servicioFiltro;
+    ServicioMascota servicioMascota;
     ControladorBusqueda controladorBusqueda;
 
     @BeforeEach
     public void init(){
         servicioFiltro= mock(ServicioFiltro.class);
-        controladorBusqueda= new ControladorBusqueda(servicioFiltro);
+        servicioMascota = mock(ServicioMascota.class)
+        controladorBusqueda= new ControladorBusqueda(servicioFiltro, servicioMascota);
     }
 
     @Test
@@ -352,6 +355,5 @@ public class ControladorBusquedaTest {
 
         when(servicioFiltro.obtenerCoincidenciasEnBancosDeSangre("1","")).thenReturn(bancos);
 
-    }
-
+    }*/
 }

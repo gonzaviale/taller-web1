@@ -17,7 +17,7 @@
         </div>
         <div class="card-body">
             <!-- Formulario -->
-            <form id="formMascotaReceptora" action="#" th:action="@{/agregar-receptora}" method="POST" enctype="multipart/form-data">
+            <form id="formMascotaReceptora" action="#" th:action="@{/definir-tipo-receptor}" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre:</label>
                     <input type="text" id="nombre" name="nombre" placeholder="Nombre de la mascota" class="form-control" required>
@@ -45,13 +45,7 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <h3 class="text-black">Suba las imágenes de los exámenes que diagnostican lo que tiene su mascota</h3>
-                    <label for="imagenes" class="form-label">Subir imágenes de los estudios:</label>
-                    <input type="file" id="imagenes" name="imagenes" multiple accept="image/*" class="form-control" required>
-                </div>
-
-                <div class="text-center">
+            <div class="text-center">
                     <button type="submit" class="btn btn-primary">Registrar</button>
                 </div>
             </form>
