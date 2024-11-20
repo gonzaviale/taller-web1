@@ -40,19 +40,14 @@ public class ControladorPublicacion {
         }
         if (mascotaId == 0 || mascotaId == null) {
             model = new ModelMap("mensaje", "Debe ingresar una mascota");
-            return new ModelAndView("redirect:/home", model);
+            return new ModelAndView("/crear-publicacion", model);
         } else {
             Mascota mascota = servicioMascota.buscarMascotaPorId(mascotaId);
             nuevaPublicacion.setMascotaDonante(mascota);
+            nuevaPublicacion.setTipoDeSangre(mascota.getSangre());
         }
         try {
             servicioPublicacion.guardarPublicacion(nuevaPublicacion);
-        } catch (PublicacionSinTipoDeSangre ex) {
-            model = new ModelMap("mensaje", "Publicacion no registrada: el campo sangre no puede estar vacio");
-            return new ModelAndView("redirect:/home", model);
-        } catch (PublicacionSinTipoDePublicacion e) {
-            model = new ModelMap("mensaje", "Publicacion no registrada: el campo tipo de publicacion no puede estar vacio");
-            return new ModelAndView("redirect:/home", model);
         } catch (PublicacionNoValida e) {
             model = new ModelMap("mensaje", "Publicacion no registrada: el campo tipo de publicacion y el campo de sangre no puede estar vacio");
             return new ModelAndView("redirect:/home", model);
