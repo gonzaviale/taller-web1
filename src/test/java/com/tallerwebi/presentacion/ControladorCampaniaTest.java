@@ -42,13 +42,21 @@ import static org.mockito.Mockito.*;
 
         @Test
         public void deberiaMostrarFormularioCrearCampaniaSiHaySesion() {
-            when(sessionMock.getAttribute("idBanco")).thenReturn(1L);
+            // Configurar mocks
+            when(sessionMock.getAttribute("idBanco")).thenReturn(1L);  // Simula la sesión con el idBanco
+            Banco bancoMock = new Banco();  // Crear un objeto Banco mockeado
+            bancoMock.setDireccion("Ubicación de prueba");  // Configurar la dirección mockeada
+            when(servicioBancoMock.BuscarBancoId(1L)).thenReturn(bancoMock);  // Simula la llamada al servicio
 
+            // Ejecutar la acción
             ModelAndView modelAndView = controladorCampanias.mostrarFormularioCrearCampania(sessionMock, null);
 
-            assertThat(modelAndView.getViewName(), is(equalTo("crearCampania")));
-            assertThat(modelAndView.getModel().get("error"), is(nullValue()));
+            // Verificar el resultado
+            assertThat(modelAndView.getViewName(), is(equalTo("crearCampania")));  // Verifica la vista
+            assertThat(modelAndView.getModel().get("ubicacion"), is(equalTo("Ubicación de prueba")));  // Verifica la ubicación
+            assertThat(modelAndView.getModel().get("error"), is(nullValue()));  // Verifica que no haya error
         }
+        
 
         @Test
         public void deberiaCrearCampaniaYRedirigirABancoHome() {

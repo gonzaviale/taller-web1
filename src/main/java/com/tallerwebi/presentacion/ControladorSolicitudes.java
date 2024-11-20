@@ -1,10 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.entidad.Banco;
-import com.tallerwebi.dominio.entidad.Entrega;
-import com.tallerwebi.dominio.entidad.PaqueteDeSangre;
-import com.tallerwebi.dominio.entidad.Solicitud;
+import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.servicio.ServicioBanco;
+import com.tallerwebi.dominio.servicio.ServicioLogin;
 import com.tallerwebi.dominio.servicio.ServicioSolicitud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,16 +16,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ControladorSolicitudes {
 
     private final ServicioSolicitud servicioSolicitud;
 
+
     @Autowired
     public ControladorSolicitudes(ServicioSolicitud servicioSolicitud) {
             this.servicioSolicitud = servicioSolicitud;
+
     }
 
 
@@ -42,6 +44,19 @@ public class ControladorSolicitudes {
         ModelMap modelo = new ModelMap();
 
         List<Solicitud> solicitudes = servicioSolicitud.obtenerSolicitudesXBanco(idBanco);
+
+
+        Map<Integer, String> nombresUsuarios = new HashMap<>();
+
+
+        for (Solicitud solicitud : solicitudes) {
+            Usuario usuario = servicioSolicitud.buscarUsuarioXId(solicitud.getUsuarioId());
+            if (usuario != null) {
+                nombresUsuarios.put(solicitud.getId(), usuario.getNombre());
+            }
+
+        }
+        modelo.addAttribute("nombresUsuarios", nombresUsuarios);
         modelo.addAttribute("solicitudes", solicitudes);
         modelo.put("datosBanco", new Banco());
         return new ModelAndView("bancoVerPeticiones", modelo);
