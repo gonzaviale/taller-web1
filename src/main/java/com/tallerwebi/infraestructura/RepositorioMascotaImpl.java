@@ -2,6 +2,8 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.RepositorioMascota;
+import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -107,14 +109,52 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
     }
 
     @Override
-    public void eliminarMascota(Mascota mascota) {
-        final Session session = sessionFactory.getCurrentSession();
-        session.delete(mascota);
+    public Boolean eliminarMascota(Mascota mascota) {
+
+        Criteria publicacionesCriteria = sessionFactory.getCurrentSession().createCriteria(Publicacion.class)
+                .add(Restrictions.eq("mascotaDonante.id", mascota.getId())); // Filtro por el ID de la mascota
+
+        boolean existeEnPublicaciones = !publicacionesCriteria.list().isEmpty();
+
+        // Crea el criterio para verificar en solicitudes
+        Criteria solicitudesDonantesCriteria =sessionFactory.getCurrentSession().createCriteria(SolicitudAUnaPublicacion.class)
+                .add(Restrictions.eq("mascotaDonante.id", mascota.getId())); // Filtro por el ID de la mascota
+
+        boolean existeEnSolicitudesDonantes = !solicitudesDonantesCriteria.list().isEmpty();
+
+        // Crea el criterio para verificar en solicitudes
+        Criteria solicitudesReceptorCriteria =sessionFactory.getCurrentSession().createCriteria(SolicitudAUnaPublicacion.class)
+                .add(Restrictions.eq("mascotaReceptora.id", mascota.getId())); // Filtro por el ID de la mascota
+
+        boolean existeEnSolicitudesReceptora = !solicitudesReceptorCriteria.list().isEmpty();
+
+        // Retorna verdadero si está asociada a alguna de las dos entidades
+        if( existeEnPublicaciones || existeEnSolicitudesDonantes || existeEnSolicitudesReceptora){
+            return Boolean.FALSE;
+        }
+        sessionFactory.getCurrentSession().delete(mascota);
+
+        return Boolean.TRUE;
     }
 
     @Override
     public void actualizarMascota(Mascota mascota) {
         final Session session = sessionFactory.getCurrentSession();
-        session.update(mascota);
+
+        Mascota encontrada=this.buscarMascotaPorId(mascota.getId());
+
+        asignarDatosAMascota(mascota,encontrada);
+
+        session.update(encontrada);
+    }
+
+    private void asignarDatosAMascota(Mascota mascota, Mascota encontrada) {
+
+        encontrada.setNombre(mascota.getNombre());
+        encontrada.setPeso(mascota.getPeso());
+        encontrada.setAnios(mascota.getAnios());
+        encontrada.setTipo(mascota.getTipo());
+        encontrada.setSangre(mascota.getSangre());
+
     }
 }

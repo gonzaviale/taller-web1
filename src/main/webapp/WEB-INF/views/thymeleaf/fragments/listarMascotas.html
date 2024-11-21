@@ -5,26 +5,48 @@
 
     <h1 class="mb-4">Mis mascotas</h1>
     <div class="row">
-        <div th:each="mascota : ${listaMascotas}" class="col-md-4 mb-4"> <!-- Cambié a col-md-4 para mostrar 3 tarjetas por fila -->
+        <div th:each="mascota : ${listaMascotas}" class="col-md-4 mb-4"> <!-- Muestra 3 tarjetas por fila -->
             <div class="card h-100"> <!-- h-100 asegura que todas las tarjetas tengan la misma altura -->
-                <div class="card-body">
+
+                <!-- Cabecera -->
+                <section class="card-body d-flex justify-content-between align-items-center">
                     <h5 class="card-title" th:text="${mascota.nombre}"></h5>
+                    <section class="d-flex align-items-center gap-3">
+                        <article th:if="${#httpServletRequest.session.getAttribute('usuarioId') == mascota.duenio.id}">
+                            <div>
+                                <form th:action="@{/editar-mascota}" method="get" class="m-0">
+                                    <input type="hidden" name="id" th:value="${mascota.id}" />
+                                    <button type="submit" class="btn btn-secondary btn-sm">Actualizar</button>
+                                </form>
+                            </div>
+                        </article>
+
+                        <article th:if="${#httpServletRequest.session.getAttribute('usuarioId') == mascota.duenio.id}">
+                            <div>
+                                <form th:action="@{/eliminar-mascota}" method="get" class="m-0">
+                                    <input type="hidden" name="id" th:value="${mascota.id}" />
+                                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </div>
+                        </article>
+                    </section>
+                </section>
+
+                <!-- Detalles de la mascota -->
+                <div class="card-body">
                     <p class="card-text">
                         <span th:if="${!mascota.receptor}"><strong>Mascota donante</strong></span>
-                        <br>
                         <span th:if="${mascota.receptor}"><strong>Mascota receptora</strong></span>
                         <br>
-                        <span th:text="${mascota.tipo}"></span>
+                        <strong>Tipo:</strong> <span th:text="${mascota.tipo}"></span>
                         <br>
                         <strong>Años:</strong> <span th:text="${mascota.anios}"></span>
                         <br>
                         <strong>Peso:</strong> <span th:text="${mascota.peso}"></span> kg
-                        <br>
-                        <br>
-                        <span th:if="${mascota.enRevision}" class="text-bg-warning"><strong>En revisión</strong></span>
-                        <span th:if="${mascota.aprobado}" class="text-bg-success"><strong>Aprobado</strong></span>
-                        <span th:if="${mascota.rechazado}" class="text-bg-danger"><strong>Rechazado</strong></span>
-                        <br>
+                        <br><br>
+                        <span th:if="${mascota.enRevision}" class="text-bg-warning p-1"><strong>En revisión</strong></span>
+                        <span th:if="${mascota.aprobado}" class="text-bg-success p-1"><strong>Aprobado</strong></span>
+                        <span th:if="${mascota.rechazado}" class="text-bg-danger p-1"><strong>Rechazado</strong></span>
                     </p>
                 </div>
             </div>
