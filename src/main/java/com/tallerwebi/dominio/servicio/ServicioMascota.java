@@ -14,4 +14,16 @@ public interface ServicioMascota {
     List<Mascota> obtenerMascotasPorDueno(Usuario dueno);
 
     Mascota buscarMascotaPorId(Long mascotaId);
+
+    Boolean eliminarMascota(Mascota mascotaBuscada);
+
+    List<String> obtenerSangreSegunTipoDeMascota(String tipo);
+
+    void editarMascota(Mascota mascotaBuscada);
+
+    boolean isPesoCorrectoCanino(Mascota mascotaBuscada);
+
+    boolean isEdadApropiadaDonante(Mascota mascota);
+
+    boolean isPesoCorrectoFelino(Mascota mascota);
 }

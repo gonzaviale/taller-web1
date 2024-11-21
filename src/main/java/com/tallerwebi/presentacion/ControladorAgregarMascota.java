@@ -1,9 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.entidad.Canino;
-import com.tallerwebi.dominio.entidad.Felino;
-import com.tallerwebi.dominio.entidad.Mascota;
-import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.servicio.ServicioImagenes;
 import com.tallerwebi.dominio.servicio.ServicioMascota;
 import com.tallerwebi.infraestructura.RepositorioMascotaImpl;
@@ -16,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class ControladorAgregarMascota {
@@ -171,6 +169,114 @@ public class ControladorAgregarMascota {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @RequestMapping(path = "/editar-mascota")
+    public ModelAndView actualizarMascota(HttpServletRequest request,
+                                              @RequestParam(value = "id", required = false) Long id) {
+        ModelMap model = new ModelMap();
+
+        if (request == null || request.getSession().getAttribute("usuarioEnSesion") == null) {
+
+            model.put("mensaje","accion invalida o no esta logeado");
+
+            return new ModelAndView("redirect:/home",model);
+        }
+
+        Long idUsuarioEnSesion=  (Long) request.getSession().getAttribute("usuarioId");
+
+        Mascota mascota= servicioMascota.buscarMascotaPorId(id);
+
+        if(!(mascota.getDuenio().getId().equals(idUsuarioEnSesion))){
+
+            model.put("mensaje","no se pudo encontrar la mascota que quiere editar");
+
+            return new ModelAndView("redirect:/home", model);
+        }
+
+        List <String> tipoDeSangre= servicioMascota.obtenerSangreSegunTipoDeMascota(mascota.getTipo());
+
+        model.put("mascota", mascota);
+        model.put("sangres",tipoDeSangre);
+
+        return new ModelAndView("editar-mascota", model);
+    }
+
+    @RequestMapping(path = "/actualizar-mascota")
+    public ModelAndView editarPublicacion
+            (HttpServletRequest request,
+             @ModelAttribute("mascota") Mascota mascota,
+             @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes) {
+
+        ModelMap model= new ModelMap();
+
+        if (request == null || request.getSession().getAttribute("usuarioEnSesion") == null) {
+            model.put("mensaje","accion invalida o no esta logeado o no es su publicacion");
+            return new ModelAndView("redirect:/home",model);
+        }
+
+        Long idUsuarioEnSesion=  (Long) request.getSession().getAttribute("usuarioId");
+
+        Mascota mascotaBuscada=servicioMascota.buscarMascotaPorId(mascota.getId());
+
+        mascota.setDonante(mascotaBuscada.isDonante());
+        mascota.setReceptor(mascotaBuscada.isReceptor());
+
+        if (!servicioMascota.isEdadApropiadaDonante(mascota) && mascota.isDonante()) {
+            model.put("mensaje","La mascota debe tener entre 1 y 8 anios.");
+            return new ModelAndView("redirect:/home", model);
+        }
+
+        if (!servicioMascota.isPesoCorrectoCanino(mascota) && mascota.isDonante() && mascota.getTipo().equalsIgnoreCase("Canino")) {
+            model.put("mensaje", "El peso del canino donante debe ser mayor a 25 kg.");
+            return new ModelAndView("redirect:/home", model);
+        }
+
+        if (!servicioMascota.isPesoCorrectoFelino(mascota) && mascota.isDonante() && mascota.getTipo().equalsIgnoreCase("Felino")) {
+            model.put("mensaje", "El peso del felino donante debe ser mayor a 3.5 kg.");
+            return new ModelAndView("redirect:/home", model);
+        }
+
+
+        if(mascotaBuscada.getDuenio().getId().equals(idUsuarioEnSesion)){
+
+            this.guardarImagenes(imagenes,mascotaBuscada.getId());
+
+            servicioMascota.editarMascota(mascota);
+
+            model.put("mensaje","se edito correctamente su publicacion");
+
+        }else{
+
+            model.put("mensaje","no es dueño de la mascota o no se pudo editar");
+        }
+
+        return new ModelAndView("redirect:/home", model);
+    }
+
+    @RequestMapping(path = "/eliminar-mascota")
+    public ModelAndView eliminarMascota(HttpServletRequest request, @RequestParam(value = "id") Long id) {
+
+        ModelMap model= new ModelMap();
+
+        if (request == null || request.getSession().getAttribute("usuarioEnSesion") == null) {
+            model.put("mensaje","accion invalida o no esta logeado");
+            return new ModelAndView("redirect:/home",model);
+        }
+
+        Long idUsuarioEnSesion=  (Long) request.getSession().getAttribute("usuarioId");
+
+        Mascota mascotaBuscada=servicioMascota.buscarMascotaPorId(id);
+
+        if(mascotaBuscada!=null && mascotaBuscada.getDuenio().getId().equals(idUsuarioEnSesion) && servicioMascota.eliminarMascota(mascotaBuscada)){
+
+            model.put("mensaje","se elimino correctamente su mascota");
+        }else{
+
+            model.put("mensaje","accion invalida no se puede eliminar pertenece a una solicitud o publicacion");
+        }
+
+        return new ModelAndView("redirect:/home", model);
     }
 
 }
