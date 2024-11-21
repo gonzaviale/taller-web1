@@ -29,29 +29,34 @@ public class RepositorioPublicacionImpl implements RepositorioPublicacion {
     @Override
     public void guardarPublicacion(Publicacion publicacion) {
         publicacion.setLocalDateTime(LocalDateTime.now());
+        publicacion.setEstaActiva(true);
         sessionFactory.getCurrentSession().save(publicacion);
     }
 
     @Override
     public Publicacion obtenerPorId(Long id) throws PublicacionNoExistente {
         Publicacion buscada = sessionFactory.getCurrentSession().get(Publicacion.class, id);
+        //|| !(buscada.getEstaActiva())
         if (buscada == null) {
             throw new PublicacionNoExistente();
         }
+
         return buscada;
     }
 
     @Override
     public List<Publicacion> obtenerTodasLasPublicaciones() {
         return sessionFactory.getCurrentSession().createCriteria(Publicacion.class)
-                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+                .add(Restrictions.eq("estaActiva", true))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+                .list();
     }
-
     @Override
     public ArrayList<Publicacion> buscarPublicaciones(String titulo, String tipoDeSangre, String zonaDeResidencia, String tipoDePublicacion) {
 
 
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Publicacion.class);
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Publicacion.class)
+                .add(Restrictions.eq("estaActiva", true));
 
         if (titulo != null && !titulo.isEmpty()) {
             criteria.add(Restrictions.like("titulo", "%" + titulo + "%", MatchMode.ANYWHERE));
@@ -91,4 +96,24 @@ public class RepositorioPublicacionImpl implements RepositorioPublicacion {
         publicacion.setEstaActiva(true);
         sessionFactory.getCurrentSession().saveOrUpdate(publicacion);
     }
+
+    @Override
+    public void editarPublicacion(Long id, Publicacion publicacionActualizada) throws PublicacionNoExistente {
+        Publicacion publicacion= this.obtenerPorId(id);
+
+        actualizarCamposDePublicacion(publicacion,publicacionActualizada);
+
+        sessionFactory.getCurrentSession().update(publicacion);
+    }
+
+    private void actualizarCamposDePublicacion(Publicacion publicacion, Publicacion publicacionActualizada) {
+
+        publicacion.setTitulo(publicacionActualizada.getTitulo());
+        publicacion.setDescripcion(publicacionActualizada.getDescripcion());
+        publicacion.setPuedeMovilizarse(publicacionActualizada.getPuedeMovilizarse());
+        publicacion.setZonaDeResidencia(publicacionActualizada.getZonaDeResidencia());
+        publicacion.setMascotaDonante(publicacionActualizada.getMascotaDonante());
+        publicacion.setTipoDeSangre(publicacionActualizada.getTipoDeSangre());
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.*;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt.isEqualTo;
 
 public class ControladorPublicacionTest {
 
@@ -25,7 +27,7 @@ public class ControladorPublicacionTest {
     private ServicioMascota servicioMascota;
     private HttpServletRequest request;
     private HttpSession session;
-/*
+
     @BeforeEach
     public void init() {
         // Crear los mocks manualmente
@@ -40,7 +42,7 @@ public class ControladorPublicacionTest {
         // Configurar el comportamiento de los mocks
         when(request.getSession()).thenReturn(session);
     }
-
+/*
     @Test
     public void siNoIngresaCamposSangreOLoIngresaVacioNoSePodraRealizarLaPublicacion() throws PublicacionSinTipoDeSangre, PublicacionNoValida, PublicacionSinTipoDePublicacion, PublicacionSinTitulo {
 
@@ -259,4 +261,162 @@ public class ControladorPublicacionTest {
     }
 
 */
+
+    @Test
+    public void noPuedoDesactivarPublicacionSinUsuarioPorLoCualMeRedirigueAlHome() throws Exception {
+        when(session.getAttribute("usuarioEnSesion")).thenReturn(null);
+
+        ModelAndView modelAndView = controladorPublicacion.desactivarPublicacion(request, 1L);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+        assertThat(modelAndView.getModel() ,hasEntry("mensaje", "accion invalida o no esta logeado o no es su publicacion"));
+    }
+
+    @Test
+    public void siIntentoDesactivarUnaPublicacionQueNoEsMia() throws Exception {
+        when(session.getAttribute("usuarioEnSesion")).thenReturn("usuarioMock");
+        when(session.getAttribute("usuarioId")).thenReturn(2L);
+
+        Publicacion publicacion = mock(Publicacion.class);
+        Usuario duenio = mock(Usuario.class);
+
+        when(duenio.getId()).thenReturn(3L); // Usuario en sesión no es el dueño
+        when(publicacion.getDuenioPublicacion()).thenReturn(duenio);
+        when(servicioPublicacion.busquedaPorId(1L)).thenReturn(publicacion);
+
+        ModelAndView modelAndView = controladorPublicacion.desactivarPublicacion(request, 1L);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+        assertThat(modelAndView.getModel().get("mensaje") , is("accion invalida no es su publicacion"));
+    }
+
+    @Test
+    public void meEntregaMensajeCorrectoSiDesactivoMiPublicacionYEsValido() throws Exception {
+        when(session.getAttribute("usuarioEnSesion")).thenReturn("usuarioMock");
+        when(session.getAttribute("usuarioId")).thenReturn(2L);
+
+        Publicacion publicacion = mock(Publicacion.class);
+        Usuario duenio = mock(Usuario.class);
+
+        when(duenio.getId()).thenReturn(2L);
+        when(publicacion.getDuenioPublicacion()).thenReturn(duenio);
+        when(servicioPublicacion.busquedaPorId(1L)).thenReturn(publicacion);
+
+        ModelAndView modelAndView = controladorPublicacion.desactivarPublicacion(request, 1L);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+        assertThat(modelAndView.getModel().get("mensaje") , is("se desactivo correctamente su publicacion no aparecera en las busquedas pero seguira siendo accesible desde su perfil"));
+        verify(servicioPublicacion).desactivarPublicacion(1L);
+    }
+
+    @Test
+    public void siNoTengoUsuarioEnSesionNo() throws Exception {
+        when(session.getAttribute("usuarioEnSesion")).thenReturn(null);
+
+        ModelAndView modelAndView = controladorPublicacion.activarPublicacion(request, 1L);
+
+        assertThat(modelAndView.getViewName() , is("redirect:/home"));
+        assertThat(modelAndView.getModel().get("mensaje") , is( "accion invalida o no esta logeado o no es su publicacion"));
+    }
+
+    @Test
+    public void fallaSiIntentoActivarUnaPublicacionQueNoEsMia() throws Exception {
+        when(session.getAttribute("usuarioEnSesion")).thenReturn("usuarioMock");
+        when(session.getAttribute("usuarioId")).thenReturn(2L);
+
+        Publicacion publicacion = mock(Publicacion.class);
+        Usuario duenio = mock(Usuario.class);
+
+        when(duenio.getId()).thenReturn(3L);
+        when(publicacion.getDuenioPublicacion()).thenReturn(duenio);
+        when(servicioPublicacion.busquedaPorId(1L)).thenReturn(publicacion);
+
+        ModelAndView modelAndView = controladorPublicacion.activarPublicacion(request, 1L);
+
+        assertThat(modelAndView.getViewName() , is("redirect:/home"));
+        assertThat(modelAndView.getModel().get("mensaje") , is( "accion invalida no es su publicacion"));
+    }
+
+    @Test
+    public void meEntregaMensajeCorrectoSiActivoMiPublicacionYEsValidoElUsuario() throws Exception {
+        when(session.getAttribute("usuarioEnSesion")).thenReturn("usuarioMock");
+        when(session.getAttribute("usuarioId")).thenReturn(2L);
+
+        Publicacion publicacion = mock(Publicacion.class);
+        Usuario duenio = mock(Usuario.class);
+
+        when(duenio.getId()).thenReturn(2L);
+        when(publicacion.getDuenioPublicacion()).thenReturn(duenio);
+        when(servicioPublicacion.busquedaPorId(1L)).thenReturn(publicacion);
+
+        ModelAndView modelAndView = controladorPublicacion.activarPublicacion(request, 1L);
+
+        assertThat(modelAndView.getViewName() , is("redirect:/home"));
+        assertThat(modelAndView.getModel().get("mensaje") , is( "se activo correctamente su publicacion aparecera en las busquedas a partir de ahora"));
+        verify(servicioPublicacion).activarPublicacion(1L);
+    }
+
+    @Test
+    public void noMeDejaEditarPublicacionSiNoTengoUsuarioEnSesion() throws Exception {
+        when(session.getAttribute("usuarioEnSesion")).thenReturn(null);
+
+        Publicacion publicacionActualizada = new Publicacion();
+        Long mascotaId = 1L;
+
+        ModelAndView modelAndView = controladorPublicacion.editarPublicacion(request, 1L, publicacionActualizada, mascotaId);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+        assertThat(modelAndView.getModel().get("mensaje"), is("accion invalida o no esta logeado o no es su publicacion"));
+    }
+
+    @Test
+    public void noPuedoEditarPublicacionDeLaCualNoSoyDuenio() throws Exception {
+        when(session.getAttribute("usuarioEnSesion")).thenReturn("usuarioMock");
+        when(session.getAttribute("usuarioId")).thenReturn(2L);
+
+        Publicacion publicacion = mock(Publicacion.class);
+        Usuario duenio = mock(Usuario.class);
+        when(duenio.getId()).thenReturn(3L); // Usuario en sesión no es el dueño
+        when(publicacion.getDuenioPublicacion()).thenReturn(duenio);
+        when(servicioPublicacion.busquedaPorId(1L)).thenReturn(publicacion);
+
+        Publicacion publicacionActualizada = new Publicacion();
+        Long mascotaId = 1L;
+
+        ModelAndView modelAndView = controladorPublicacion.editarPublicacion(request, 1L, publicacionActualizada, mascotaId);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+        assertThat(modelAndView.getModel().get("mensaje"), is(nullValue())); // No debe haber mensaje
+    }
+
+    @Test
+    public void mePermiteEditarPublicacionDandomeUnMensajeExitoso() throws Exception {
+        when(session.getAttribute("usuarioEnSesion")).thenReturn("usuarioMock");
+        when(session.getAttribute("usuarioId")).thenReturn(2L);
+
+        Publicacion publicacion = mock(Publicacion.class);
+        Usuario duenio = mock(Usuario.class);
+        Mascota mascota = mock(Mascota.class);
+
+        when(duenio.getId()).thenReturn(2L);
+        when(publicacion.getId()).thenReturn(1L);
+        when(publicacion.getDuenioPublicacion()).thenReturn(duenio);
+        when(servicioPublicacion.busquedaPorId(1L)).thenReturn(publicacion);
+
+        when(servicioMascota.buscarMascotaPorId(1L)).thenReturn(mascota);
+        when(mascota.getSangre()).thenReturn("A+");
+
+        Publicacion publicacionActualizada = new Publicacion();
+        Long mascotaId = 1L;
+
+        ModelAndView modelAndView = controladorPublicacion.editarPublicacion(request, 1L, publicacionActualizada, mascotaId);
+
+        assertThat(modelAndView.getViewName(), is("redirect:/home"));
+        assertThat(modelAndView.getModel().get("mensaje"), is("se edito correctamente su publicacion"));
+        assertThat(publicacionActualizada.getMascotaDonante(), is(mascota));
+        assertThat(publicacionActualizada.getTipoDeSangre(), is("A+"));
+    }
+
+
+
 }

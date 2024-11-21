@@ -94,8 +94,7 @@ public class ControladorLogin {
                                     @RequestParam(value = "pais", required = false) String pais,
                                     @RequestParam(value = "telefono", required = false) String telefono,
                                     @RequestParam(value = "horario", required = false) String horario,
-                                    RedirectAttributes redirectAttributes) {
-                                    @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes,
+                                    RedirectAttributes redirectAttributes,
                                     @RequestParam (value="file",required = false) MultipartFile file) {
         modelo.clear();
 
@@ -167,7 +166,6 @@ public class ControladorLogin {
         }
 
         try {
-            // Delegar la lógica al servicio
             servicioPDFFile.guardarPdf(file, "v_" + nuevoUsuario.getId());
         } catch (IllegalArgumentException e) {
             modelo.put("error","Error: " + e.getMessage());

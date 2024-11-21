@@ -13,4 +13,6 @@ public interface ServicioPublicacion {
     Publicacion busquedaPorId(Long publicacionId) throws PublicacionNoExistente;
     void desactivarPublicacion(Long publicacionId);
     void activarPublicacion(Long publicacionId);
+
+    void editarPublicacion(Long id, Publicacion publicacionActualizada) throws PublicacionNoExistente;
 }

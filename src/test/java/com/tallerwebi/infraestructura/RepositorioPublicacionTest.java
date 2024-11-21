@@ -127,6 +127,8 @@ public class RepositorioPublicacionTest {
     private List<Publicacion> givenObtengoUnaListaConLasPublicacionesGuardadas() {
         Publicacion nuevaPublicacion=new Publicacion();
         Publicacion nuevaPublicacion1= new Publicacion();
+        nuevaPublicacion1.setEstaActiva(true);
+        nuevaPublicacion.setEstaActiva(true);
         repositorio.guardarPublicacion(nuevaPublicacion);
         repositorio.guardarPublicacion(nuevaPublicacion1);
         List <Publicacion> publicaciones= new ArrayList<>();
@@ -287,12 +289,18 @@ public class RepositorioPublicacionTest {
         Publicacion nuevaPublicacion=new Publicacion();
         nuevaPublicacion.setZonaDeResidencia("argentina");
         nuevaPublicacion.setTitulo("busqueda");
+        nuevaPublicacion.setEstaActiva(true);
+
         Publicacion nuevaPublicacion1= new Publicacion();
         nuevaPublicacion1.setZonaDeResidencia("argentina");
         nuevaPublicacion1.setTitulo("busqueda");
+        nuevaPublicacion1.setEstaActiva(true);
+
         Publicacion nuevaPublicacion2= new Publicacion();
         nuevaPublicacion2.setZonaDeResidencia("Chile");
         nuevaPublicacion2.setTitulo("donacion");
+        nuevaPublicacion2.setEstaActiva(true);
+
         repositorio.guardarPublicacion(nuevaPublicacion2);
         repositorio.guardarPublicacion(nuevaPublicacion);
         repositorio.guardarPublicacion(nuevaPublicacion1);
@@ -312,10 +320,16 @@ public class RepositorioPublicacionTest {
     private void givenGuardoTresPublicacionesConSoloDosCoincidenciasEnPublicacionesConZonasDeResidencia() {
         Publicacion nuevaPublicacion=new Publicacion();
         nuevaPublicacion.setZonaDeResidencia("Donacion");
+        nuevaPublicacion.setEstaActiva(true);
+
         Publicacion nuevaPublicacion1= new Publicacion();
         nuevaPublicacion1.setZonaDeResidencia("Donacion");
+        nuevaPublicacion1.setEstaActiva(true);
+
         Publicacion nuevaPublicacion2= new Publicacion();
         nuevaPublicacion2.setZonaDeResidencia("INVALIDA");
+        nuevaPublicacion2.setEstaActiva(true);
+
         repositorio.guardarPublicacion(nuevaPublicacion2);
         repositorio.guardarPublicacion(nuevaPublicacion);
         repositorio.guardarPublicacion(nuevaPublicacion1);
