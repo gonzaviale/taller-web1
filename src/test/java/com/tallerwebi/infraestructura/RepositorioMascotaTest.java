@@ -3,6 +3,7 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.entidad.Canino;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.RepositorioMascota;
+import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.hibernate.SessionFactory;
@@ -19,12 +20,9 @@ import javax.transaction.Transactional;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
@@ -40,16 +38,12 @@ public class RepositorioMascotaTest {
     @Transactional
     @Rollback
     public void queGuardeMascota(){
-        //preparacion
         Mascota mascota = new Canino();
         mascota.setNombre("tobi");
 
-        //ejecucion
         repositorioMascota.agregarMascota(mascota);
 
-        //validacion
         assertThat(mascota.getId(), notNullValue());
-
     }
 
     @Test
@@ -117,7 +111,7 @@ public class RepositorioMascotaTest {
 
         Mascota mascota = new Mascota();
         mascota.setRevision(true);
-        mascota.setId(1l);
+        mascota.setId(1L);
         repositorioMascota.agregarMascota(mascota);
 
         repositorioMascota.aprobarMascota(mascota.getId());
@@ -140,4 +134,78 @@ public class RepositorioMascotaTest {
         assertFalse(mascota.isEnRevision());
         assertTrue(mascota.isRechazado());
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void eliminarMascota_deberia_no_eliminar_si_esta_asociada() {
+        Mascota mascota = new Mascota();
+        mascota.setNombre("Firulais");
+        mascota.setTipo("Canino");
+        mascota.setPeso(25f);
+        mascota.setAnios(5);
+
+        sessionFactory.getCurrentSession().save(mascota);
+
+        Publicacion publicacion = new Publicacion();
+        publicacion.setMascotaDonante(mascota); // Relación con la mascota
+        sessionFactory.getCurrentSession().save(publicacion);
+
+        Boolean resultado = repositorioMascota.eliminarMascota(mascota);
+
+        assertFalse(resultado);
+        Mascota mascotaRecuperada = sessionFactory.getCurrentSession().get(Mascota.class, mascota.getId());
+        assertNotNull(mascotaRecuperada);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void eliminarMascota_deberia_eliminar_si_no_esta_asociada() {
+        Mascota mascota = new Mascota();
+        mascota.setNombre("Luna");
+        mascota.setTipo("Felino");
+        mascota.setPeso(4.5f);
+        mascota.setAnios(3);
+
+        sessionFactory.getCurrentSession().save(mascota);
+
+        Boolean resultado = repositorioMascota.eliminarMascota(mascota);
+
+        assertTrue(resultado);
+        Mascota mascotaRecuperada = sessionFactory.getCurrentSession().get(Mascota.class, mascota.getId());
+        assertNull(mascotaRecuperada);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void actualizarMascota_deberia_actualizar_los_datos_correctamente() {
+        Mascota mascotaInicial = new Mascota();
+        mascotaInicial.setNombre("Firulais");
+        mascotaInicial.setTipo("Canino");
+        mascotaInicial.setPeso(30f);
+        mascotaInicial.setAnios(3);
+        mascotaInicial.setSangre("A+");
+        repositorioMascota.agregarMascota(mascotaInicial);
+
+        Mascota mascotaActualizada = new Mascota();
+        mascotaActualizada.setId(mascotaInicial.getId());
+        mascotaActualizada.setNombre("Max");
+        mascotaActualizada.setTipo("Canino");
+        mascotaActualizada.setPeso(35f);
+        mascotaActualizada.setAnios(4);
+        mascotaActualizada.setSangre("B+");
+
+        repositorioMascota.actualizarMascota(mascotaActualizada);
+
+        Mascota mascotaRecuperada = repositorioMascota.buscarMascotaPorId(mascotaInicial.getId());
+        assertNotNull(mascotaRecuperada);
+        assertEquals("Max", mascotaRecuperada.getNombre());
+        assertEquals("Canino", mascotaRecuperada.getTipo());
+        assertEquals(35f, mascotaRecuperada.getPeso());
+        assertEquals(4, mascotaRecuperada.getAnios());
+        assertEquals("B+", mascotaRecuperada.getSangre());
+    }
+
 }

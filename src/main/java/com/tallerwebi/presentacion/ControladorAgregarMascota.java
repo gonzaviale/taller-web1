@@ -219,15 +219,26 @@ public class ControladorAgregarMascota {
 
         Mascota mascotaBuscada=servicioMascota.buscarMascotaPorId(mascota.getId());
 
-        String validador= this.validarPesoYAnios(mascota);
+        mascota.setDonante(mascotaBuscada.isDonante());
+        mascota.setReceptor(mascotaBuscada.isReceptor());
 
-        if(!validador.isBlank()){
-
-            model.put("mensaje",validador);
+        if (!servicioMascota.isEdadApropiadaDonante(mascota) && mascota.isDonante()) {
+            model.put("mensaje","La mascota debe tener entre 1 y 8 anios.");
             return new ModelAndView("redirect:/home", model);
         }
 
-        if(mascotaBuscada!=null && mascotaBuscada.getDuenio().getId().equals(idUsuarioEnSesion)){
+        if (!servicioMascota.isPesoCorrectoCanino(mascota) && mascota.isDonante() && mascota.getTipo().equalsIgnoreCase("Canino")) {
+            model.put("mensaje", "El peso del canino donante debe ser mayor a 25 kg.");
+            return new ModelAndView("redirect:/home", model);
+        }
+
+        if (!servicioMascota.isPesoCorrectoFelino(mascota) && mascota.isDonante() && mascota.getTipo().equalsIgnoreCase("Felino")) {
+            model.put("mensaje", "El peso del felino donante debe ser mayor a 3.5 kg.");
+            return new ModelAndView("redirect:/home", model);
+        }
+
+
+        if(mascotaBuscada.getDuenio().getId().equals(idUsuarioEnSesion)){
 
             this.guardarImagenes(imagenes,mascotaBuscada.getId());
 
@@ -241,22 +252,6 @@ public class ControladorAgregarMascota {
         }
 
         return new ModelAndView("redirect:/home", model);
-    }
-
-    private String validarPesoYAnios(Mascota mascota) {
-        if (!servicioMascota.isPesoCorrectoCanino(mascota)) {
-            return "El peso del canino donante debe ser mayor a 25 kg.";
-        }
-
-        if (!servicioMascota.isPesoCorrectoFelino(mascota)) {
-            return "El peso del felino donante debe ser mayor a 3.5 kg.";
-        }
-
-        if (!servicioMascota.isEdadApropiadaDonante(mascota)) {
-            return "La mascota debe tener entre 1 y 8 años.";
-        }
-
-        return "";
     }
 
     @RequestMapping(path = "/eliminar-mascota")

@@ -69,37 +69,35 @@ public class ServicioMascotaImpl implements ServicioMascota {
     }
 
     @Override
-    public boolean isPesoCorrectoCanino(Mascota mascota) {
-        if (isNotValid(mascota)) {
-            return false;
+    public boolean isEdadApropiadaDonante(Mascota mascota) {
+        if (isValid(mascota)) {
+            return mascota.getAnios() >= 1 && mascota.getAnios() <= 8; // Edad entre 1 y 8 años inclusivos
         }
-
-        return mascota.getTipo().equalsIgnoreCase("Canino") && mascota.getPeso() > 25f;
+        return false;
     }
 
     @Override
-    public boolean isEdadApropiadaDonante(Mascota mascota) {
-        if (isNotValid(mascota)) {
-            return false;
+    public boolean isPesoCorrectoCanino(Mascota mascota) {
+        if (isValid(mascota)) {
+            return mascota.getPeso() >= 25f; // El peso debe ser mayor o igual a 25 kg
         }
-
-        return mascota.getAnios() > 1 && mascota.getAnios() < 8;
+        return false;
     }
 
     @Override
     public boolean isPesoCorrectoFelino(Mascota mascota) {
-        if (isNotValid(mascota)) {
-            return false;
+        if (isValid(mascota) ) {
+            return mascota.getPeso() >= 3.5f; // El peso debe ser mayor o igual a 3.5 kg
         }
-
-        return mascota.getTipo().equalsIgnoreCase("Felino") && mascota.getPeso() > 3.5f;
+        return false;
     }
 
-    private static boolean isNotValid(Mascota mascota) {
-        return mascota == null ||
-                mascota.getTipo() == null ||
-                mascota.getPeso() == null ||
-                mascota.getAnios() == null;
+    private static boolean isValid(Mascota mascota) {
+        return mascota != null &&
+                mascota.getTipo() != null &&
+                mascota.getPeso() != null &&
+                mascota.getAnios() != null &&
+                mascota.isDonante();
     }
 
 
