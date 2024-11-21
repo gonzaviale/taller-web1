@@ -33,6 +33,13 @@
                         <p class="card-text">Email: <span th:text="${usuario.email}"></span></p>
                         <p class="card-text">Matrícula: <span th:text="${usuario.matricula}"></span></p>
 
+                            <a th:href="@{/descargarMatricula(id=${usuario.id})}"
+                               class="btn btn-outline-primary text-uppercase shadow-sm fw-bold p-2 mb-3"
+                               style="width: 100%; font-size: 0.9rem; transition: all 0.3s;"
+                               target="_blank">
+                                Descargar Matrícula PDF
+                            </a>
+
                         <form th:action="@{/aceptarUsuario}" method="post" style="display:inline;">
                             <input type="hidden" name="id" th:value="${usuario.id}" />
                             <button type="submit" class="btn btn-success">Aceptar</button>

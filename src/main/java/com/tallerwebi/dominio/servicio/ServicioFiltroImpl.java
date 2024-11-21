@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
+import com.tallerwebi.presentacion.DTO.UsuarioFiltradoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -79,18 +80,80 @@ public class ServicioFiltroImpl implements ServicioFiltro {
     }
 
     @Override
-    public List<Usuario> obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(String sangreBuscada, String tipoDeBusqueda) {
+    public List<UsuarioFiltradoDTO> obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(String sangreBuscada, String tipoDeBusqueda) {
 
         sangreBuscada=validadorCampo(sangreBuscada);
 
         if(tipoDeBusqueda.equals("publicacion")){
-            return repositorioUsuario.obtenerTodosLosUsuariosQueContenganPublicacionesConLaSangreBuscada(sangreBuscada);
+            List<Usuario> usuarios= repositorioUsuario.obtenerTodosLosUsuariosQueContenganPublicacionesConLaSangreBuscada(sangreBuscada);
+
+            return this.asignarUsuariosDTOSConPublicaciones(usuarios,sangreBuscada);
         }
         if(tipoDeBusqueda.equals("mascota")){
-            return repositorioUsuario.obtenerTodosLosUsuariosQueContenganMascotasConLaSangreBuscada(sangreBuscada);
+            List<Usuario> usuarios= repositorioUsuario.obtenerTodosLosUsuariosQueContenganMascotasConLaSangreBuscada(sangreBuscada);
+
+            return this.asignarUsuariosDTOSMascotas(usuarios,sangreBuscada);
         }
 
-        return this.obtenerTodosLosUsuariosConPublicacionesOMascotasDadasDeAlta();
+        return null;
+    }
+
+    private List<UsuarioFiltradoDTO> asignarUsuariosDTOSMascotas(List<Usuario> usuarios,String sangre) {
+        List<UsuarioFiltradoDTO> filtradoDTOS= new ArrayList<>();
+
+        for (Usuario usuario : usuarios){
+            if (this.filtrarPorMascotaConTipoDeSangre(usuario.getMascotas(),sangre)!=0) {
+                filtradoDTOS.add(new UsuarioFiltradoDTO(usuario.getId(), usuario.getNombre(), usuario.getApellido(), usuario.getEmail(), usuario.getMascotas().size()));
+            }
+        }
+
+        return filtradoDTOS;
+
+    }
+
+    private long filtrarPorMascotaConTipoDeSangre(List<Mascota> mascotas, String sangre) {
+        if (mascotas == null || sangre == null || sangre.isEmpty()) {
+            return 0;
+        }
+
+        return mascotas.stream()
+                .filter(mascota -> mascota.getSangre().equalsIgnoreCase(sangre))
+                .count();
+    }
+
+
+    private List<UsuarioFiltradoDTO> asignarUsuariosDTOSConPublicaciones(List<Usuario> usuarios,String sangre) {
+
+        List<UsuarioFiltradoDTO> filtradoDTOS= new ArrayList<>();
+
+        for (Usuario usuario : usuarios) {
+            Integer cantidadPublicacionesBusqueda = 0;
+            Integer cantidadPublicacionesDonacion = 0;
+            Integer cantidadPublicacionVenta = 0;
+            cantidadPublicacionesBusqueda = contarPublicacionesPorTipo(usuario, "busqueda", sangre);
+            cantidadPublicacionesDonacion = contarPublicacionesPorTipo(usuario, "donacion", sangre);
+            cantidadPublicacionVenta = contarPublicacionesPorTipo(usuario, "venta", sangre);
+
+            filtradoDTOS.add(new UsuarioFiltradoDTO(usuario.getId()
+                    , usuario.getNombre(), usuario.getApellido()
+                    , usuario.getEmail(), cantidadPublicacionesBusqueda, cantidadPublicacionesDonacion, cantidadPublicacionVenta));
+        }
+
+        return filtradoDTOS;
+    }
+
+    private Integer contarPublicacionesPorTipo(Usuario usuario, String tipo, String sangre) {
+
+        Integer count = 0;
+
+        for (int i = 0; i < usuario.getPublicaciones().size(); i++) {
+            if (usuario.getPublicaciones().get(i).getTipoDePublicacion().equalsIgnoreCase(tipo) && usuario.getPublicaciones().get(i).getTipoDeSangre().equalsIgnoreCase(sangre)) {
+                count++;
+            }
+        }
+
+        return count;
+
     }
 
     @Override

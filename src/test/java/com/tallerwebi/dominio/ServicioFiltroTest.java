@@ -4,10 +4,12 @@ import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
 import com.tallerwebi.dominio.servicio.ServicioFiltroImpl;
 import com.tallerwebi.presentacion.DTO.BancoConTiposDeSangreDTO;
+import com.tallerwebi.presentacion.DTO.UsuarioFiltradoDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -392,7 +394,7 @@ public class ServicioFiltroTest {
         when(repositorioUsuario.obtenerTodosLosUsuariosQueContenganPublicacionesConLaSangreBuscada(sangreBuscada)).thenReturn(usuariosMock);
 
         // Ejecutar el método
-        List<Usuario> resultado = servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangreBuscada, tipoDeBusqueda);
+        List<UsuarioFiltradoDTO> resultado = servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangreBuscada, tipoDeBusqueda);
 
         // Verificar el resultado
         assertThat(resultado, is(notNullValue()));
@@ -413,15 +415,14 @@ public class ServicioFiltroTest {
         when(repositorioUsuario.obtenerTodosLosUsuariosQueContenganMascotasConLaSangreBuscada(sangreBuscada)).thenReturn(usuariosMock);
 
         // Ejecutar el método
-        List<Usuario> resultado = servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangreBuscada, tipoDeBusqueda);
+        List<UsuarioFiltradoDTO> resultado = servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangreBuscada, tipoDeBusqueda);
 
         // Verificar el resultado
-        assertThat(resultado, is(notNullValue()));
-        assertThat(resultado.size(), is(1));
+        assertThat(resultado, is(Collections.emptyList()));
     }
 
     @Test
-    public void testObtenerCoincidenciasTipoDeBusquedaInvalido() {
+    public void testNoObtenerCoincidenciasTipoDeBusquedaInvalido() {
         String sangreBuscada = "O+";
         String tipoDeBusqueda = "otro";
 
@@ -433,11 +434,10 @@ public class ServicioFiltroTest {
         when(servicioFiltro.obtenerTodosLosUsuariosConPublicacionesOMascotasDadasDeAlta()).thenReturn(usuariosMock);
 
         // Ejecutar el método
-        List<Usuario> resultado = servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangreBuscada, tipoDeBusqueda);
+        List<UsuarioFiltradoDTO> resultado = servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangreBuscada, tipoDeBusqueda);
 
         // Verificar el resultado
-        assertThat(resultado, is(notNullValue()));
-        assertThat(resultado.size(), is(1));
+        assertThat(resultado, is(nullValue()));
 
     }
 
@@ -454,7 +454,7 @@ public class ServicioFiltroTest {
         when(repositorioUsuario.obtenerTodosLosUsuariosQueContenganPublicacionesConLaSangreBuscada(sangreBuscada)).thenReturn(usuariosMock);
 
         // Ejecutar el método con parámetros vacíos
-        List<Usuario> resultado = servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangreBuscada, tipoDeBusqueda);
+        List<UsuarioFiltradoDTO> resultado = servicioFiltro.obtenerCoincidenciasEnSangreBuscadaYSuTipoDeBusqueda(sangreBuscada, tipoDeBusqueda);
 
         // Verificar el resultado
         assertThat(resultado, is(notNullValue()));

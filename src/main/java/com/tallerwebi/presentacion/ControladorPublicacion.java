@@ -74,4 +74,126 @@ public class ControladorPublicacion {
         return new ModelAndView("crear-publicacion", model);
     }
 
+    @RequestMapping(path = "/desactivar-publicacion")
+    public ModelAndView desactivarPublicacion(HttpServletRequest request, @RequestParam(value = "id", required = false) Long id) throws PublicacionNoExistente {
+
+        ModelMap model= new ModelMap();
+
+        if (request == null || request.getSession().getAttribute("usuarioEnSesion") == null) {
+            model.put("mensaje","accion invalida o no esta logeado o no es su publicacion");
+            return new ModelAndView("redirect:/home",model);
+        }
+
+        Long idUsuarioEnSesion=  (Long) request.getSession().getAttribute("usuarioId");
+
+        if(servicioPublicacion.busquedaPorId(id).getDuenioPublicacion().getId().equals(idUsuarioEnSesion)){
+
+            servicioPublicacion.desactivarPublicacion(id);
+
+            model.put("mensaje","se desactivo correctamente su publicacion no aparecera en las busquedas pero seguira siendo accesible desde su perfil");
+        }else{
+
+            model.put("mensaje","accion invalida no es su publicacion");
+        }
+
+        return new ModelAndView("redirect:/home", model);
+    }
+
+    @RequestMapping(path = "/activar-publicacion")
+    public ModelAndView activarPublicacion(HttpServletRequest request, @RequestParam(value = "id", required = false) Long id) throws PublicacionNoExistente {
+
+        ModelMap model= new ModelMap();
+
+
+        if (request == null || request.getSession().getAttribute("usuarioEnSesion") == null) {
+            model.put("mensaje","accion invalida o no esta logeado o no es su publicacion");
+            return new ModelAndView("redirect:/home",model);
+        }
+
+        Long idUsuarioEnSesion=  (Long) request.getSession().getAttribute("usuarioId");
+
+        if(servicioPublicacion.busquedaPorId(id).getDuenioPublicacion().getId().equals(idUsuarioEnSesion)){
+
+            servicioPublicacion.activarPublicacion(id);
+
+            model.put("mensaje","se activo correctamente su publicacion aparecera en las busquedas a partir de ahora");
+        }else{
+
+            model.put("mensaje","accion invalida no es su publicacion");
+        }
+
+
+        return new ModelAndView("redirect:/home", model);
+
+    }
+
+    @RequestMapping(path = "/actualizar-publicacion")
+    public ModelAndView actualizarPublicacion(HttpServletRequest request,
+                                              @RequestParam(value = "id", required = false) Long id) throws PublicacionNoExistente {
+        ModelMap model = new ModelMap();
+
+        if (request == null || request.getSession().getAttribute("usuarioEnSesion") == null) {
+
+            model.put("mensaje","accion invalida o no esta logeado o no es su publicacion");
+
+            return new ModelAndView("redirect:/home",model);
+        }
+
+        Long idUsuarioEnSesion=  (Long) request.getSession().getAttribute("usuarioId");
+
+        if(!(servicioPublicacion.busquedaPorId(id).getDuenioPublicacion().getId().equals(idUsuarioEnSesion))){
+
+            model.put("mensaje","no se pudo encontrar la publicacion que quiere editar");
+
+            return new ModelAndView("redirect:/home", model);
+        }
+
+        List<Mascota> misMascotas = servicioMascota.obtenerMascotasPorDueno((Usuario) request.getSession().getAttribute("usuarioEnSesion"));
+        List<Mascota> mascotasDonantes = misMascotas.stream()
+                .filter(Mascota::isDonante)
+                .filter(Mascota::isAprobado)
+                .collect(Collectors.toList());
+
+        Publicacion publicacion =servicioPublicacion.busquedaPorId(id);
+
+        model.put("publicacion", publicacion);
+        model.put("misMascotas", mascotasDonantes);
+
+        return new ModelAndView("actualizar-publicacion", model);
+    }
+
+
+    @RequestMapping(path = "/editar-publicacion")
+    public ModelAndView editarPublicacion
+            (HttpServletRequest request,
+             @RequestParam(value = "id", required = false) Long id,
+             @ModelAttribute("publicacion") Publicacion publicacionActualizada,
+             @RequestParam("mascota") Long mascotaId) throws PublicacionNoExistente {
+
+        ModelMap model= new ModelMap();
+
+        if (request == null || request.getSession().getAttribute("usuarioEnSesion") == null) {
+            model.put("mensaje","accion invalida o no esta logeado o no es su publicacion");
+            return new ModelAndView("redirect:/home",model);
+        }
+
+        Long idUsuarioEnSesion=  (Long) request.getSession().getAttribute("usuarioId");
+
+        if(servicioPublicacion.busquedaPorId(id).getDuenioPublicacion().getId().equals(idUsuarioEnSesion)){
+
+            Publicacion publicacion =servicioPublicacion.busquedaPorId(id);
+
+            Mascota mascota = servicioMascota.buscarMascotaPorId(mascotaId);
+            publicacionActualizada.setMascotaDonante(mascota);
+            publicacionActualizada.setTipoDeSangre(mascota.getSangre());
+
+            servicioPublicacion.editarPublicacion(publicacion.getId(), publicacionActualizada);
+
+            model.put("mensaje","se edito correctamente su publicacion");
+        }
+
+        return new ModelAndView("redirect:/home", model);
+
+    }
+
 }

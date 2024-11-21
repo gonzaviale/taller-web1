@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.entidad.Veterinario;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
+import com.tallerwebi.dominio.servicio.ServicioPDFFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ControladorAdminstradorTest {
@@ -27,6 +29,9 @@ public class ControladorAdminstradorTest {
 
     @Mock
     private HttpServletRequest request;
+
+    @Mock
+    private ServicioPDFFile servicioPDFFile;
 
     @Mock
     private HttpSession session;
@@ -133,7 +138,33 @@ public class ControladorAdminstradorTest {
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/administrador?mensaje=error"));
     }
 
+    @Test
+    void testRedirigirConArchivoCorrecto() {
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute("administrador")).thenReturn(admin);
 
+        when(servicioPDFFile.obtenerNombreArchivoPorPrefijo("v_1")).thenReturn("archivo1.pdf");
 
+        ModelAndView result = controladorAdministrador.descargarPdf(1L, request);
+
+        assertThat(result.getViewName(), is("redirect:/downloadPdf?fileName=archivo1.pdf"));
+        verify(servicioPDFFile).obtenerNombreArchivoPorPrefijo("v_1");
+    }
+
+    @Test
+    void testMensajeErrorDescarga() {
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute("administrador")).thenReturn(admin);
+
+        when(servicioPDFFile.obtenerNombreArchivoPorPrefijo("v_1")).thenReturn(null);
+
+        // Ejecución del método
+        ModelAndView result = controladorAdministrador.descargarPdf(1L, request);
+
+        // Validación
+        assertThat(result.getViewName(), is("redirect:/administrador?mensaje=error descarga"));
+        verify(servicioPDFFile).obtenerNombreArchivoPorPrefijo("v_1");
+
+    }
 
 }

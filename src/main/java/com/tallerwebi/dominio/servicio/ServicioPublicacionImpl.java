@@ -21,7 +21,7 @@ public class ServicioPublicacionImpl implements ServicioPublicacion {
 
     @Override
     public void guardarPublicacion(Publicacion publicacion) throws PublicacionNoValida, PublicacionSinTitulo {
-        if (publicacion.getTitulo().isEmpty()){
+        if (publicacion.getTipoDeSangre().isEmpty() && publicacion.getTipoDePublicacion().isEmpty() && publicacion.getTitulo().isEmpty()){
             throw new PublicacionNoValida();
         }
         if(publicacion.getTitulo().isEmpty()){
@@ -60,6 +60,11 @@ public class ServicioPublicacionImpl implements ServicioPublicacion {
     public void activarPublicacion(Long publicacionId) {
         repositorioPublicacion.activarPublicacion(publicacionId);
 
+    }
+
+    @Override
+    public void editarPublicacion(Long id, Publicacion publicacionActualizada) throws PublicacionNoExistente {
+        repositorioPublicacion.editarPublicacion(id,publicacionActualizada);
     }
 
 }

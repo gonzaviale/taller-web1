@@ -7,11 +7,34 @@
     <article th:each="publicacion : ${publicaciones}" class="card mb-3">
         <section class="card-body d-flex justify-content-between align-items-center">
             <h5 class="card-title" th:text="${publicacion.getTitulo()}"></h5>
-            <a th:href="@{/{nombre}.{id}/(nombre=${publicacion.duenioPublicacion.nombre}, id=${publicacion.duenioPublicacion.id})}">
-                <span class="text-muted"
-                      th:text="${publicacion.duenioPublicacion.nombre + ' ' + publicacion.duenioPublicacion.apellido}"></span>
-            </a>
+            <section class="d-flex align-items-center gap-3">
+                <article th:if="${#httpServletRequest.session.getAttribute('usuarioId') == publicacion.duenioPublicacion.id}">
+                    <div th:if="${publicacion.estaActiva}">
+                        <form th:action="@{/desactivar-publicacion}" method="get" class="m-0">
+                            <input type="hidden" name="id" th:value="${publicacion.id}" />
+                            <button type="submit" class="btn btn-danger">desactivar</button>
+                        </form>
+                    </div>
+                </article>
+
+                <article th:if="${#httpServletRequest.session.getAttribute('usuarioId') == publicacion.duenioPublicacion.id}">
+
+                    <div th:if="${publicacion.estaActiva}">
+                        <form th:action="@{/actualizar-publicacion}" method="get" class="m-0">
+                            <input type="hidden" name="id" th:value="${publicacion.id}" />
+                            <button type="submit" class="btn btn-secondary">actualizar</button>
+                        </form>
+                    </div>
+                </article>
+
+                <a th:href="@{/{nombre}.{id}/(nombre=${publicacion.duenioPublicacion.nombre}, id=${publicacion.duenioPublicacion.id})}"
+                   class="text-muted">
+                    <span th:text="${publicacion.duenioPublicacion.nombre + ' ' + publicacion.duenioPublicacion.apellido}"></span>
+                </a>
+
+            </section>
         </section>
+
         <section class="card-body">
             <p class="card-text" th:text="${publicacion.getDescripcion()}"></p>
             <ul class="list-group list-group-flush">
@@ -54,7 +77,6 @@
                 </div>
                 <input type="submit" value="Enviar solicitud" class="btn btn-primary">
             </form>
-            </div>
         </section>
     </article>
 </article>

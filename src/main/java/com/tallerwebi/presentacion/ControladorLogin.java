@@ -7,6 +7,7 @@ import com.tallerwebi.dominio.servicio.ServicioImagenes;
 import com.tallerwebi.dominio.servicio.ServicioLogin;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
+import com.tallerwebi.dominio.servicio.ServicioPDFFile;
 import com.tallerwebi.presentacion.DTO.DatosLoginDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,11 +29,13 @@ public class ControladorLogin {
     private final ServicioLogin servicioLogin;
     final private ModelMap modelo = new ModelMap();
     private final ServicioImagenes servicioImagenes;
+    private final ServicioPDFFile servicioPDFFile;
 
     @Autowired
-    public ControladorLogin(ServicioLogin servicioLogin,ServicioImagenes servicioImagenes) {
+    public ControladorLogin(ServicioLogin servicioLogin,ServicioImagenes servicioImagenes,ServicioPDFFile servicioPDFFile) {
         this.servicioLogin = servicioLogin;
         this.servicioImagenes= servicioImagenes;
+        this.servicioPDFFile=servicioPDFFile;
 
     }
 
@@ -91,7 +94,8 @@ public class ControladorLogin {
                                     @RequestParam(value = "pais", required = false) String pais,
                                     @RequestParam(value = "telefono", required = false) String telefono,
                                     @RequestParam(value = "horario", required = false) String horario,
-                                    RedirectAttributes redirectAttributes) {
+                                    RedirectAttributes redirectAttributes,
+                                    @RequestParam (value="file",required = false) MultipartFile file) {
         modelo.clear();
 
         Usuario nuevoUsuario;
@@ -159,6 +163,14 @@ public class ControladorLogin {
         } catch (Exception e) {
             modelo.put("error", "Error al registrar el nuevo usuario");
             return new ModelAndView("nuevo-usuario", modelo);
+        }
+
+        try {
+            servicioPDFFile.guardarPdf(file, "v_" + nuevoUsuario.getId());
+        } catch (IllegalArgumentException e) {
+            modelo.put("error","Error: " + e.getMessage());
+        } catch (IOException e) {
+            modelo.put("error","Error al guardar el archivo.");
         }
 
         try {
