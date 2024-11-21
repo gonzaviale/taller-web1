@@ -92,6 +92,7 @@ public class RepositorioSolicitudAUnaPublicacionImpl implements RepositorioSolic
                 .setProjection(Projections.projectionList()
                         .add(Projections.groupProperty("solicitud.veterinario.id"), "veterinarioId")
                         .add(Projections.rowCount(), "numSolicitudes"))
+                .add(Restrictions.isNotNull("solicitud.veterinario"))
                 .addOrder(Order.asc("numSolicitudes"))
                 .list();
 
