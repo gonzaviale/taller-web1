@@ -63,12 +63,8 @@ public class ControladorWebSocket {
     public String sendChatUserMessage(ChatMessageUsersDTO chatMessage) throws Exception {
         MensajeUsuarioUsuario createMessage;
         JSONObject json = new JSONObject();
-        System.out.println(chatMessage.getUsuarioEmisor());
-        System.out.println(chatMessage.getUsuarioEmisor());
-        System.out.println(chatMessage.getMensaje());
-
         Usuario emisor = servicioMensajeUsuarioUsuario.searchUser(chatMessage.getUsuarioEmisor());
-        Usuario receptor = servicioMensajeUsuarioUsuario.searchUser(chatMessage.getUsuarioEmisor());
+        Usuario receptor = servicioMensajeUsuarioUsuario.searchUser(chatMessage.getUsuarioReceptor());
         createMessage = servicioMensajeUsuarioUsuario.enviarMensaje(chatMessage.getMensaje(), emisor, receptor);
         json.put("mensaje", createMessage.getMensaje());
         json.put("usuarioEmisor", createMessage.getUsuarioEmisor());
