@@ -39,6 +39,24 @@
                class="message-text" th:text="${mensaje.mensaje}">
             </a>
         </div>
+        <div th:each="mensaje : ${listMessagesUsers}"
+             th:classappend="${!mensaje.leido} ? 'unread' : ''"
+             class="message-preview">
+            <div class="message-details">
+                <!-- Nombre del emisor -->
+                <a th:href="@{/getMessagesByUsers(usuario2=${mensaje.usuarioReceptor.getId()})}"
+                   th:text="${mensaje.usuarioEmisor.getNombre()}">
+                </a>
+                <!-- Usario Receptor -->
+                <a th:href="@{/getMessagesByUsers(usuario2=${mensaje.usuarioReceptor.getId()})}"
+                   th:text="${mensaje.usuarioReceptor.getNombre()}">
+                </a>
+            </div>
+                <!-- Vista previa del mensaje -->
+                <a th:href="@{/getMessagesByUsers(usuario2=${mensaje.usuarioReceptor.getId()})}"
+                   class="message-text" th:text="${mensaje.mensaje}">
+                </a>
+        </div>
     </div>
 </div>
 

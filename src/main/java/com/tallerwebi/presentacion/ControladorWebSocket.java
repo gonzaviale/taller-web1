@@ -1,5 +1,8 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidad.MensajeUsuarioUsuario;
+import com.tallerwebi.dominio.servicio.ServicioMensajeUsuarioUsuario;
+import com.tallerwebi.presentacion.DTO.ChatMessageUsersDTO;
 import org.json.JSONObject;
 import com.tallerwebi.presentacion.DTO.ChatMessageDTO;
 import com.tallerwebi.dominio.entidad.Bot;
@@ -16,13 +19,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ControladorWebSocket {
+    private final ServicioMensajeUsuarioUsuario servicioMensajeUsuarioUsuario;
     private ServicioBot servicioBot;
     private ServicioMensajeUsuarioBanco servicioMensajeUsuarioBanco;
 
     @Autowired
-    public ControladorWebSocket(ServicioBot servicioBot, ServicioMensajeUsuarioBanco servicioMensajeUsuarioBanco) {
+    public ControladorWebSocket(ServicioBot servicioBot, ServicioMensajeUsuarioBanco servicioMensajeUsuarioBanco, ServicioMensajeUsuarioUsuario servicioMensajeUsuarioUsuario) {
         this.servicioBot = servicioBot;
         this.servicioMensajeUsuarioBanco = servicioMensajeUsuarioBanco;
+        this.servicioMensajeUsuarioUsuario = servicioMensajeUsuarioUsuario;
     }
 
     @MessageMapping("/sendMessage")
@@ -50,6 +55,24 @@ public class ControladorWebSocket {
         json.put("usuario", createMessage.getUsuario().getId());
         json.put("banco", createMessage.getBanco().getId());
         json.put("emisor", createMessage.getEmisor());
+        return json.toString();
+    }
+
+    @MessageMapping("/chatUserMessage")
+    @SendTo("/topic/chatUser")
+    public String sendChatUserMessage(ChatMessageUsersDTO chatMessage) throws Exception {
+        MensajeUsuarioUsuario createMessage;
+        JSONObject json = new JSONObject();
+        System.out.println(chatMessage.getUsuarioEmisor());
+        System.out.println(chatMessage.getUsuarioEmisor());
+        System.out.println(chatMessage.getMensaje());
+
+        Usuario emisor = servicioMensajeUsuarioUsuario.searchUser(chatMessage.getUsuarioEmisor());
+        Usuario receptor = servicioMensajeUsuarioUsuario.searchUser(chatMessage.getUsuarioEmisor());
+        createMessage = servicioMensajeUsuarioUsuario.enviarMensaje(chatMessage.getMensaje(), emisor, receptor);
+        json.put("mensaje", createMessage.getMensaje());
+        json.put("usuarioEmisor", createMessage.getUsuarioEmisor());
+        json.put("usuarioReceptor", createMessage.getUsuarioReceptor());
         return json.toString();
     }
 
