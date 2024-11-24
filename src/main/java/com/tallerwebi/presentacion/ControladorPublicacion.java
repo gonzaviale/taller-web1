@@ -33,13 +33,14 @@ public class ControladorPublicacion {
 
     @RequestMapping(path = "/publicarPublicacion", method = RequestMethod.POST)
     public ModelAndView publicarPublicacion(@ModelAttribute("publicacion") Publicacion nuevaPublicacion, @RequestParam("mascota") Long mascotaId, HttpServletRequest request) {
-        ModelMap model;
+        ModelMap model = new ModelMap();
+        model.put("publicaciones", "");
 
         if (request != null && request.getSession().getAttribute("usuarioEnSesion") != null) {
             nuevaPublicacion.setDuenioPublicacion((Usuario) request.getSession().getAttribute("usuarioEnSesion"));
         }
         if (mascotaId == 0 || mascotaId == null) {
-            model = new ModelMap("mensaje", "Debe ingresar una mascota");
+            model.put("mensaje", "Debe ingresar una mascota");
             return new ModelAndView("/crear-publicacion", model);
         } else {
             Mascota mascota = servicioMascota.buscarMascotaPorId(mascotaId);
@@ -49,14 +50,13 @@ public class ControladorPublicacion {
         try {
             servicioPublicacion.guardarPublicacion(nuevaPublicacion);
         } catch (PublicacionNoValida e) {
-            model = new ModelMap("mensaje", "Publicacion no registrada: el campo tipo de publicacion y el campo de sangre no puede estar vacio");
+            model.put("mensaje", "Publicacion no registrada: el campo tipo de publicacion y el campo de sangre no puede estar vacio");
             return new ModelAndView("redirect:/home", model);
         } catch (PublicacionSinTitulo e) {
-            model = new ModelMap("mensaje", "Publicacion no registrada: el campo titulo de la publicacion no puede estar vacio");
+            model.put("mensaje", "Publicacion no registrada: el campo titulo de la publicacion no puede estar vacio");
             return new ModelAndView("redirect:/home", model);
         }
-        model = new ModelMap("mensaje", "la publicacion fue registrada correctamente");
-
+        model.put("mensaje", "la publicacion fue registrada correctamente");
         return new ModelAndView("redirect:/home", model);
     }
 

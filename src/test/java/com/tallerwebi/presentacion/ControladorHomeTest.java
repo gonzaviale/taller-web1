@@ -94,7 +94,6 @@ public class ControladorHomeTest {
 
     private static Publicacion getPublicacionConTipoDePublicacionYTitulo(String tipoDePublicacion,String titulo) {
         Publicacion nuevaPublicacion= new Publicacion();
-        nuevaPublicacion.setTipoDePublicacion(tipoDePublicacion);
         nuevaPublicacion.setTitulo(titulo);
         return nuevaPublicacion;
     }

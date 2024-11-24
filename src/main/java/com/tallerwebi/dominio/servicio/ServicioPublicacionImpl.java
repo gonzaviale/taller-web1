@@ -21,7 +21,7 @@ public class ServicioPublicacionImpl implements ServicioPublicacion {
 
     @Override
     public void guardarPublicacion(Publicacion publicacion) throws PublicacionNoValida, PublicacionSinTitulo {
-        if (publicacion.getTipoDeSangre().isEmpty() && publicacion.getTipoDePublicacion().isEmpty() && publicacion.getTitulo().isEmpty()){
+        if (publicacion.getTipoDeSangre().isEmpty() && publicacion.getTitulo().isEmpty()){
             throw new PublicacionNoValida();
         }
         if(publicacion.getTitulo().isEmpty()){

@@ -129,10 +129,10 @@ public class ServicioFiltroImpl implements ServicioFiltro {
         for (Usuario usuario : usuarios) {
             Integer cantidadPublicacionesBusqueda = 0;
             Integer cantidadPublicacionesDonacion = 0;
-            Integer cantidadPublicacionVenta = 0;
+            Integer cantidadPublicacionVenta = 0;/*
             cantidadPublicacionesBusqueda = contarPublicacionesPorTipo(usuario, "busqueda", sangre);
             cantidadPublicacionesDonacion = contarPublicacionesPorTipo(usuario, "donacion", sangre);
-            cantidadPublicacionVenta = contarPublicacionesPorTipo(usuario, "venta", sangre);
+            cantidadPublicacionVenta = contarPublicacionesPorTipo(usuario, "venta", sangre);*/
 
             filtradoDTOS.add(new UsuarioFiltradoDTO(usuario.getId()
                     , usuario.getNombre(), usuario.getApellido()
@@ -142,7 +142,7 @@ public class ServicioFiltroImpl implements ServicioFiltro {
         return filtradoDTOS;
     }
 
-    private Integer contarPublicacionesPorTipo(Usuario usuario, String tipo, String sangre) {
+    /*private Integer contarPublicacionesPorTipo(Usuario usuario, String tipo, String sangre) {
 
         Integer count = 0;
 
@@ -154,7 +154,7 @@ public class ServicioFiltroImpl implements ServicioFiltro {
 
         return count;
 
-    }
+    } */
 
     @Override
     public List<Usuario> obtenerTodosLosVeterinariosVerificados() {

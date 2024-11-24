@@ -31,12 +31,16 @@
 
         <div class="mb-3">
             <label for="mascota" class="form-label">Selecciona una Mascota</label>
-            <select id="mascota" name="mascota" class="form-select" required>
+            <select id="mascota" name="mascota" class="form-select" required onchange="actualizarSangre()">
                 <option value="">Elige una mascota</option>
-                <option th:each="mascota : ${misMascotas}" th:value="${mascota.id}"
-                        th:text="${mascota.nombre}"></option>
+                <option th:each="mascota : ${misMascotas}"
+                        th:value="${mascota.id}"
+                        th:data-sangre="${mascota.sangre}"
+                        th:text="${mascota.nombre}">
+                </option>
             </select>
             <div class="invalid-feedback">Por favor, ingrese una mascota.</div>
+            <input type="hidden" id="sangre" th:field="*{tipoDeSangre}" value="">
         </div>
 
         <!-- Campo Puede Movilizarse -->
@@ -98,6 +102,20 @@
             }
         }, false);
     })();
+</script>
+
+<script>
+    function actualizarSangre() {
+        // Obtén el select y el campo oculto
+        const select = document.getElementById("mascota");
+        const sangreInput = document.getElementById("sangre");
+
+        // Obtén el atributo "data-sangre" de la opción seleccionada
+        const sangre = select.options[select.selectedIndex].getAttribute("data-sangre");
+
+        // Actualiza el valor del campo oculto
+        sangreInput.value = sangre || "";
+    }
 </script>
 
 

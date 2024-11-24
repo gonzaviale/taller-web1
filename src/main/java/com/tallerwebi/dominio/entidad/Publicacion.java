@@ -16,7 +16,6 @@ public class Publicacion {
     private String tipoDeSangre;
     private String zonaDeResidencia;
     private Boolean estaActiva;
-    private String tipoDePublicacion;
     private LocalDateTime localDateTime;
 
     public void setEstaActiva(Boolean estaActiva) {
@@ -91,14 +90,6 @@ public class Publicacion {
 
     public void setZonaDeResidencia(String zonaDeResidencia) {
         this.zonaDeResidencia = zonaDeResidencia;
-    }
-
-    public String getTipoDePublicacion() {
-        return tipoDePublicacion;
-    }
-
-    public void setTipoDePublicacion(String tipoDePublicacion) {
-        this.tipoDePublicacion = tipoDePublicacion;
     }
 
     public Boolean getPuedeMovilizarse() {
