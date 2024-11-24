@@ -35,8 +35,8 @@ public class RepositorioMensajeUsuarioUsuarioImpl implements RepositorioMensajeU
     @Override
     public ArrayList<MensajeUsuarioUsuario> getMessagesByUser(Usuario usuario) {
         String hql = "SELECT m FROM MensajeUsuarioUsuario m " +
-                "WHERE m.usuarioEmisor = :usuario " +
-                "OR m.usuarioReceptor = :usuario " +
+                "WHERE (m.usuarioEmisor = :usuario OR m.usuarioReceptor = :usuario) " +
+                "AND (m.usuarioEmisor != m.usuarioReceptor)" +
                 "AND m.fecha = (SELECT MAX(sub.fecha) FROM MensajeUsuarioUsuario sub " +
                 "               WHERE sub.usuarioEmisor = m.usuarioEmisor OR sub.usuarioReceptor = m.usuarioReceptor) " +
                 "ORDER BY m.fecha DESC";

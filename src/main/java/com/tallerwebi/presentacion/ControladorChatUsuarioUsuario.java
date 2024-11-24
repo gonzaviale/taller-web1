@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Controller
 public class ControladorChatUsuarioUsuario {
@@ -25,15 +26,22 @@ public class ControladorChatUsuarioUsuario {
     }
 
     @RequestMapping(path = "/getMessagesByUsers", method = RequestMethod.GET)
-    public ModelAndView getMessagesByUsers(Long usuario2, HttpServletRequest request){
+    public ModelAndView getMessagesByUsers(Long usuario2, Long usuario, HttpServletRequest request){
         try {
             ModelMap model = new ModelMap();
-            Usuario usuario1 = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+            Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
             Usuario usuario2Obj = servicioMensajeUsuarioUsuario.searchUser(usuario2);
-            ArrayList<MensajeUsuarioUsuario> messages = this.servicioMensajeUsuarioUsuario.getMessagesByUsers(usuario1, usuario2Obj);
-            model.put("listMessages", messages);
-            model.put("usuarioEmisor", usuario1);
-            model.put("usuarioReceptor", usuario2Obj);
+            Usuario usuarioObj = servicioMensajeUsuarioUsuario.searchUser(usuario);
+            model.put("usuarioEmisor", usuarioEnSesion);
+            if(!Objects.equals(usuarioEnSesion.getId(), usuario2Obj.getId())){
+                model.put("usuarioReceptor", usuario2Obj);
+                ArrayList<MensajeUsuarioUsuario> messages = this.servicioMensajeUsuarioUsuario.getMessagesByUsers(usuarioEnSesion, usuario2Obj);
+                model.put("listMessages", messages);
+            } else{
+                model.put("usuarioReceptor", usuarioObj);
+                ArrayList<MensajeUsuarioUsuario> messages = this.servicioMensajeUsuarioUsuario.getMessagesByUsers(usuarioEnSesion, usuarioObj);
+                model.put("listMessages", messages);
+            }
             return new ModelAndView("chattUsersUsers", model);
         } catch (RuntimeException e) {
             ModelMap model = new ModelMap();

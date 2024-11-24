@@ -48,14 +48,14 @@
         <div class="card-body chat-box" style="max-height: 400px; overflow-y: auto;" id="messages">
             <!-- Mensajes iniciales renderizados por Thymeleaf -->
             <div th:each="mensaje : ${listMessages}">
-                <div th:if="${mensaje.getUsuarioEmisor() == usuarioEmisor}">
+                <div th:if="${mensaje.getUsuarioEmisor().getId() == usuarioEmisor.getId()}">
                     <div class="d-flex justify-content-end mb-2">
                         <div class="p-2 bg-primary text-white rounded">
                             <span th:text="${mensaje.getMensaje()}"></span>
                         </div>
                     </div>
                 </div>
-                <div th:if="${mensaje.getUsuarioEmisor() != usuarioEmisor}">
+                <div th:if="${mensaje.getUsuarioEmisor().getId() != usuarioEmisor.getId()}">
                     <div class="d-flex justify-content-start mb-2">
                         <div class="p-2 bg-secondary text-white rounded">
                             <span th:text="${mensaje.getMensaje()}"></span>
