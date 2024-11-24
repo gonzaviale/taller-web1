@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.entidad.MensajeUsuarioBanco;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioMensajeUsuarioBanco;
+import com.tallerwebi.dominio.servicio.ServicioMensajeUsuarioUsuario;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +16,12 @@ import java.util.ArrayList;
 @Controller
 public class ControladorChatUsuarioBanco {
     private ServicioMensajeUsuarioBanco servicioMensajeUsuario;
+    private ServicioMensajeUsuarioUsuario servicioMensajeUsuarioUsuario;
 
-    public ControladorChatUsuarioBanco(ServicioMensajeUsuarioBanco servicioMensajeUsuario) {
+    public ControladorChatUsuarioBanco(ServicioMensajeUsuarioBanco servicioMensajeUsuario,
+                                       ServicioMensajeUsuarioUsuario servicioMensajeUsuarioUsuario) {
         this.servicioMensajeUsuario = servicioMensajeUsuario;
+        this.servicioMensajeUsuarioUsuario = servicioMensajeUsuarioUsuario;
     }
 
     @RequestMapping(path = "/getAllMessages", method = RequestMethod.GET)
@@ -25,6 +29,7 @@ public class ControladorChatUsuarioBanco {
         try{
             ModelMap model = new ModelMap();
             Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("usuarioEnSesion");
+            model.put("listMessagesUsers", this.servicioMensajeUsuarioUsuario.getMessages(usuarioEnSesion));
             model.put("listMessages", this.servicioMensajeUsuario.getMessages(usuarioEnSesion));
             return new ModelAndView("messageUser", model);
         } catch(RuntimeException e){

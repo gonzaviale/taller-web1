@@ -19,19 +19,25 @@
                             <span th:text="' ('"></span>
                             <a th:href="@{/{nombre}.{id}/(nombre=${solicitud.getMascotaReceptora().getDuenio().getNombre()}, id=${solicitud.getMascotaReceptora().getDuenio().getId()})}"
                                th:text="${solicitud.getMascotaReceptora().getDuenio().getNombre() + ' ' + solicitud.getMascotaReceptora().getDuenio().getApellido()}"></a>
-                            <span th:text="'). Si aceptas vas a tener que esperar que el veterinario notifique el día y la hora para la transfusón.'"></span>
+                            <span th:text="'). Si aceptas vas a tener que esperar que el veterinario notifique el día y la hora para la transfusión.'"></span>
                         </p>
                         <div class="d-flex justify-content-between mt-3">
-                            <!-- Formulario de Aprobación -->
-                            <form th:action="@{/aceptar-solicitud-publicacion}" method="POST" class="d-inline-block">
-                                <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
-                                <input type="submit" class="btn btn-success" value="Aceptar">
-                            </form>
+                            <div>
+                                <!-- Formulario de Aprobación -->
+                                <form th:action="@{/aceptar-solicitud-publicacion}" method="POST" class="d-inline-block">
+                                    <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
+                                    <input type="submit" class="btn btn-success" value="Aceptar">
+                                </form>
 
-                            <!-- Formulario de Rechazo -->
-                            <form th:action="@{/rechazar-solicitud-publicacion}" method="POST" class="d-inline-block">
-                                <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
-                                <input type="submit" class="btn btn-danger" value="Rechazar">
+                                <!-- Formulario de Rechazo -->
+                                <form th:action="@{/rechazar-solicitud-publicacion}" method="POST" class="d-inline-block">
+                                    <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
+                                    <input type="submit" class="btn btn-danger" value="Rechazar">
+                                </form>
+                            </div>
+                            <form th:action="@{/enviarMensajeUsuarioUsuario}" method="POST">
+                                <input type="hidden" th:value="${solicitud.getMascotaReceptora().getDuenio().getId()}" name="usuarioReceptor">
+                                <input type="submit" class="btn btn-primary" value="Enviar Mensaje">
                             </form>
                         </div>
                     </div>
