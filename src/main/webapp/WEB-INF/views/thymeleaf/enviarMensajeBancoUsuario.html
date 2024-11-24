@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Enviar Mensaje a Banco</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<header th:replace="fragments/headerbanco :: headerBanco"></header>
+<div class="container">
+    <form action="/spring/enviarMensajeBancoUsuario" class="mt-2" method="POST">
+        <input name="userId" type="hidden" th:value="${userId}"/>
+        <input name="mensajeUsuarioBanco" type="text" id="messageInput" class="form-control mb-2" placeholder="Escribe un mensaje..."/>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+</body>
+</html>

@@ -26,6 +26,10 @@
                     <p><strong>Tipo de Sangre:</strong> <span th:text="${solicitud.tipoSangre}"></span></p>
                     <p><strong>Cantidad:</strong> <span th:text="${solicitud.cantidad}"></span></p>
 
+                    <form action="#" th:action="@{/enviarMensajeAUsuario}" method="post">
+                        <input type="hidden" th:name="userId" th:value="${solicitud.usuarioId}"/>
+                        <button type="submit" class="btn btn-primary mb-2">Enviar Mensaje</button>
+                    </form>
                     <form action="#" th:action="@{/rechazarSolicitud}" method="post">
                         <input type="hidden" th:name="solicitudId" th:value="${solicitud.id}"/>
                         <button type="submit" class="btn btn-danger">Rechazar</button>
