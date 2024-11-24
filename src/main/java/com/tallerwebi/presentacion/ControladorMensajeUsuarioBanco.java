@@ -45,4 +45,30 @@ public class ControladorMensajeUsuarioBanco {
         }
         return new ModelAndView("home", model);
     }
+
+    @RequestMapping(path = "/enviarMensajeBancoUsuario", method = RequestMethod.POST)
+    public ModelAndView enviarMensajeBancoUsuario
+            (@ModelAttribute("mensajeUsuarioBanco") String mensajeUsuarioBanco,
+             @ModelAttribute("userId") Long userId,
+             HttpServletRequest request){
+        ModelMap model = new ModelMap();
+        model.remove("mensajeUsuarioBanco");
+        try{
+            Usuario usuario = servicioMensajeUsuarioBanco.searchUser(userId);
+            Long idBanco = (Long)request.getSession().getAttribute("idBanco");
+            MensajeUsuarioBanco mensajeEnviado = servicioMensajeUsuarioBanco.
+                    enviarMensaje(mensajeUsuarioBanco, "Banco", usuario, idBanco);
+        }catch (Exception e){
+            model.remove("mensajeUsuarioBanco");
+            model.put("errorAlEnviarMensaje", e.getMessage());
+        }
+        return new ModelAndView("bancoHome", model);
+    }
+
+    @RequestMapping(path="/enviarMensajeAUsuario")
+    public ModelAndView enviarMensajeABancoScoring(@ModelAttribute("userId") Long userId) {
+        ModelMap model = new ModelMap();
+        model.put("userId", userId);
+        return new ModelAndView("enviarMensajeBancoUsuario", model);
+    }
 }
