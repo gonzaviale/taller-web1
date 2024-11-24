@@ -92,7 +92,6 @@ public class ServicioFiltroTest {
         Publicacion publicacion = new Publicacion();
         publicacion.setTitulo("Mascota");
         publicacion.setTipoDeSangre(tipoDeSangre);
-        publicacion.setTipoDePublicacion("Donante");
         return publicacion;
     }
 

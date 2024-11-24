@@ -29,7 +29,6 @@ public class RepositorioPublicacionImpl implements RepositorioPublicacion {
     @Override
     public void guardarPublicacion(Publicacion publicacion) {
         publicacion.setLocalDateTime(LocalDateTime.now());
-        publicacion.setEstaActiva(true);
         sessionFactory.getCurrentSession().save(publicacion);
     }
 

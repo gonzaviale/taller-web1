@@ -39,7 +39,6 @@ public class ServicioPublicacionTest {
 
     private Publicacion whenCreoUnaPublicacionSinTitulo() {
         Publicacion nuevaPublicacion= new Publicacion();
-        nuevaPublicacion.setTipoDePublicacion("Venta");
         nuevaPublicacion.setTipoDeSangre("DEA-1.1");
         nuevaPublicacion.setTitulo("");
         return nuevaPublicacion;
@@ -47,7 +46,6 @@ public class ServicioPublicacionTest {
 
     private Publicacion whenCreoUnaPublicacionNoValida() {
         Publicacion nuevaPublicacion= new Publicacion();
-        nuevaPublicacion.setTipoDePublicacion("");
         nuevaPublicacion.setTipoDeSangre("");
         nuevaPublicacion.setTitulo("");
         return nuevaPublicacion;
@@ -56,7 +54,6 @@ public class ServicioPublicacionTest {
 
     private Publicacion whenCreoUnaPublicacionSinTipoDePublicacion() {
         Publicacion nuevaPublicacion= new Publicacion();
-        nuevaPublicacion.setTipoDePublicacion("");
         nuevaPublicacion.setTipoDeSangre("DEA-1.1");
         nuevaPublicacion.setTitulo("busco DEA-1.1");
         return nuevaPublicacion;
@@ -65,7 +62,6 @@ public class ServicioPublicacionTest {
 
     private static Publicacion whenCreoUnaPublicacionSinTipoDeSangre() {
         Publicacion nuevaPublicacion= new Publicacion();
-        nuevaPublicacion.setTipoDePublicacion("busqueda");
         nuevaPublicacion.setTipoDeSangre("");
         nuevaPublicacion.setTitulo("busco sangre");
         return nuevaPublicacion;
@@ -84,7 +80,6 @@ public class ServicioPublicacionTest {
     private static Publicacion givenCreoUnaPublicaionValida() {
         Publicacion miPublicacion = new Publicacion();
         miPublicacion.setTipoDeSangre("DEA-1.1");
-        miPublicacion.setTipoDePublicacion("busqueda");
         miPublicacion.setTitulo("busco sangre DEA-1.1");
         return miPublicacion;
     }
