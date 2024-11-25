@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.RepositorioMascota;
 import com.tallerwebi.dominio.entidad.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -90,6 +91,18 @@ public class ServicioMascotaImpl implements ServicioMascota {
             return mascota.getPeso() >= 3.5f; // El peso debe ser mayor o igual a 3.5 kg
         }
         return false;
+    }
+
+    @Override
+    public String verificarEstado(String tipo, Float peso, Integer anios) {
+        if (tipo.equals("Canino") && peso < 25f) {
+            return "Para que un perro sea donante debe pesar más de 25 kilos.";
+        } else if (tipo.equals("Felino") && peso < 3.5f) {
+            return "Para que un gato sea donante debe pesar más de 3,5 kilos.";
+        } else if (anios <= 1 || anios >= 8){
+            return "Para que tu mascota sea donante debe tener entre 1 y 8 años.";
+        }
+        return null;
     }
 
     private static boolean isValid(Mascota mascota) {
