@@ -87,7 +87,6 @@ public class ControladorAgregarMascota {
             return new ModelAndView("redirect:/home", modelo);
         }
 
-
         modelo.put("mascotaAux", mascotaAux);
 
         return new ModelAndView(

@@ -115,8 +115,13 @@
                             <a th:href="@{/{nombre}.{id}/(nombre=${solicitud.getMascotaReceptora().getDuenio().getNombre()}, id=${solicitud.getMascotaReceptora().getDuenio().getId()})}"
                                th:text="${solicitud.getMascotaReceptora().getDuenio().getNombre() + ' ' + solicitud.getMascotaReceptora().getDuenio().getApellido()}"></a>
                             <span th:text="')'"></span>
-                            <span th:text="'. Ahora tenés que comunicarte con ambas partes para acordar día y horario de transfusión.'"></span>
+                            <span th:text="'. Ahora tenés que agendar el turno para la transfusión.'"></span>
                         </p>
+                        <form th:action="@{/crear-turno}" method="POST" class="d-inline-block">
+                            <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
+                            <input type="datetime-local" name="fechaYHora" id="fechaYHora">
+                            <input type="submit" class="btn btn-primary" value="Crear">
+                        </form>
                     </div>
                 </div>
             </article>
