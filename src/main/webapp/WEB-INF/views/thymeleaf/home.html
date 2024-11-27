@@ -108,7 +108,7 @@
      class="alert alert-danger text-center mx-auto col-md-6">
     <p th:text="${errorAlEnviarMensaje}"></p>
 </div>
-<section th:if="${!turnosVet.isEmpty()}" class="container mt-4">
+<section th:if="${turnosVet != null and !turnosVet.isEmpty()}" class="container mt-4">
     <article th:each="turno : ${turnosVet}" class="alert alert-success text-center mx-auto col-md-6">
         <p>
             <span th:text="'Recordá que agendaste un turno para el '"></span>
@@ -116,7 +116,7 @@
         </p>
     </article>
 </section>
-<section th:if="${!turnosReceptor.isEmpty()}" class="container mt-4">
+<section th:if="${turnosReceptor != null and !turnosReceptor.isEmpty()}" class="container mt-4">
     <article th:each="turno : ${turnosReceptor}" class="alert alert-success text-center mx-auto col-md-6">
         <p>
             <span th:text="'Tenés un turno agendado para el '"></span>
@@ -124,9 +124,13 @@
             <span th:text="'Veterinario: ' + ${turno.getSolicitudAUnaPublicacion().getVeterinario().getNombre()} + ' ' + ${turno.getSolicitudAUnaPublicacion().getVeterinario().getApellido()}"></span><br>
             <span th:text="'Dueño de la mascota donante: ' + ${turno.getSolicitudAUnaPublicacion().getMascotaDonante().getDuenio().getNombre()} + ' ' + ${turno.getSolicitudAUnaPublicacion().getMascotaDonante().getDuenio().getApellido()}"></span>
         </p>
+        <form action="#" th:action="@{/enviarMensajeUsuarioUsuario}" method="post">
+            <input type="hidden" th:name="usuarioReceptor" th:value="${turno.getSolicitudAUnaPublicacion().getMascotaDonante().getDuenio().getId()}"/>
+            <input type="submit" class="btn btn-primary mb-2" value="Enviar Mensaje">
+        </form>
     </article>
 </section>
-<section th:if="${!turnosDonante.isEmpty()}" class="container mt-4">
+<section th:if="${turnosDonante != null and !turnosDonante.isEmpty()}" class="container mt-4">
     <article th:each="turno : ${turnosDonante}" class="alert alert-success text-center mx-auto col-md-6">
         <p>
             <span th:text="'Tenés un turno agendado para el '"></span>
