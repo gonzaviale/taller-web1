@@ -62,11 +62,18 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         sessionFactory.getCurrentSession().update(banco);
     }
 
+    @Override
+    public List<Banco> obtenerTodosLosBancosNoVerificados() {
+        final Session session = sessionFactory.getCurrentSession();
+        return  session.createCriteria(Banco.class)
+                .add(Restrictions.eq("activo", false)).list();
+
+    }
 
     @Override
     public Banco buscarBanco(String email, String password) {
         final Session session = sessionFactory.getCurrentSession();
-        return (Banco) session.createCriteria(Usuario.class)
+        return (Banco) session.createCriteria(Banco.class)
                 .add(Restrictions.eq("email", email))
                 .add(Restrictions.eq("password", password))
                 .uniqueResult();

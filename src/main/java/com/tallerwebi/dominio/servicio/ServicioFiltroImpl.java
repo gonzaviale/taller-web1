@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.servicio;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.RepositorioMascota;
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
@@ -175,6 +176,11 @@ public class ServicioFiltroImpl implements ServicioFiltro {
     @Override
     public boolean desactivarUsuarioBuscadoPor(Long id) {
         return repositorioUsuario.desactivarUsuarioBuscadoPor(id);
+    }
+
+    @Override
+    public List<Banco> obtenerTodosLosBancosNoVerificados() {
+        return repositorioBanco.obtenerTodosLosBancosNoVerificados();
     }
 
     private String validadorCampo(String campo) {

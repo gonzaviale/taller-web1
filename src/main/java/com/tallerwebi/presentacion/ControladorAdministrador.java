@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
 import com.tallerwebi.dominio.servicio.ServicioPDFFile;
@@ -38,8 +39,10 @@ public class ControladorAdministrador {
         ModelMap model= new ModelMap();
 
         List<Usuario> usuarios=servicioFiltro.obtenerTodosLosVeterinariosNoVerificados();
+        List<Banco> bancos=servicioFiltro.obtenerTodosLosBancosNoVerificados();
 
         model.addAttribute("usuarios",usuarios);
+        model.addAttribute("bancos",bancos);
         model.addAttribute("mensaje",mensaje);
 
         return new ModelAndView("administrador", model);
