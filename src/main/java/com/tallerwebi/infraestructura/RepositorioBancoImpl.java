@@ -69,6 +69,13 @@ public class RepositorioBancoImpl implements RepositorioBanco {
                 .add(Restrictions.eq("activo", false)).list();
 
     }
+    @Override
+    public boolean activarBanco(Long id) {
+      Banco banco = this.buscarPorId(id);
+        banco.setActivo(true);
+        actualizarBanco(banco);
+        return banco.getActivo();
+    }
 
     @Override
     public Banco buscarBanco(String email, String password) {

@@ -104,4 +104,23 @@ public class ControladorAdministrador {
         return new ModelAndView("redirect:/administrador?mensaje=error descarga");
     }
 
+    @RequestMapping("/aceptarBanco")
+    public ModelAndView aceptarBanco(@RequestParam("id") Long id,
+                                     HttpServletRequest request) {
+
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("administrador");
+
+        if (usuarioEnSesion == null || !usuarioEnSesion.getRol().equals("administrador")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        if (servicioFiltro.activarBancoPorId(id)) {
+            return new ModelAndView("redirect:/administrador?mensaje=banco-activado");
+        }
+        return new ModelAndView("redirect:/administrador?mensaje=error");
+    }
+
+
+
+
 }

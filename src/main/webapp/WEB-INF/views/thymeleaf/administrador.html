@@ -55,6 +55,51 @@
         </div>
     </div>
 
+
+
+    <!-- Verifica si hay bancos pendientes -->
+    <div th:if="${bancos != null && !bancos.isEmpty()}">
+        <div class="row">
+            <!-- Lista de tarjetas para cada banco -->
+            <div th:each="banco : ${bancos}" class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Nombre y datos básicos del banco -->
+                        <h5 class="card-title" th:text="${banco.nombreBanco}"></h5>
+                        <p class="card-text">Ciudad: <span th:text="${banco.ciudad}"></span></p>
+                        <p class="card-text">País: <span th:text="${banco.pais}"></span></p>
+                        <p class="card-text">Teléfono: <span th:text="${banco.telefono}"></span></p>
+                        <p class="card-text">Email: <span th:text="${banco.email}"></span></p>
+                        <p class="card-text">Horario: <span th:text="${banco.horario}"></span></p>
+
+
+                        <!-- Formulario para aceptar banco -->
+                        <form th:action="@{/aceptarBanco}" method="post" style="display:inline;">
+                            <input type="hidden" name="id" th:value="${banco.id}" />
+                            <button type="submit" class="btn btn-success">Aceptar</button>
+                        </form>
+
+                        <!-- Formulario para rechazar banco -->
+                        <form th:action="@{/rechazarBanco}" method="post" style="display:inline;">
+                            <input type="hidden" name="id" th:value="${banco.id}" />
+                            <button type="submit" class="btn btn-danger">Rechazar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje si no hay bancos disponibles -->
+    <div th:if="${bancos == null || bancos.isEmpty()}">
+        <p class="text-center">No hay bancos pendientes de revisión.</p>
+    </div>
+
+
+
+
+
+
     <!-- Mensaje en caso de no haber usuarios pendientes -->
     <div th:if="${usuarios == null || usuarios.isEmpty()}" class="text-center">
         <p>No hay solicitudes pendientes.</p>

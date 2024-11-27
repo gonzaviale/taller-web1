@@ -35,4 +35,6 @@ public interface RepositorioBanco {
     void actualizarBanco(Banco banco);
 
     List<Banco> obtenerTodosLosBancosNoVerificados();
+
+    boolean activarBanco(Long id);
 }

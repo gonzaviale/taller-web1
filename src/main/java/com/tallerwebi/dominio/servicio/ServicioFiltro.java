@@ -30,4 +30,6 @@ public interface ServicioFiltro {
     boolean desactivarUsuarioBuscadoPor(Long id);
 
     List<Banco> obtenerTodosLosBancosNoVerificados();
+
+    boolean activarBancoPorId(Long id);
 }
