@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioFiltro;
 import com.tallerwebi.dominio.servicio.ServicioPDFFile;
@@ -38,8 +39,10 @@ public class ControladorAdministrador {
         ModelMap model= new ModelMap();
 
         List<Usuario> usuarios=servicioFiltro.obtenerTodosLosVeterinariosNoVerificados();
+        List<Banco> bancos=servicioFiltro.obtenerTodosLosBancosNoVerificados();
 
         model.addAttribute("usuarios",usuarios);
+        model.addAttribute("bancos",bancos);
         model.addAttribute("mensaje",mensaje);
 
         return new ModelAndView("administrador", model);
@@ -100,5 +103,38 @@ public class ControladorAdministrador {
 
         return new ModelAndView("redirect:/administrador?mensaje=error descarga");
     }
+
+    @RequestMapping("/aceptarBanco")
+    public ModelAndView aceptarBanco(@RequestParam("id") Long id,
+                                     HttpServletRequest request) {
+
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("administrador");
+
+        if (usuarioEnSesion == null || !usuarioEnSesion.getRol().equals("administrador")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        if (servicioFiltro.activarBancoPorId(id)) {
+            return new ModelAndView("redirect:/administrador?mensaje=banco-activado");
+        }
+        return new ModelAndView("redirect:/administrador?mensaje=error");
+    }
+
+    @RequestMapping("/rechazarBanco")
+    public ModelAndView rechazarBanco(@RequestParam("id") Long id,
+                                      HttpServletRequest request) {
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("administrador");
+
+        if (usuarioEnSesion == null || !usuarioEnSesion.getRol().equals("administrador")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        if (servicioFiltro.desactivarBancoPorId(id)) {
+            return new ModelAndView("redirect:/administrador?mensaje=banco-inactivo");
+        }
+
+        return new ModelAndView("redirect:/administrador?mensaje=error");
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.servicio;
 
+import com.tallerwebi.dominio.entidad.Banco;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
@@ -27,4 +28,10 @@ public interface ServicioFiltro {
     boolean activarUsuarioBuscadoPor(Long id);
 
     boolean desactivarUsuarioBuscadoPor(Long id);
+
+    List<Banco> obtenerTodosLosBancosNoVerificados();
+
+    boolean activarBancoPorId(Long id);
+
+    boolean desactivarBancoPorId(Long id);
 }

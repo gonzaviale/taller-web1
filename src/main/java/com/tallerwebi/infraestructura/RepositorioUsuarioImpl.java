@@ -125,6 +125,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         return (Banco) session.createCriteria(Banco.class)
                 .add(Restrictions.eq("email", email))
                 .add(Restrictions.eq("password", password))
+                .add(Restrictions.eq("activo",true))
                 .uniqueResult();
     }
 

@@ -33,4 +33,10 @@ public interface RepositorioBanco {
     ArrayList<Banco> searchBankByScoreAndBlood(String sangre);
 
     void actualizarBanco(Banco banco);
+
+    List<Banco> obtenerTodosLosBancosNoVerificados();
+
+    boolean activarBanco(Long id);
+
+    boolean borrarBanco(Long id);
 }
