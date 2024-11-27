@@ -188,6 +188,11 @@ public class ServicioFiltroImpl implements ServicioFiltro {
        return repositorioBanco.activarBanco(id);
     }
 
+    @Override
+    public boolean desactivarBancoPorId(Long id) {
+        return repositorioBanco.borrarBanco(id);
+    }
+
     private String validadorCampo(String campo) {
         return (campo == null || campo.isEmpty()) ? "" : campo;
     }

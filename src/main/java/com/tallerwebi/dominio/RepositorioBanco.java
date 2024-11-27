@@ -37,4 +37,6 @@ public interface RepositorioBanco {
     List<Banco> obtenerTodosLosBancosNoVerificados();
 
     boolean activarBanco(Long id);
+
+    boolean borrarBanco(Long id);
 }

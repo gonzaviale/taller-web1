@@ -22,8 +22,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(SpringExtension.class)
@@ -463,5 +462,25 @@ public class RepositorioBancoTest {
         }
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    void borrarBancoDeLaBaseDeDatos() {
+
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+
+        repositorioBanco.guardar(banco);
+
+        Banco bancoGuardado = repositorioBanco.buscarPorId(banco.getId());
+        assertNotNull(bancoGuardado);
+
+        boolean resultado = repositorioBanco.borrarBanco(banco.getId());
+
+        assertTrue(resultado);
+
+        Banco bancoEliminado = repositorioBanco.buscarPorId(banco.getId());
+        assertNull(bancoEliminado);
+    }
 
 }

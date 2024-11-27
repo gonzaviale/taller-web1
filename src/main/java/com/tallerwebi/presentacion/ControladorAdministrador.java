@@ -120,7 +120,21 @@ public class ControladorAdministrador {
         return new ModelAndView("redirect:/administrador?mensaje=error");
     }
 
+    @RequestMapping("/rechazarBanco")
+    public ModelAndView rechazarBanco(@RequestParam("id") Long id,
+                                      HttpServletRequest request) {
+        Usuario usuarioEnSesion = (Usuario) request.getSession().getAttribute("administrador");
 
+        if (usuarioEnSesion == null || !usuarioEnSesion.getRol().equals("administrador")) {
+            return new ModelAndView("redirect:/home");
+        }
+
+        if (servicioFiltro.desactivarBancoPorId(id)) {
+            return new ModelAndView("redirect:/administrador?mensaje=banco-inactivo");
+        }
+
+        return new ModelAndView("redirect:/administrador?mensaje=error");
+    }
 
 
 }

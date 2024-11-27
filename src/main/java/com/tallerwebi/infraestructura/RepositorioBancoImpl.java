@@ -9,10 +9,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +73,20 @@ public class RepositorioBancoImpl implements RepositorioBanco {
         banco.setActivo(true);
         actualizarBanco(banco);
         return banco.getActivo();
+    }
+
+    @Override
+    public boolean borrarBanco(Long id) {
+        final Session session = sessionFactory.getCurrentSession();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaDelete<Banco> criteriaDelete = criteriaBuilder.createCriteriaDelete(Banco.class);
+        Root<Banco> root = criteriaDelete.from(Banco.class);
+
+        criteriaDelete.where(criteriaBuilder.equal(root.get("id"), id));
+        int result = session.createQuery(criteriaDelete).executeUpdate();
+
+        return result > 0;
     }
 
     @Override
