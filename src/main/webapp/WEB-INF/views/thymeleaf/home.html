@@ -97,7 +97,14 @@
 <div th:if="${errorAlEnviarMensaje != null and errorAlEnviarMensaje != ''}" class="alert alert-danger text-center mx-auto col-md-6">
   <p th:text="${errorAlEnviarMensaje}"></p>
 </div>
-
+<section th:if="${!turnosVet.isEmpty()}" class="container mt-4">
+  <article th:each="turno : ${turnosVet}">
+    <p>
+      <span th:text="'Recordá que agendaste un turno para el '"></span>
+      <strong th:text="${#strings.concat(turno.fechaYHora.dayOfMonth, '/', turno.fechaYHora.monthValue, '/', turno.fechaYHora.year, ' a las ', turno.fechaYHora.hour, ':', turno.fechaYHora.minute)}"></strong>
+    </p>
+  </article>
+</section>
 <!-- Listado de Publicaciones -->
 <section th:if="${!publicaciones.isEmpty()}" class="container mt-4">
   <article th:replace="fragments/listarPublicaciones"></article>
