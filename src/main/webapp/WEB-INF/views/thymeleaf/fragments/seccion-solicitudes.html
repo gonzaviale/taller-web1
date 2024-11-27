@@ -119,7 +119,10 @@
                         </p>
                         <form th:action="@{/crear-turno}" method="POST" class="d-inline-block">
                             <input type="hidden" th:value="${solicitud.id}" name="solicitudId">
+                            <label for="fechaYHora">Fecha y hora</label>
                             <input type="datetime-local" name="fechaYHora" id="fechaYHora">
+                            <label for="direccion">Lugar</label>
+                            <input type="text" name="direccion" id="direccion">
                             <input type="submit" class="btn btn-primary" value="Crear">
                         </form>
                     </div>

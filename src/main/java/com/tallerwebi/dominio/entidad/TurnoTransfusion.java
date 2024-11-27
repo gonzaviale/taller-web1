@@ -9,6 +9,7 @@ public class TurnoTransfusion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime fechaYHora;
+    private String direccion;
 
     @ManyToOne
     private SolicitudAUnaPublicacion solicitudAUnaPublicacion;
@@ -35,5 +36,13 @@ public class TurnoTransfusion {
 
     public void setSolicitudAUnaPublicacion(SolicitudAUnaPublicacion solicitudAUnaPublicacion) {
         this.solicitudAUnaPublicacion = solicitudAUnaPublicacion;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 }
