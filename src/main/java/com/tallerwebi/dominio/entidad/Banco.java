@@ -38,6 +38,14 @@ public class Banco {
     @Column(name = "puntos", nullable = false)
     private Integer puntos;
 
+
+
+    @Column(name ="activo", nullable = false)
+    private Boolean activo;
+
+
+
+
     @OneToMany(mappedBy = "banco", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PaqueteDeSangre> stockSangre;
 
@@ -60,6 +68,7 @@ public class Banco {
         this.stockSangre  = new ArrayList<>();
         this.campanas  = new ArrayList<>();
         this.puntos = 0;
+        this.activo = false;
 
     }
 
@@ -67,6 +76,7 @@ public class Banco {
         this.stockSangre  = new ArrayList<>();
         this.campanas  = new ArrayList<>();
         this.puntos = 0;
+        this.activo = false;
     }
 
     public void eliminarPaquete(long paqueteId) {
@@ -185,7 +195,13 @@ public class Banco {
 
     public void setPuntos(Integer puntos) { this.puntos = puntos; }
 
+    public Boolean getActivo() {
+        return activo;
+    }
 
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
 
 
     @Override

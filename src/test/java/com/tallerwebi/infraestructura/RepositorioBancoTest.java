@@ -22,7 +22,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(SpringExtension.class)
@@ -427,6 +427,60 @@ public class RepositorioBancoTest {
                 allOf(hasProperty("tipoSangre", is("A+")), hasProperty("cantidad", is(5))),
                 allOf(hasProperty("tipoSangre", is("O+")), hasProperty("cantidad", is(7)))
         ));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void testObtenerTodosLosBancosNoVerificados() {
+
+        Banco banco1 = new Banco("Banco 1", "Dirección 1", "Ciudad 1", "País 1",
+                "111111111", "banco1@example.com", "password1", "Horario 1");
+        banco1.setActivo(false);
+
+        Banco banco2 = new Banco("Banco 2", "Dirección 2", "Ciudad 2", "País 2",
+                "222222222", "banco2@example.com", "password2", "Horario 2");
+        banco2.setActivo(false);
+
+        Banco banco3 = new Banco("Banco 3", "Dirección 3", "Ciudad 3", "País 3",
+                "333333333", "banco3@example.com", "password3", "Horario 3");
+        banco3.setActivo(true);
+
+        repositorioBanco.guardar(banco1);
+        repositorioBanco.guardar(banco2);
+        repositorioBanco.guardar(banco3);
+
+        List<Banco> bancosNoVerificados = repositorioBanco.obtenerTodosLosBancosNoVerificados();
+
+        assertThat(bancosNoVerificados, hasSize(2));
+        assertThat(bancosNoVerificados, containsInAnyOrder(banco1, banco2));
+        assertThat(bancosNoVerificados, not(contains(banco3)));
+
+
+        for (Banco banco : bancosNoVerificados) {
+            assertFalse(banco.getActivo());
+        }
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void borrarBancoDeLaBaseDeDatos() {
+
+        Banco banco = new Banco("Banco Test", "Dirección Test", "Ciudad Test", "País Test",
+                "123456789", "test@example.com", "testpassword", "Horario Test");
+
+        repositorioBanco.guardar(banco);
+
+        Banco bancoGuardado = repositorioBanco.buscarPorId(banco.getId());
+        assertNotNull(bancoGuardado);
+
+        boolean resultado = repositorioBanco.borrarBanco(banco.getId());
+
+        assertTrue(resultado);
+
+        Banco bancoEliminado = repositorioBanco.buscarPorId(banco.getId());
+        assertNull(bancoEliminado);
     }
 
 }

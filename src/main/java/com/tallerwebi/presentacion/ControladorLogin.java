@@ -148,7 +148,7 @@ public class ControladorLogin {
 
             Banco banco = new Banco(usuario.getNombre(),direccion,ciudad,pais,telefono, usuario.getEmail(), usuario.getPassword(), horario);
             servicioLogin.RegistrarBanco(banco);
-            redirectAttributes.addFlashAttribute("mensajeExito", "Usuario registrado con éxito");
+            redirectAttributes.addFlashAttribute("mensajeExito", "Usuario registrado con éxito espere que su cuenta sea validada");
             return new ModelAndView("redirect:/login",modelo);
         }
 
