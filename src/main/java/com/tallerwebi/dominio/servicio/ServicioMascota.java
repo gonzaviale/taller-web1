@@ -26,4 +26,6 @@ public interface ServicioMascota {
     boolean isEdadApropiadaDonante(Mascota mascota);
 
     boolean isPesoCorrectoFelino(Mascota mascota);
+
+    String verificarEstado(String tipo, Float peso, Integer anios);
 }

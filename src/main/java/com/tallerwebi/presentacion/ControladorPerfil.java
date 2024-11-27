@@ -1,9 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.entidad.Mascota;
-import com.tallerwebi.dominio.entidad.Publicacion;
-import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
-import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.servicio.ServicioImagenes;
 import com.tallerwebi.dominio.servicio.ServicioPerfil;
 import com.tallerwebi.dominio.servicio.ServicioSolicitudAUnaPublicacion;
@@ -55,7 +52,7 @@ public class ControladorPerfil {
             if (usuarioBuscado.getRol().equals("veterinario")) {
                 List<SolicitudAUnaPublicacion> solicitudesDelVet = servicioSolicitudAUnaPublicacion.traerSolicitudesHechasAlVet(usuarioBuscado);
                 model.addAttribute("solicitudesDelVet", solicitudesDelVet);
-            } //else {
+            }
                 List<SolicitudAUnaPublicacion> solicitudesRecibidas = servicioSolicitudAUnaPublicacion.traerSolicitudesPendientesDelUsuario(usuarioBuscado);
                 model.addAttribute("solicitudesRecibidas", solicitudesRecibidas);
 
@@ -64,7 +61,6 @@ public class ControladorPerfil {
 
                 List<SolicitudAUnaPublicacion> solicitudesRechazadas = servicioSolicitudAUnaPublicacion.traerSolicitudesRechazadasDelUsuario(usuarioBuscado);
                 model.addAttribute("solicitudesRechazadas", solicitudesRechazadas);
-            //}
 
             anidirFotoDePerfil(usuarioBuscado, model);
 

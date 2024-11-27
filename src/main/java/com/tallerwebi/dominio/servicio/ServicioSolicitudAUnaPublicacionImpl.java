@@ -35,38 +35,32 @@ public class ServicioSolicitudAUnaPublicacionImpl implements ServicioSolicitudAU
     public List<SolicitudAUnaPublicacion> traerSolicitudesPendientesDelUsuario(Usuario dueno) {
         List<SolicitudAUnaPublicacion> solicitudes = repositorioSolicitud.traerTodasLasSolicitudes();
 
-        List<SolicitudAUnaPublicacion> solicitudesPorUsuario = solicitudes.stream()
+        return solicitudes.stream()
                 .filter(solicitud -> solicitud.getMascotaDonante().getDuenio().getId() == dueno.getId())
                 .filter(SolicitudAUnaPublicacion::getPendiente)
                 .collect(Collectors.toList());
-
-        return solicitudesPorUsuario;
     }
 
     @Override
     public List<SolicitudAUnaPublicacion> traerSolicitudesAceptadasDelUsuario(Usuario dueno) {
         List<SolicitudAUnaPublicacion> solicitudes = repositorioSolicitud.traerTodasLasSolicitudes();
 
-        List<SolicitudAUnaPublicacion> solicitudesPorUsuario = solicitudes.stream()
+        return solicitudes.stream()
                 .filter(solicitud -> solicitud.getMascotaReceptora().getDuenio().getId() == dueno.getId())
                 .filter(SolicitudAUnaPublicacion::getAprobada)
                 .filter(solicitud -> !solicitud.getVista())
                 .collect(Collectors.toList());
-
-        return solicitudesPorUsuario;
     }
 
     @Override
     public List<SolicitudAUnaPublicacion> traerSolicitudesRechazadasDelUsuario(Usuario dueno) {
         List<SolicitudAUnaPublicacion> solicitudes = repositorioSolicitud.traerTodasLasSolicitudes();
 
-        List<SolicitudAUnaPublicacion> solicitudesPorUsuario = solicitudes.stream()
+        return solicitudes.stream()
                 .filter(solicitud -> solicitud.getMascotaReceptora().getDuenio().getId() == dueno.getId())
                 .filter(SolicitudAUnaPublicacion::getRechazada)
                 .filter(solicitud -> !solicitud.getVista())
                 .collect(Collectors.toList());
-
-        return solicitudesPorUsuario;
     }
 
     @Override
@@ -82,11 +76,12 @@ public class ServicioSolicitudAUnaPublicacionImpl implements ServicioSolicitudAU
 
     @Override
     public List<SolicitudAUnaPublicacion> traerSolicitudesHechasAlVet(Usuario usuarioBuscado) {
-        List<SolicitudAUnaPublicacion> solicitudes = repositorioSolicitud.traerTodasLasSolicitudes();
+        List<SolicitudAUnaPublicacion> solicitudes = repositorioSolicitud.traerSolicitudesDelVet(usuarioBuscado);
 
         return solicitudes.stream()
                 .filter(solicitud -> solicitud.getVeterinario() != null &&
                         Objects.equals(solicitud.getVeterinario().getId(), usuarioBuscado.getId()))
+
                 .collect(Collectors.toList());
     }
 

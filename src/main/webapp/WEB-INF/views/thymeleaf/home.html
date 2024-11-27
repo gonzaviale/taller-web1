@@ -1,56 +1,62 @@
 <!DOCTYPE HTML>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-  <link rel="stylesheet" th:href="@{/css/main.css}"/>
-  <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <title>Home</title>
 
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .content-wrapper {
-      background-color: #ffffff;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .btn-custom {
-      background-color: #007bff;
-      border-color: #007bff;
-      color: white;
-    }
-    .btn-custom:hover {
-      background-color: #0056b3;
-      border-color: #004085;
-      color: #ffffff;
-    }
-    .hero-section {
-      text-align: center;
-      color: white;
-    }
-    .hero-section h1 {
-      font-size: 3rem;
-      margin-top: 20px;
-    }
-    .chat-button {
-      position: fixed;
-      bottom: 0px; /* Distancia desde el borde inferior */
-      right: 20px; /* Distancia desde el borde derecho */
-      width: 200px;
-      height: 40px;
-      background-color: white; /* Fondo negro */
-      color: #0056b3; /* Texto en blanco */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
-      font-weight: bold;
-    }
-  </style>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .content-wrapper {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+            color: #ffffff;
+        }
+
+        .hero-section {
+            text-align: center;
+            color: white;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-top: 20px;
+        }
+
+        .chat-button {
+            position: fixed;
+            bottom: 0px; /* Distancia desde el borde inferior */
+            right: 20px; /* Distancia desde el borde derecho */
+            width: 200px;
+            height: 40px;
+            background-color: white; /* Fondo negro */
+            color: #0056b3; /* Texto en blanco */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -60,50 +66,86 @@
 
 <!-- Hero Section -->
 <section class="hero-section">
-  <h1 th:text="${mensajeBienvenida}">Bienvenido a nuestra aplicación</h1>
-  <a href="/spring/logout">Cerrar Sesion</a>
+    <h1 th:text="${mensajeBienvenida}">Bienvenido a nuestra aplicación</h1>
+    <a href="/spring/logout">Cerrar Sesion</a>
 </section>
 
 <main role="main" class="container my-5">
-  <div class="content-wrapper mx-auto col-md-8">
+    <div class="content-wrapper mx-auto col-md-8">
 
-    <!-- Botones principales -->
-    <div class="d-grid gap-2 mb-4">
-      <a href="crear-publicacion.html" class="btn btn-custom btn-lg w-100">Publicar mascota donante</a>
-      <a href="/spring/chat" class="btn btn-outline-primary btn-lg w-100">ChatBot</a>
-      <a th:if="${rol == 'dueño mascota'}" href="agregar-mascota.html" class="btn btn-outline-primary btn-lg w-100">Registrar mi mascota</a>
+        <!-- Botones principales -->
+        <div class="d-grid gap-2 mb-4">
+            <a th:if="${rol == 'dueño mascota'}" href="crear-publicacion.html" class="btn btn-custom btn-lg w-100">Publicar
+                mascota donante</a>
+            <a href="/spring/chat" class="btn btn-outline-primary btn-lg w-100">ChatBot</a>
+            <a th:if="${rol == 'dueño mascota'}" href="agregar-mascota.html"
+               class="btn btn-outline-primary btn-lg w-100">Registrar mi mascota</a>
+        </div>
+
+        <div th:if="${rol == 'veterinario'}" class="d-grid gap-2">
+            <a href="/spring/ver-solicitudes" class="btn btn-info btn-lg w-100">Ver Solicitudes de mascotas</a>
+        </div>
+
     </div>
-
-    <div th:if="${rol == 'veterinario'}" class="d-grid gap-2">
-      <a href="/spring/ver-solicitudes" class="btn btn-info btn-lg w-100">Ver Solicitudes de mascotas</a>
-    </div>
-
-  </div>
 </main>
 
 <!-- Mensajes de feedback -->
 <div th:if="${mensaje}" class="alert alert-success text-center mx-auto col-md-6">
-  <p th:text="${mensaje}"></p>
+    <p th:text="${mensaje}"></p>
 </div>
 
-<div th:if="${mensajeUsuarioBanco != null and mensajeUsuarioBanco != ''}" class="alert alert-success text-center mx-auto col-md-6">
-  <p th:text="${mensajeUsuarioBanco}"></p>
+<div th:if="${mensajeUsuarioBanco != null and mensajeUsuarioBanco != ''}"
+     class="alert alert-success text-center mx-auto col-md-6">
+    <p th:text="${mensajeUsuarioBanco}"></p>
 </div>
 
-<div th:if="${solicitudPubliExitosa != null and solicitudPubliExitosa != ''}" class="alert alert-success text-center mx-auto col-md-6">
-  <p th:text="${solicitudPubliExitosa}"></p>
+<div th:if="${solicitudPubliExitosa != null and solicitudPubliExitosa != ''}"
+     class="alert alert-success text-center mx-auto col-md-6">
+    <p th:text="${solicitudPubliExitosa}"></p>
 </div>
 
-<div th:if="${errorAlEnviarMensaje != null and errorAlEnviarMensaje != ''}" class="alert alert-danger text-center mx-auto col-md-6">
-  <p th:text="${errorAlEnviarMensaje}"></p>
+<div th:if="${errorAlEnviarMensaje != null and errorAlEnviarMensaje != ''}"
+     class="alert alert-danger text-center mx-auto col-md-6">
+    <p th:text="${errorAlEnviarMensaje}"></p>
 </div>
-
+<section th:if="${turnosVet != null and !turnosVet.isEmpty()}" class="container mt-4">
+    <article th:each="turno : ${turnosVet}" class="alert alert-success text-center mx-auto col-md-6">
+        <p>
+            <span th:text="'Recordá que agendaste un turno para el '"></span>
+            <strong th:text="${#strings.concat(turno.fechaYHora.dayOfMonth, '/', turno.fechaYHora.monthValue, '/', turno.fechaYHora.year, ' a las ', turno.fechaYHora.hour, ':', turno.fechaYHora.minute)}"></strong>
+        </p>
+    </article>
+</section>
+<section th:if="${turnosReceptor != null and !turnosReceptor.isEmpty()}" class="container mt-4">
+    <article th:each="turno : ${turnosReceptor}" class="alert alert-success text-center mx-auto col-md-6">
+        <p>
+            <span th:text="'Tenés un turno agendado para el '"></span>
+            <strong th:text="${#strings.concat(turno.fechaYHora.dayOfMonth, '/', turno.fechaYHora.monthValue, '/', turno.fechaYHora.year, ' a las ', turno.fechaYHora.hour, ':', turno.fechaYHora.minute)}"></strong><br>
+            <span th:text="'Veterinario: ' + ${turno.getSolicitudAUnaPublicacion().getVeterinario().getNombre()} + ' ' + ${turno.getSolicitudAUnaPublicacion().getVeterinario().getApellido()}"></span><br>
+            <span th:text="'Dueño de la mascota donante: ' + ${turno.getSolicitudAUnaPublicacion().getMascotaDonante().getDuenio().getNombre()} + ' ' + ${turno.getSolicitudAUnaPublicacion().getMascotaDonante().getDuenio().getApellido()}"></span>
+        </p>
+        <form action="#" th:action="@{/enviarMensajeUsuarioUsuario}" method="post">
+            <input type="hidden" th:name="usuarioReceptor" th:value="${turno.getSolicitudAUnaPublicacion().getMascotaDonante().getDuenio().getId()}"/>
+            <input type="submit" class="btn btn-primary mb-2" value="Enviar Mensaje">
+        </form>
+    </article>
+</section>
+<section th:if="${turnosDonante != null and !turnosDonante.isEmpty()}" class="container mt-4">
+    <article th:each="turno : ${turnosDonante}" class="alert alert-success text-center mx-auto col-md-6">
+        <p>
+            <span th:text="'Tenés un turno agendado para el '"></span>
+            <strong th:text="${#strings.concat(turno.fechaYHora.dayOfMonth, '/', turno.fechaYHora.monthValue, '/', turno.fechaYHora.year, ' a las ', turno.fechaYHora.hour, ':', turno.fechaYHora.minute)}"></strong><br>
+            <span th:text="'Veterinario: ' + ${turno.getSolicitudAUnaPublicacion().getVeterinario().getNombre()} + ' ' + ${turno.getSolicitudAUnaPublicacion().getVeterinario().getApellido()}"></span><br>
+            <span th:text="'Dueño de la mascota receptora: ' + ${turno.getSolicitudAUnaPublicacion().getMascotaReceptora().getDuenio().getNombre()} + ' ' + ${turno.getSolicitudAUnaPublicacion().getMascotaReceptora().getDuenio().getApellido()}"></span>
+        </p>
+    </article>
+</section>
 <!-- Listado de Publicaciones -->
 <section th:if="${!publicaciones.isEmpty()}" class="container mt-4">
-  <article th:replace="fragments/listarPublicaciones"></article>
+    <article th:replace="fragments/listarPublicaciones"></article>
 </section>
 <div class="chat-button">
-  <a href="/spring/getAllMessages" >Chat</a>
+    <a href="/spring/getAllMessages">Chat</a>
 </div>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 

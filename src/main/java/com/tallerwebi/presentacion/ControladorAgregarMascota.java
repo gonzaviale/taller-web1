@@ -82,11 +82,8 @@ public class ControladorAgregarMascota {
             return errorView;
         }
 
-        if (mascotaAux.getTipo().equals("Canino") && (mascotaAux.getPeso() < 25f || mascotaAux.getAnios() <= 1 || mascotaAux.getAnios() >= 8)) {
-            modelo.put("mensaje", "Para que un perro sea donante debe pesar más de 25 kilos y tener entre 1 y 8 años");
-            return new ModelAndView("home", modelo);
-        } else if (mascotaAux.getTipo().equals("Felino") && (mascotaAux.getPeso() < 3.5f || mascotaAux.getAnios() <= 1 || mascotaAux.getAnios() >= 8)) {
-            modelo.put("mensaje", "Para que un gato sea donante debe pesar más de 3,5 kilos y tener entre 1 y 8 años");
+        if (servicioMascota.verificarEstado(mascotaAux.getTipo(), mascotaAux.getPeso(), mascotaAux.getAnios()) != null){
+            modelo.put("mensaje", servicioMascota.verificarEstado(mascotaAux.getTipo(), mascotaAux.getPeso(), mascotaAux.getAnios()));
             return new ModelAndView("redirect:/home", modelo);
         }
 
