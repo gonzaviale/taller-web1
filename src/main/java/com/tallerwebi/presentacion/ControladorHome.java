@@ -49,7 +49,9 @@ public class ControladorHome {
 
         List<Publicacion> publicaciones = servicioPublicacion.obtenerTodasLasPublicaciones();
         List<Mascota> misMascotas = servicioMascota.obtenerMascotasPorDueno(usuarioEnSesion);
-        List<TurnoTransfusion> turnos = servicioTurnoTransfusion.traerTurnosVigentesVet(usuarioEnSesion.getId());
+        List<TurnoTransfusion> turnosVet = servicioTurnoTransfusion.traerTurnosVigentesVet(usuarioEnSesion.getId());
+        List<TurnoTransfusion> turnosReceptor = servicioTurnoTransfusion.traerTurnosVigentesReceptor(usuarioEnSesion.getId());
+        List<TurnoTransfusion> turnosDonante = servicioTurnoTransfusion.traerTurnosVigentesDonante(usuarioEnSesion.getId());
         List<Mascota> mascotasNecesitadas = misMascotas.stream()
                 .filter(Mascota::isReceptor)
                 .filter(Mascota::isAprobado)
@@ -57,7 +59,9 @@ public class ControladorHome {
         model.addAttribute("publicaciones", publicaciones);
         model.addAttribute("mensaje", mensaje);
         model.addAttribute("mascotasNecesitadas", mascotasNecesitadas);
-        model.addAttribute("turnosVet", turnos);
+        model.addAttribute("turnosVet", turnosVet);
+        model.addAttribute("turnosReceptor", turnosReceptor);
+        model.addAttribute("turnosDonante", turnosDonante);
 
         return new ModelAndView("home", model);
     }

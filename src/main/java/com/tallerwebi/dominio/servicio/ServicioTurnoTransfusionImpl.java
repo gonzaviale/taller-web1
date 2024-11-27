@@ -36,4 +36,22 @@ public class ServicioTurnoTransfusionImpl implements ServicioTurnoTransfusion{
     public void guardarTurno(TurnoTransfusion turno) {
         repositorioTurnoTransfusion.guardarTurno(turno);
     }
+
+    @Override
+    public List<TurnoTransfusion> traerTurnosVigentesReceptor(Long id) {
+            List<TurnoTransfusion> turnos = repositorioTurnoTransfusion.traerTodosLosTurnos();
+            return turnos.stream()
+                    .filter(turno -> turno.getFechaYHora().isAfter(LocalDateTime.now())
+                            && turno.getSolicitudAUnaPublicacion().getMascotaReceptora().getDuenio().getId() == id)
+                    .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TurnoTransfusion> traerTurnosVigentesDonante(Long id) {
+        List<TurnoTransfusion> turnos = repositorioTurnoTransfusion.traerTodosLosTurnos();
+        return turnos.stream()
+                .filter(turno -> turno.getFechaYHora().isAfter(LocalDateTime.now())
+                        && turno.getSolicitudAUnaPublicacion().getMascotaDonante().getDuenio().getId() == id)
+                .collect(Collectors.toList());
+    }
 }
