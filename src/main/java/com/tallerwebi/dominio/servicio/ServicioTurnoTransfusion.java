@@ -5,7 +5,7 @@ import com.tallerwebi.dominio.entidad.TurnoTransfusion;
 import java.util.List;
 
 public interface ServicioTurnoTransfusion {
-    public  List<TurnoTransfusion> traerTurnosVigentesVet();
+    public  List<TurnoTransfusion> traerTurnosVigentesVet(Long id);
 
     void guardarTurno(TurnoTransfusion turno);
 }

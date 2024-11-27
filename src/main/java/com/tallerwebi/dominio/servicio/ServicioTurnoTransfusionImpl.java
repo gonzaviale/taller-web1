@@ -24,10 +24,11 @@ public class ServicioTurnoTransfusionImpl implements ServicioTurnoTransfusion{
     }
 
     @Override
-    public List<TurnoTransfusion> traerTurnosVigentesVet() {
+    public List<TurnoTransfusion> traerTurnosVigentesVet(Long id) {
         List<TurnoTransfusion> turnos = repositorioTurnoTransfusion.traerTodosLosTurnos();
         return turnos.stream()
-                .filter(turno -> turno.getFechaYHora().isAfter(LocalDateTime.now()))
+                .filter(turno -> turno.getFechaYHora().isAfter(LocalDateTime.now())
+                && turno.getSolicitudAUnaPublicacion().getVeterinario().getId() == id)
                 .collect(Collectors.toList());
     }
 

@@ -49,7 +49,7 @@ public class ControladorHome {
 
         List<Publicacion> publicaciones = servicioPublicacion.obtenerTodasLasPublicaciones();
         List<Mascota> misMascotas = servicioMascota.obtenerMascotasPorDueno(usuarioEnSesion);
-        List<TurnoTransfusion> turnos = servicioTurnoTransfusion.traerTurnosVigentesVet();
+        List<TurnoTransfusion> turnos = servicioTurnoTransfusion.traerTurnosVigentesVet(usuarioEnSesion.getId());
         List<Mascota> mascotasNecesitadas = misMascotas.stream()
                 .filter(Mascota::isReceptor)
                 .filter(Mascota::isAprobado)
