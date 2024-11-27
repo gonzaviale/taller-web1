@@ -29,9 +29,11 @@ public class ControladorTurnoTransfusion {
 
     @RequestMapping(path = "/crear-turno", method = RequestMethod.POST)
     public ModelAndView crearTurno(@RequestParam("fechaYHora") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaYHora,
+                                   @RequestParam("direccion") String direccion,
                                    @RequestParam("solicitudId") Long solicitudId) {
         TurnoTransfusion turno = new TurnoTransfusion();
         turno.setFechaYHora(fechaYHora);
+        turno.setDireccion(direccion);
         turno.setSolicitudAUnaPublicacion(servicioSolicitudAUnaPublicacion.traerSolicitudPorId(solicitudId));
         servicioTurnoTransfusion.guardarTurno(turno);
         return new ModelAndView("redirect:/miPerfil");

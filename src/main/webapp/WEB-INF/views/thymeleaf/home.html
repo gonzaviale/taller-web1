@@ -120,7 +120,7 @@
     <article th:each="turno : ${turnosReceptor}" class="alert alert-success text-center mx-auto col-md-6">
         <p>
             <span th:text="'Tenés un turno agendado para el '"></span>
-            <strong th:text="${#strings.concat(turno.fechaYHora.dayOfMonth, '/', turno.fechaYHora.monthValue, '/', turno.fechaYHora.year, ' a las ', turno.fechaYHora.hour, ':', turno.fechaYHora.minute)}"></strong><br>
+            <strong th:text="${#strings.concat(turno.fechaYHora.dayOfMonth, '/', turno.fechaYHora.monthValue, '/', turno.fechaYHora.year, ' a las ', turno.fechaYHora.hour, ':', turno.fechaYHora.minute)} + ' en ' + ${turno.getDireccion()}"></strong><br>
             <span th:text="'Veterinario: ' + ${turno.getSolicitudAUnaPublicacion().getVeterinario().getNombre()} + ' ' + ${turno.getSolicitudAUnaPublicacion().getVeterinario().getApellido()}"></span><br>
             <span th:text="'Dueño de la mascota donante: ' + ${turno.getSolicitudAUnaPublicacion().getMascotaDonante().getDuenio().getNombre()} + ' ' + ${turno.getSolicitudAUnaPublicacion().getMascotaDonante().getDuenio().getApellido()}"></span>
         </p>
@@ -133,8 +133,8 @@
 <section th:if="${turnosDonante != null and !turnosDonante.isEmpty()}" class="container mt-4">
     <article th:each="turno : ${turnosDonante}" class="alert alert-success text-center mx-auto col-md-6">
         <p>
-            <span th:text="'Tenés un turno agendado para el '"></span>
-            <strong th:text="${#strings.concat(turno.fechaYHora.dayOfMonth, '/', turno.fechaYHora.monthValue, '/', turno.fechaYHora.year, ' a las ', turno.fechaYHora.hour, ':', turno.fechaYHora.minute)}"></strong><br>
+            <span th:text="'Tenés un turno agendado para que ' + ${turno.getSolicitudAUnaPublicacion().getMascotaDonante().getNombre()} + 'done el '"></span>
+            <strong th:text="${#strings.concat(turno.fechaYHora.dayOfMonth, '/', turno.fechaYHora.monthValue, '/', turno.fechaYHora.year, ' a las ', turno.fechaYHora.hour, ':', turno.fechaYHora.minute)} + ' en ' + ${turno.getDireccion()}"></strong><br>
             <span th:text="'Veterinario: ' + ${turno.getSolicitudAUnaPublicacion().getVeterinario().getNombre()} + ' ' + ${turno.getSolicitudAUnaPublicacion().getVeterinario().getApellido()}"></span><br>
             <span th:text="'Dueño de la mascota receptora: ' + ${turno.getSolicitudAUnaPublicacion().getMascotaReceptora().getDuenio().getNombre()} + ' ' + ${turno.getSolicitudAUnaPublicacion().getMascotaReceptora().getDuenio().getApellido()}"></span>
         </p>
