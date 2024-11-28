@@ -132,7 +132,7 @@ public class RepositorioSolicitudAUnaPublicacionImpl implements RepositorioSolic
         List<SolicitudAUnaPublicacion> solicitudes;
         solicitudes = sessionFactory.getCurrentSession()
                 .createCriteria(SolicitudAUnaPublicacion.class, "solicitud")
-                .add(Restrictions.eq("id", usuarioBuscado.getId()))
+                .add(Restrictions.eq("veterinario", usuarioBuscado))
                 .add(Subqueries.notExists(subquery))
                 .list();
         return solicitudes;
