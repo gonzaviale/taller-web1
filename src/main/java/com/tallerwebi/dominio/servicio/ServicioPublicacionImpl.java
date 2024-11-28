@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.servicio;
 
+import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.RepositorioPublicacion;
 import com.tallerwebi.dominio.excepcion.*;
@@ -65,6 +66,11 @@ public class ServicioPublicacionImpl implements ServicioPublicacion {
     @Override
     public void editarPublicacion(Long id, Publicacion publicacionActualizada) throws PublicacionNoExistente {
         repositorioPublicacion.editarPublicacion(id,publicacionActualizada);
+    }
+
+    @Override
+    public List<Entrega> obtenerEntregasXUsuarioId(Long id) {
+        return repositorioPublicacion.obtenerEntregasParaUsuario(id);
     }
 
 }

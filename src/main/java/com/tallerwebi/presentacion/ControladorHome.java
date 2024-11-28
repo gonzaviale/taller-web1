@@ -1,10 +1,12 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioMascota;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
+import com.tallerwebi.dominio.servicio.ServicioSolicitudImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +24,11 @@ public class ControladorHome {
     final private ServicioPublicacion servicioPublicacion;
     final private ServicioMascota servicioMascota;
 
+
     public ControladorHome(ServicioPublicacion servicioPublicacion, ServicioMascota servicioMascota) {
         this.servicioPublicacion = servicioPublicacion;
         this.servicioMascota = servicioMascota;
+
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
@@ -42,13 +46,15 @@ public class ControladorHome {
             model.addAttribute("mensajeBienvenida", mensajeBienvenida);
             model.addAttribute("rol", usuarioEnSesion.getRol());
         }
-
+        List<Entrega> entregas = servicioPublicacion.obtenerEntregasXUsuarioId(usuarioEnSesion.getId());
         List<Publicacion> publicaciones = servicioPublicacion.obtenerTodasLasPublicaciones();
         List<Mascota> misMascotas = servicioMascota.obtenerMascotasPorDueno(usuarioEnSesion);
         List<Mascota> mascotasNecesitadas = misMascotas.stream()
                 .filter(Mascota::isReceptor)
                 .filter(Mascota::isAprobado)
                 .collect(Collectors.toList());
+
+        model.addAttribute("entregas",entregas);
         model.addAttribute("publicaciones", publicaciones);
         model.addAttribute("mensaje", mensaje);
         model.addAttribute("mascotasNecesitadas", mascotasNecesitadas);

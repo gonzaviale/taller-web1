@@ -86,6 +86,25 @@
   <p th:text="${mensaje}"></p>
 </div>
 
+
+<div th:if="${entregas != null && !entregas.isEmpty()}" class="mt-4">
+  <div class="row justify-content-center">
+    <div th:each="entrega : ${entregas}" class="col-md-6 col-lg-4">
+      <div class="alert alert-success mb-4">
+        <h5 class="alert-heading text-center">¡Tu solicitud fue aprobada!</h5>
+        <p>El pedido de tu solicitud ha sido aprobado. Puedes retirarlo en la siguiente dirección y horario:</p>
+        <ul>
+          <li><strong>Dirección:</strong> <span th:text="${entrega.direccion}"></span></li>
+          <li><strong>Horario:</strong> <span th:text="${entrega.horario}"></span></li>
+          <li><strong>Código de la entrega:</strong> <span th:text="${entrega.id}"></span></li>
+        </ul>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div th:if="${mensajeUsuarioBanco != null and mensajeUsuarioBanco != ''}" class="alert alert-success text-center mx-auto col-md-6">
   <p th:text="${mensajeUsuarioBanco}"></p>
 </div>
