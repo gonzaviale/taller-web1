@@ -35,7 +35,7 @@ public class ControladorSolicitudes {
 
 
     @RequestMapping("/verPeticiones")
-    public ModelAndView BancoVerPeticiones(HttpSession session) {
+    public ModelAndView BancoVerPeticiones(HttpSession session , @ModelAttribute("mensaje") String mensaje) {
         if (!verificarSesion(session)) {
             return new ModelAndView("redirect:/login");
         }
@@ -56,6 +56,11 @@ public class ControladorSolicitudes {
             }
 
         }
+
+        if (mensaje != null && !mensaje.isEmpty()) {
+            modelo.addAttribute("mensaje", mensaje);
+        }
+
         modelo.addAttribute("nombresUsuarios", nombresUsuarios);
         modelo.addAttribute("solicitudes", solicitudes);
         modelo.put("datosBanco", new Banco());
@@ -95,7 +100,8 @@ public class ControladorSolicitudes {
     @RequestMapping(value = "/asignarPaquete", method = RequestMethod.POST)
     public String asignarPaquete(@RequestParam("solicitudId") int solicitudId,
                                  @RequestParam("paqueteId") int paqueteId,
-                                 HttpSession session) {
+                                 HttpSession session,
+                                 RedirectAttributes redirectAttributes) {
         if (!verificarSesion(session)) {
             return "redirect:/login";
         }
@@ -104,6 +110,7 @@ public class ControladorSolicitudes {
         //TODO falta enviar un mensaje con los datos de la entrega
 
 
+        redirectAttributes.addFlashAttribute("mensaje", "Solicitud aprobada exitosamente");
         return "redirect:/verPeticiones";
     }
 

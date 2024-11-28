@@ -10,11 +10,21 @@
 
 <body>
 
+
+
 <div th:insert="~{fragments/headerbanco :: headerBanco}"></div>
 <div th:replace="fragments/navbanco :: sidebar"></div>
 
+
+<div th:if="${not #strings.isEmpty(mensaje)}" class="alert alert-success">
+    <span th:text="${mensaje}"></span>
+</div>
+
 <main role="main" class="container mt-4">
     <div class="row">
+
+
+
 
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <h1>Ver Peticiones de Sangre</h1>
