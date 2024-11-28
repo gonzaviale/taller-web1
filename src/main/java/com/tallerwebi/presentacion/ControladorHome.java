@@ -3,10 +3,15 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
+import com.tallerwebi.dominio.entidad.TurnoTransfusion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.servicio.ServicioMascota;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
-import com.tallerwebi.dominio.servicio.ServicioSolicitudImpl;
+
+
+
+import com.tallerwebi.dominio.servicio.ServicioTurnoTransfusion;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +28,13 @@ public class ControladorHome {
 
     final private ServicioPublicacion servicioPublicacion;
     final private ServicioMascota servicioMascota;
+    final private ServicioTurnoTransfusion servicioTurnoTransfusion;
 
 
-    public ControladorHome(ServicioPublicacion servicioPublicacion, ServicioMascota servicioMascota) {
+    public ControladorHome(ServicioPublicacion servicioPublicacion, ServicioMascota servicioMascota, ServicioTurnoTransfusion servicioTurnoTransfusion) {
         this.servicioPublicacion = servicioPublicacion;
         this.servicioMascota = servicioMascota;
+        this.servicioTurnoTransfusion = servicioTurnoTransfusion;
 
     }
 
@@ -49,6 +56,9 @@ public class ControladorHome {
         List<Entrega> entregas = servicioPublicacion.obtenerEntregasXUsuarioId(usuarioEnSesion.getId());
         List<Publicacion> publicaciones = servicioPublicacion.obtenerTodasLasPublicaciones();
         List<Mascota> misMascotas = servicioMascota.obtenerMascotasPorDueno(usuarioEnSesion);
+        List<TurnoTransfusion> turnosVet = servicioTurnoTransfusion.traerTurnosVigentesVet(usuarioEnSesion.getId());
+        List<TurnoTransfusion> turnosReceptor = servicioTurnoTransfusion.traerTurnosVigentesReceptor(usuarioEnSesion.getId());
+        List<TurnoTransfusion> turnosDonante = servicioTurnoTransfusion.traerTurnosVigentesDonante(usuarioEnSesion.getId());
         List<Mascota> mascotasNecesitadas = misMascotas.stream()
                 .filter(Mascota::isReceptor)
                 .filter(Mascota::isAprobado)
@@ -58,6 +68,9 @@ public class ControladorHome {
         model.addAttribute("publicaciones", publicaciones);
         model.addAttribute("mensaje", mensaje);
         model.addAttribute("mascotasNecesitadas", mascotasNecesitadas);
+        model.addAttribute("turnosVet", turnosVet);
+        model.addAttribute("turnosReceptor", turnosReceptor);
+        model.addAttribute("turnosDonante", turnosDonante);
 
         return new ModelAndView("home", model);
     }

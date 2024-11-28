@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.servicio.ServicioMascota;
 import com.tallerwebi.dominio.servicio.ServicioPublicacion;
 import com.tallerwebi.dominio.servicio.ServicioPublicacionImpl;
+import com.tallerwebi.dominio.servicio.ServicioTurnoTransfusion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -19,13 +20,15 @@ import static org.mockito.Mockito.when;
 public class ControladorHomeTest {
 
     ServicioPublicacion servicioPublicacion;
+    ServicioTurnoTransfusion servicioTurnoTransfusion;
     ServicioMascota servicioMascota;
     ControladorHome controladorHome;
 
     @BeforeEach
     public void init(){
         servicioPublicacion= mock(ServicioPublicacionImpl.class);
-        controladorHome= new ControladorHome(servicioPublicacion, servicioMascota);
+        servicioTurnoTransfusion = mock(ServicioTurnoTransfusion.class);
+        controladorHome= new ControladorHome(servicioPublicacion, servicioMascota, servicioTurnoTransfusion);
     }
 
     /*@Test

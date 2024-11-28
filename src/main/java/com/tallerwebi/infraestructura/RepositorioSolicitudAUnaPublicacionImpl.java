@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioSolicitudAUnaPublicacion;
 import com.tallerwebi.dominio.entidad.SolicitudAUnaPublicacion;
+import com.tallerwebi.dominio.entidad.TurnoTransfusion;
 import com.tallerwebi.dominio.entidad.Usuario;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -120,6 +121,21 @@ public class RepositorioSolicitudAUnaPublicacionImpl implements RepositorioSolic
     public void asignarVeterinario(Usuario vet, SolicitudAUnaPublicacion solicitud) {
         solicitud.setVeterinario(vet);
         sessionFactory.getCurrentSession().saveOrUpdate(solicitud);
+    }
+
+    @Override
+    public List<SolicitudAUnaPublicacion> traerSolicitudesDelVet(Usuario usuarioBuscado) {
+        DetachedCriteria subquery = DetachedCriteria.forClass(TurnoTransfusion.class, "turno")
+                .add(Property.forName("turno.solicitudAUnaPublicacion.id").eqProperty("solicitud.id"))
+                .setProjection(Projections.id());
+
+        List<SolicitudAUnaPublicacion> solicitudes;
+        solicitudes = sessionFactory.getCurrentSession()
+                .createCriteria(SolicitudAUnaPublicacion.class, "solicitud")
+                .add(Restrictions.eq("veterinario", usuarioBuscado))
+                .add(Subqueries.notExists(subquery))
+                .list();
+        return solicitudes;
     }
 
     @Override

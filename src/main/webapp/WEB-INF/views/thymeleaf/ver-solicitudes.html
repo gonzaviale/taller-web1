@@ -1,12 +1,15 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Solicitudes</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <title>Solicitudes</title>
 </head>
 <body>
-<h1>Solicitudes</h1>
+<header th:replace="fragments/header :: header"></header>
+<h1 class="flex justify-content-center text-center mt-2">Solicitudes</h1>
 <div class="container mt-4">
     <div th:each="entry : ${mascotasConImagenes}" class="row">
         <div class="col-md-6 offset-md-3">

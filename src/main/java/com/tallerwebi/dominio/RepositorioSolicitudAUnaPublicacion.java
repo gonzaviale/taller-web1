@@ -21,5 +21,7 @@ public interface RepositorioSolicitudAUnaPublicacion {
     Usuario traerVeterinario();
 
     void asignarVeterinario(Usuario vet, SolicitudAUnaPublicacion solicitud);
+
+    List<SolicitudAUnaPublicacion> traerSolicitudesDelVet(Usuario usuarioBuscado);
 }
 
