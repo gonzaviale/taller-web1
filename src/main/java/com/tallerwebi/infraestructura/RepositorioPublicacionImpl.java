@@ -1,16 +1,21 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.Mascota;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.RepositorioPublicacion;
+import com.tallerwebi.dominio.entidad.Solicitud;
 import com.tallerwebi.dominio.excepcion.PublicacionNoExistente;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
+import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +55,7 @@ public class RepositorioPublicacionImpl implements RepositorioPublicacion {
                 .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
                 .list();
     }
+
     @Override
     public ArrayList<Publicacion> buscarPublicaciones(String titulo, String tipoDeSangre, String zonaDeResidencia, String tipoDePublicacion) {
 
@@ -98,11 +104,26 @@ public class RepositorioPublicacionImpl implements RepositorioPublicacion {
 
     @Override
     public void editarPublicacion(Long id, Publicacion publicacionActualizada) throws PublicacionNoExistente {
-        Publicacion publicacion= this.obtenerPorId(id);
+        Publicacion publicacion = this.obtenerPorId(id);
 
-        actualizarCamposDePublicacion(publicacion,publicacionActualizada);
+        actualizarCamposDePublicacion(publicacion, publicacionActualizada);
 
         sessionFactory.getCurrentSession().update(publicacion);
+    }
+
+
+    //TODO
+    @Override
+    public List<Entrega> obtenerEntregasParaUsuario(Long id) {
+        CriteriaBuilder cb = sessionFactory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Entrega> cq = cb.createQuery(Entrega.class);
+
+        Root<Entrega> entregaRoot = cq.from(Entrega.class);
+
+        Predicate usuarioPredicate = cb.equal(entregaRoot.get("usuarioId"), id);
+        cq.select(entregaRoot).where(usuarioPredicate);
+        return sessionFactory.getCurrentSession().createQuery(cq).getResultList();
+
     }
 
     private void actualizarCamposDePublicacion(Publicacion publicacion, Publicacion publicacionActualizada) {

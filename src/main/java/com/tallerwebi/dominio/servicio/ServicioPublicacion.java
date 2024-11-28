@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.servicio;
 
+import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.excepcion.*;
 
@@ -15,4 +16,6 @@ public interface ServicioPublicacion {
     void activarPublicacion(Long publicacionId);
 
     void editarPublicacion(Long id, Publicacion publicacionActualizada) throws PublicacionNoExistente;
+
+    List<Entrega> obtenerEntregasXUsuarioId(Long id);
 }

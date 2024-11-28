@@ -63,7 +63,7 @@ public class ServicioSolicitudImpl implements ServicioSolicitud {
         PaqueteDeSangre paquete = banco.getPaquete(paqueteId);
         banco.eliminarPaquete(paqueteId);
         this.repositorioBanco.actualizarBanco(banco);
-        Entrega entrega = new Entrega(solicitudId, paquete.getId(),banco.getDireccion(), banco.getHorario());
+        Entrega entrega = new Entrega(solicitudId, paquete.getId(),banco.getDireccion(), banco.getHorario(),solicitud.getUsuarioId());
        return   this.repositorio.guardarEntrega(entrega);
 
 

@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidad.Entrega;
 import com.tallerwebi.dominio.entidad.Publicacion;
 import com.tallerwebi.dominio.excepcion.PublicacionNoExistente;
 
@@ -17,4 +18,6 @@ public interface RepositorioPublicacion {
     void activarPublicacion(Long publicacionId);
 
     void editarPublicacion(Long id, Publicacion publicacionActualizada) throws PublicacionNoExistente;
+
+    List<Entrega> obtenerEntregasParaUsuario(Long id);
 }

@@ -14,4 +14,6 @@ public interface ServicioSolicitud {
     Entrega asignarPaqueteASolicitud(int solicitudId, long paqueteId);
     Banco obtenerBancoXId(Long bancoId);
     Usuario buscarUsuarioXId(long usuarioId);
+
+
 }
